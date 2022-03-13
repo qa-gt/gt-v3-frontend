@@ -17,6 +17,7 @@
   </el-row>
     -->
   <el-row justify="space-around">
+    
     <el-col :span="5" class="test1">
       <el-card class="box-card">
         <template #header>
@@ -33,14 +34,15 @@
             <br />
           </div>
         </el-card>
-
+        <br>
         <el-scrollbar height="300px">
           <p v-for="item in 20" :key="item" class="scrollbar-message">
-            <el-card shadow="hover" class="content-card">{{ item }}</el-card>
+            <el-card shadow="hover" class="message-card">{{ item }}</el-card>
           </p>
         </el-scrollbar>
       </el-col>
- 
+    
+
     <el-col :span="18">
       <el-scrollbar>
         <p v-for="item in 20" :key="item" class="scrollbar-content">
@@ -157,6 +159,11 @@
 .content-card {
   width: 100%;
   height: 100%;
+}
+
+.message-card {
+  width: 95%;
+  height: 90%;
 }
 </style>
 
