@@ -44,7 +44,7 @@
  
     <el-col :span="18">
       <el-scrollbar>
-        <p v-for="item in 20" :key="item" class="scrollbar-content">
+        <p v-for="item in 10" :key="item" class="scrollbar-content">
           <el-card shadow="hover" class="content-card">
             <template #header>
               <div class="content-card-header">
