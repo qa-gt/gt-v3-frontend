@@ -17,31 +17,29 @@
   </el-row>
     -->
   <el-row justify="space-around">
-    
     <el-col :span="5" class="test1">
       <el-card shadow="hover" class="box-card">
         <template #header>
           <div class="card-header">
-              <h2>{{ username }}</h2>
-            </div>
-          </template>
-          <div>
-            <div>ID:{{ id }} | {{ grade }} | {{ sex }}</div>
-            <br />
-            <div>
-              <b>认证:{{ tags }}</b>
-            </div>
-            <br />
+            <h2>{{ username }}</h2>
           </div>
-        </el-card>
-        <br>
-        <el-scrollbar height="300px">
-          <p v-for="item in 20" :key="item" class="scrollbar-message">
-            <el-card shadow="hover" class="message-card">{{ item }}</el-card>
-          </p>
-        </el-scrollbar>
-      </el-col>
-    
+        </template>
+        <div>
+          <div>ID:{{ id }} | {{ grade }} | {{ sex }}</div>
+          <br />
+          <div>
+            <b>认证:{{ tags }}</b>
+          </div>
+          <br />
+        </div>
+      </el-card>
+      <br />
+      <el-scrollbar height="300px">
+        <p v-for="item in 20" :key="item" class="scrollbar-message">
+          <el-card shadow="hover" class="message-card">{{ item }}</el-card>
+        </p>
+      </el-scrollbar>
+    </el-col>
 
     <el-col :span="18">
       <el-scrollbar>
@@ -65,10 +63,22 @@
       <el-pagination
         background
         layout="prev, pager, next, jumper"
+        style="max-width: 100%"
         :total="200"
-        :pager-count="9"
-        :page-size="20"
+        :page-size="5"
+        :pager-count="7"
         :hide-on-single-page="true"
+        v-if="!isMobile"
+      >
+      </el-pagination>
+      <el-pagination
+        small
+        layout="prev, pager, next"
+        :total="50"
+        :page-size="5"
+        :pager-count="6"
+        :hide-on-single-page="true"
+        v-if="isMobile"
       >
       </el-pagination>
     </el-col>
@@ -78,7 +88,7 @@
 </template>
 
 <style>
-.test1{
+.test1 {
   min-width: 20rem;
 }
 
@@ -170,6 +180,7 @@
 <script>
 export default {
   data() {
+    this.isMobile = sessionStorage.getItem("isMobile");
     return {
       username: "test",
       id: "1",

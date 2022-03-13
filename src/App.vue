@@ -30,3 +30,22 @@ nav a.router-link-exact-active {
   color: #3287d6;
 }
 </style>
+
+<script>
+export default {
+  data() {
+    sessionStorage.setItem(
+      "isMobile",
+      (navigator.userAgent.match(
+        /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i
+      ) &&
+        "true") ||
+        ""
+    );
+    return {
+      username: "test",
+      isMobile: sessionStorage.getItem("isMobile"),
+    };
+  },
+};
+</script>
