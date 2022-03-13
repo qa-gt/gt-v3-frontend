@@ -17,11 +17,10 @@
   </el-row>
     -->
   <el-row justify="space-around">
-    
-      <el-col :span="5">
-        <el-card class="box-card">
-          <template #header>
-            <div class="box-card-header">
+    <el-col :span="5" class="test1">
+      <el-card class="box-card">
+        <template #header>
+          <div class="card-header">
               <h2>{{ username }}</h2>
             </div>
           </template>
@@ -77,6 +76,10 @@
 </template>
 
 <style>
+.test1{
+  min-width: 20rem;
+}
+
 .el-row {
   margin-bottom: 20px;
 }
