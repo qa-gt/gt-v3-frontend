@@ -35,22 +35,23 @@
           {{ item }}
         </p>
       </el-scrollbar>
-
     </el-col>
 
-
     <el-col :span="18">
-
-      <el-scrollbar height="490px">
+      <el-scrollbar>
         <p v-for="item in 20" :key="item" class="scrollbar-demo-item">
           {{ item }}
         </p>
       </el-scrollbar>
-
+      
+      <el-pagination background layout="prev, pager, next" :total="1500">
+      </el-pagination>
     </el-col>
 
-
     <!--<el-col :span="6"><div class="grid-content bg-purple"></div></el-col>-->
+    
+       
+    
   </el-row>
 </template>
 
