@@ -1,4 +1,12 @@
 # qagt
+## 主要关注src目录下的文件
+
+## 环境准备
+
+Vue3   Vue_CLI
+
+Element Plus
+
 
 ## Project setup
 ```
