@@ -21,26 +21,42 @@
       <el-card class="box-card">
         <template #header>
           <div class="card-header">
-            <h2>{{ username }}</h2>
+              <h2>{{ username }}</h2>
+            </div>
+          </template>
+          <div>
+            <div>ID:{{ id }} | {{ grade }} | {{ sex }}</div>
+            <br />
+            <div>
+              <b>认证:{{ tags }}</b>
+            </div>
+            <br />
           </div>
-        </template>
-        <div>
-          <div>ID:{{ id }} | {{ grade }} | {{ sex }}</div><br>
-          <div><b>认证:{{ tags }}</b></div><br>
-        </div>
-      </el-card>
+        </el-card>
 
-      <el-scrollbar height="300px">
-        <p v-for="item in 20" :key="item" class="scrollbar-demo-item">
-          {{ item }}
-        </p>
-      </el-scrollbar>
-    </el-col>
-
+        <el-scrollbar height="300px">
+          <p v-for="item in 20" :key="item" class="scrollbar-message">
+            <el-card shadow="hover" class="content-card">{{ item }}</el-card>
+          </p>
+        </el-scrollbar>
+      </el-col>
+ 
     <el-col :span="18">
       <el-scrollbar>
-        <p v-for="item in 20" :key="item" class="scrollbar-demo-item">
-          {{ item }}
+        <p v-for="item in 20" :key="item" class="scrollbar-content">
+          <el-card shadow="hover" class="content-card">
+            <template #header>
+              <div class="content-card-header">
+                <span>Card name</span>
+                <el-button class="button" type="text"
+                  >Operation button</el-button
+                >
+              </div>
+            </template>
+            <div v-for="o in 4" :key="o" class="text item">
+              {{ "List item " + o }}
+            </div>
+          </el-card>
         </p>
       </el-scrollbar>
 
@@ -93,12 +109,23 @@
 </style>
 
 <style scoped>
-.scrollbar-demo-item {
+.scrollbar-content {
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  height: 230px;
+  margin: 10px;
+  text-align: left;
+  border-radius: 4px;
+  background: var(--el-color-primary-light-9);
+  color: var(--el-color-primary);
+}
+.scrollbar-message {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 50px;
-  margin: 10px;
+  height: 70px;
+  margin: 0px;
   text-align: center;
   border-radius: 4px;
   background: var(--el-color-primary-light-9);
@@ -106,15 +133,42 @@
 }
 </style>
 
+<style>
+.box-card-header {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.content-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.text {
+  font-size: 14px;
+}
+
+.item {
+  margin-bottom: 18px;
+}
+
+.content-card {
+  width: 100%;
+  height: 100%;
+}
+</style>
+
 <script>
 export default {
   data() {
     return {
-        username: "test",
-        id: "1",
-        grade: "九年级",
-        sex: "♂",
-        tags: "创始人"
+      username: "test",
+      id: "1",
+      grade: "九年级",
+      sex: "♂",
+      tags: "创始人",
     };
   },
 };
