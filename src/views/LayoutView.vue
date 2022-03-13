@@ -19,7 +19,7 @@
   <el-row justify="space-around">
     
     <el-col :span="5" class="test1">
-      <el-card class="box-card">
+      <el-card shadow="hover" class="box-card">
         <template #header>
           <div class="card-header">
               <h2>{{ username }}</h2>
@@ -112,7 +112,7 @@
 
 <style scoped>
 .scrollbar-content {
-  display: flex;
+  display: 100%;
   align-items: center;
   justify-content: left;
   height: 230px;
