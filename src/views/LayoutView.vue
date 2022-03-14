@@ -25,6 +25,25 @@
     </el-col>
 
     <el-col :span="18">
+      <el-row justify="left">
+        <el-card shadow="never" class="content-card">
+          <el-tabs
+            v-model="activeName"
+            class="demo-tabs"
+            @tab-click="handleClick"
+          >
+            <el-tab-pane label="默认分类" name="first">默认分类</el-tab-pane>
+            <el-tab-pane label="八卦内容" name="second">八卦内容</el-tab-pane>
+            <el-tab-pane label="消息通知" name="third">消息通知</el-tab-pane>
+            <el-tab-pane label="知识相关" name="fourth">知识相关</el-tab-pane>
+            <el-tab-pane label="时政新闻" name="fifth">时政新闻</el-tab-pane>
+            <el-tab-pane label="灌水区" name="seventh">灌水区</el-tab-pane>
+            <el-tab-pane label="站务" name="eighth">站务</el-tab-pane>
+            <el-tab-pane label="校方讯息" name="ninth">校方讯息</el-tab-pane>
+          </el-tabs>
+        </el-card>
+      </el-row>
+
       <el-scrollbar>
         <p v-for="item in 20" :key="item" class="scrollbar-content">
           <el-card shadow="hover" class="content-card">
