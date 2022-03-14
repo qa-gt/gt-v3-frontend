@@ -1,4 +1,27 @@
 <template>
+  <el-header class="header">
+    <h3>{{ title }}</h3>
+    <div class="user">
+      <div class="svg">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="25"
+          height="25"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#33CCCC"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M5.52 19c.64-2.2 1.84-3 3.22-3h6.52c1.38 0 2.58.8 3.22 3" />
+          <circle cx="12" cy="10" r="3" />
+          <circle cx="12" cy="12" r="10" />
+        </svg>
+      </div>
+      <div style="float: right;">{{ username }}</div>
+    </div>
+  </el-header>
   <nav>
     <router-link to="/">Home</router-link> |
     <router-link to="/about">About</router-link> |
@@ -43,6 +66,7 @@ export default {
         ""
     );
     return {
+      title: "QA瓜田",
       username: "test",
       isMobile: sessionStorage.getItem("isMobile"),
     };

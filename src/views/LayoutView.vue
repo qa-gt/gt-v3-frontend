@@ -1,6 +1,5 @@
 <template>
-  <!--
-  <el-row :gutter="40">
+  <!-- <el-row :gutter="40">
     <el-col :span="16"><div class="grid-content bg-purple"></div></el-col>
     <el-col :span="8"><div class="grid-content bg-purple"></div></el-col>
   </el-row>
@@ -14,8 +13,7 @@
     <el-col :span="4"><div class="grid-content bg-purple"></div></el-col>
     <el-col :span="16"><div class="grid-content bg-purple"></div></el-col>
     <el-col :span="4"><div class="grid-content bg-purple"></div></el-col>
-  </el-row>
-    -->
+  </el-row> -->
   <el-row justify="space-around">
     <el-col :span="5" class="test1">
       <el-card shadow="hover" class="box-card">
@@ -88,9 +86,7 @@
 </template>
 
 <style>
-.test1 {
-  min-width: 20rem;
-}
+
 
 .el-row {
   margin-bottom: 20px;
