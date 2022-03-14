@@ -1,6 +1,6 @@
 <template>
   <el-row justify="space-around">
-    <el-col :span="5" class="test1">
+    <el-col :span="5" class="user-info">
       <el-card shadow="hover" class="box-card">
         <template #header>
           <div class="card-header">
@@ -88,6 +88,10 @@
     <!--<el-col :span="6"><div class="grid-content bg-purple"></div></el-col>-->
   </el-row>
 </template>
+
+<style lang="scss" scoped>
+@import url("@/../public/scss/Layout.scss");
+</style>
 
 <script>
 import { ref } from "vue";
