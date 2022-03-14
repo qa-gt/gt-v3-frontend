@@ -173,21 +173,10 @@
 }
 </style>
 
-
 <script>
 import { ref } from "vue";
 export default {
-  setup() {
-    
-
-    const activeName = ref("first");
-
-    const handleClick = (tab: string, event: Event) => {
-      console.log(tab, event);
-    };
-  },
-
-    data() {
+  data() {
     this.isMobile = sessionStorage.getItem("isMobile");
     return {
       username: "test",
@@ -195,7 +184,13 @@ export default {
       grade: "九年级",
       sex: "♂",
       tags: "创始人",
+      activeName: ref("first"),
     };
+  },
+  methods: {
+    handleClick: (tab, event) => {
+      console.log(tab, event);
+    },
   },
 };
 </script>
