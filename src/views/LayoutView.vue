@@ -1,19 +1,11 @@
 <template>
-  <!-- <el-row :gutter="40">
-    <el-col :span="16"><div class="grid-content bg-purple"></div></el-col>
-    <el-col :span="8"><div class="grid-content bg-purple"></div></el-col>
-  </el-row>
-  <el-row :gutter="40">
-    <el-col :span="8"><div class="grid-content bg-purple"></div></el-col>
-    <el-col :span="8"><div class="grid-content bg-purple"></div></el-col>
-    <el-col :span="4"><div class="grid-content bg-purple"></div></el-col>
-    <el-col :span="4"><div class="grid-content bg-purple"></div></el-col>
-  </el-row>
-  <el-row :gutter="40">
-    <el-col :span="4"><div class="grid-content bg-purple"></div></el-col>
-    <el-col :span="16"><div class="grid-content bg-purple"></div></el-col>
-    <el-col :span="4"><div class="grid-content bg-purple"></div></el-col>
-  </el-row> -->
+  <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
+    <el-tab-pane label="User" name="first">User</el-tab-pane>
+    <el-tab-pane label="Config" name="second">Config</el-tab-pane>
+    <el-tab-pane label="Role" name="third">Role</el-tab-pane>
+    <el-tab-pane label="Task" name="fourth">Task</el-tab-pane>
+  </el-tabs>
+
   <el-row justify="space-around">
     <el-col :span="5" class="test1">
       <el-card shadow="hover" class="box-card">
@@ -86,8 +78,6 @@
 </template>
 
 <style>
-
-
 .el-row {
   margin-bottom: 20px;
 }
@@ -173,9 +163,31 @@
 }
 </style>
 
+
+<style>
+.demo-tabs > .el-tabs__content {
+  padding: 32px;
+  color: #6b778c;
+  font-size: 32px;
+  font-weight: 600;
+}
+</style>
+
+
 <script>
+import { ref } from "vue";
 export default {
-  data() {
+  setup() {
+    
+
+    const activeName = ref("first");
+
+    const handleClick = (tab: string, event: Event) => {
+      console.log(tab, event);
+    };
+  },
+
+    data() {
     this.isMobile = sessionStorage.getItem("isMobile");
     return {
       username: "test",
