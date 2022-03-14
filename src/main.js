@@ -5,7 +5,10 @@ import 'element-plus/dist/index.css';
 
 import App from './App.vue';
 import router from './router';
+
+//导入scss文件
 import "../public/scss/style.scss";
+import "../public/scss/Layout.scss";
 //import store from "./store/index";
 //import elementIcons from "./utils/elementIcons";
 
