@@ -23,6 +23,11 @@
         </p>
       </el-scrollbar>
     </el-col>
+    <el-col :span="18" style="min-width: 300px">
+      <el-card full>
+        
+      </el-card>
+    </el-col>
   </el-row>
 </template>
 
