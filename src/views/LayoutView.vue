@@ -1,11 +1,12 @@
 <template>
+<el-row justify="space-around">
   <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
     <el-tab-pane label="User" name="first">User</el-tab-pane>
     <el-tab-pane label="Config" name="second">Config</el-tab-pane>
     <el-tab-pane label="Role" name="third">Role</el-tab-pane>
     <el-tab-pane label="Task" name="fourth">Task</el-tab-pane>
   </el-tabs>
-
+</el-row>
   <el-row justify="space-around">
     <el-col :span="5" class="test1">
       <el-card shadow="hover" class="box-card">
@@ -166,10 +167,10 @@
 
 <style>
 .demo-tabs > .el-tabs__content {
-  padding: 32px;
+  padding: 3px;
   color: #6b778c;
-  font-size: 32px;
-  font-weight: 600;
+  font-size: 16px;
+  font-weight: 80;
 }
 </style>
 
