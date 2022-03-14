@@ -19,16 +19,31 @@
           <circle cx="12" cy="12" r="10" />
         </svg>
       </div>
-      <div style="float: right;">{{ username }}</div>
+      <div style="float: right">{{ username }}</div>
     </div>
+    <nav>
+      <router-link to="/">Home</router-link> |
+      <router-link to="/about">About</router-link> |
+      <router-link to="/test">Test</router-link> |
+      <router-link to="/layout">Layout</router-link>
+      <router-view />
+    </nav>
   </el-header>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link> |
-    <router-link to="/test">Test</router-link> |
-    <router-link to="/layout">Layout</router-link>
-  </nav>
-  <router-view />
+
+  <el-row justify="space-evenly">
+    
+
+    <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
+      <el-tab-pane label="默认分类" name="first">默认分类</el-tab-pane>
+      <el-tab-pane label="八卦内容" name="second">八卦内容</el-tab-pane>
+      <el-tab-pane label="消息通知" name="third">消息通知</el-tab-pane>
+      <el-tab-pane label="知识相关" name="fourth">知识相关</el-tab-pane>
+      <el-tab-pane label="时政新闻" name="fifth">时政新闻</el-tab-pane>
+      <el-tab-pane label="灌水区" name="seventh">灌水区</el-tab-pane>
+      <el-tab-pane label="站务" name="eighth">站务</el-tab-pane>
+      <el-tab-pane label="校方讯息" name="ninth">校方讯息</el-tab-pane>
+    </el-tabs>
+  </el-row>
 </template>
 
 <style>
