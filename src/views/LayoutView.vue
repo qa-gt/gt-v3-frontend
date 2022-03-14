@@ -19,20 +19,32 @@
       <br />
       <el-scrollbar height="300px">
         <p v-for="item in 20" :key="item" class="scrollbar-message">
-          <el-card shadow="hover" class="message-card">{{ item }}</el-card>
+          <el-card shadow="hover" class="message-card">
+            <el-popover
+              v-bind:placement="isMobile ? 'top' : 'right'"
+              v-bind:title="item"
+              :width="200"
+              trigger="click"
+              content="this is content, this is content, this is content"
+            >
+              <template #reference>
+                <el-button>Click to activate</el-button>
+              </template>
+            </el-popover></el-card
+          >
         </p>
       </el-scrollbar>
     </el-col>
 
     <el-col :span="18">
-      <el-row justify="left" style="margin: 0 10px;">
+      <el-row justify="left" style="margin: 0 10px">
         <el-card shadow="never" class="content-card">
           <el-tabs
             v-model="activeName"
             class="demo-tabs"
             @tab-click="handleClick"
           >
-            <el-tab-pane label="默认分类" name="first">默认分类</el-tab-pane>
+            <el-tab-pane label="默认分类" name="first"> 默认分类 </el-tab-pane>
             <el-tab-pane label="八卦内容" name="second">八卦内容</el-tab-pane>
             <el-tab-pane label="消息通知" name="third">消息通知</el-tab-pane>
             <el-tab-pane label="知识相关" name="fourth">知识相关</el-tab-pane>
