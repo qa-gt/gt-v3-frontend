@@ -36,7 +36,7 @@
       </el-scrollbar>
     </el-col>
 
-    <el-col :span="18">
+    <el-col :span="18" style="min-width: 300px;">
       <el-row justify="left" style="margin: 0 10px">
         <el-card shadow="never" class="content-card">
           <el-tabs
