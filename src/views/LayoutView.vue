@@ -1,5 +1,4 @@
 <template>
-
   <el-row justify="space-around">
     <el-col :span="5" class="test1">
       <el-card shadow="hover" class="box-card">

@@ -31,8 +31,6 @@
   </el-header>
 
   <el-row justify="space-evenly">
-    
-
     <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
       <el-tab-pane label="默认分类" name="first">默认分类</el-tab-pane>
       <el-tab-pane label="八卦内容" name="second">八卦内容</el-tab-pane>
