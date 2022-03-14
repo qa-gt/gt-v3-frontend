@@ -27,7 +27,7 @@
       <router-link to="/test">Test</router-link> |
       <router-link to="/layout">Layout</router-link> |
       <router-link to="/user">User</router-link>
-      <router-view style="margin-top: 10px;" />
+      <router-view style="margin-top: 30px;" />
     </nav>
   </el-header>
 
