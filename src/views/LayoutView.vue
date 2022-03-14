@@ -1,6 +1,6 @@
 <template>
-  <el-row justify="space-around">
-    <el-col :span="5" class="user-info">
+  <el-row justify="space-evenly">
+    <el-col :span="5" :xs="24" :sm="18" :md="6">
       <el-card shadow="hover" class="box-card">
         <template #header>
           <div class="card-header">
@@ -36,8 +36,8 @@
       </el-scrollbar>
     </el-col>
 
-    <el-col :span="18" style="min-width: 300px;">
-      <el-row justify="left" style="margin: 0 10px">
+    <el-col :span="19" :xs="24" :sm="18" :md="17">
+      <el-row justify="left">
         <el-card shadow="never" class="content-card">
           <el-tabs
             v-model="activeName"
@@ -58,7 +58,11 @@
       </el-row>
 
       <el-scrollbar>
-        <p v-for="item in 20" :key="item" class="scrollbar-content">
+        <p
+          v-for="item in 20"
+          :key="item"
+          class="scrollbar-content"
+        >
           <el-card shadow="hover" class="content-card">
             <template #header>
               <div class="content-card-header">
@@ -73,29 +77,28 @@
             </div>
           </el-card>
         </p>
+        <el-pagination
+          background
+          layout="prev, pager, next, jumper"
+          style="max-width: 100%"
+          :total="200"
+          :page-size="5"
+          :pager-count="7"
+          :hide-on-single-page="true"
+          v-if="!isMobile"
+        >
+        </el-pagination>
+        <el-pagination
+          small
+          layout="prev, pager, next"
+          :total="50"
+          :page-size="5"
+          :pager-count="6"
+          :hide-on-single-page="true"
+          v-if="isMobile"
+        >
+        </el-pagination>
       </el-scrollbar>
-
-      <el-pagination
-        background
-        layout="prev, pager, next, jumper"
-        style="max-width: 100%"
-        :total="200"
-        :page-size="5"
-        :pager-count="7"
-        :hide-on-single-page="true"
-        v-if="!isMobile"
-      >
-      </el-pagination>
-      <el-pagination
-        small
-        layout="prev, pager, next"
-        :total="50"
-        :page-size="5"
-        :pager-count="6"
-        :hide-on-single-page="true"
-        v-if="isMobile"
-      >
-      </el-pagination>
     </el-col>
 
     <!--<el-col :span="6"><div class="grid-content bg-purple"></div></el-col>-->
