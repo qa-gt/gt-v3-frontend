@@ -25,7 +25,7 @@
     </el-col>
 
     <el-col :span="18">
-      <el-row justify="left">
+      <el-row justify="left" style="margin: 0 10px;">
         <el-card shadow="never" class="content-card">
           <el-tabs
             v-model="activeName"
