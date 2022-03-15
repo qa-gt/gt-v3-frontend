@@ -25,62 +25,64 @@
     </el-col>
     <el-col :span="18" style="min-width: 300px">
       <el-card full>
-        
         <el-form :label-position="top" :model="form" label-width="120px">
-    <el-form-item label="Activity name">
-      <el-input v-model="form.name" />
-    </el-form-item>
-    <el-form-item label="Activity zone">
-      <el-select v-model="form.region" placeholder="please select your zone">
-        <el-option label="Zone one" value="shanghai" />
-        <el-option label="Zone two" value="beijing" />
-      </el-select>
-    </el-form-item>
-    <el-form-item label="Activity time">
-      <el-col :span="11">
-        <el-date-picker
-          v-model="form.date1"
-          type="date"
-          placeholder="Pick a date"
-          style="width: 100%"
-        />
-      </el-col>
-      <el-col :span="2" class="text-center">
-        <span class="text-gray-500">-</span>
-      </el-col>
-      <el-col :span="11">
-        <el-time-picker
-          v-model="form.date2"
-          placeholder="Pick a time"
-          style="width: 100%"
-        />
-      </el-col>
-    </el-form-item>
-    <el-form-item label="Instant delivery">
-      <el-switch v-model="form.delivery" />
-    </el-form-item>
-    <el-form-item label="Activity type">
-      <el-checkbox-group v-model="form.type">
-        <el-checkbox label="Online activities" name="type" />
-        <el-checkbox label="Promotion activities" name="type" />
-        <el-checkbox label="Offline activities" name="type" />
-        <el-checkbox label="Simple brand exposure" name="type" />
-      </el-checkbox-group>
-    </el-form-item>
-    <el-form-item label="Resources">
-      <el-radio-group v-model="form.resource">
-        <el-radio label="Sponsor" />
-        <el-radio label="Venue" />
-      </el-radio-group>
-    </el-form-item>
-    <el-form-item label="Activity form">
-      <el-input v-model="form.desc" type="textarea" />
-    </el-form-item>
-    <el-form-item>
-      <el-button type="primary" @click="onSubmit">Create</el-button>
-      <el-button>Cancel</el-button>
-    </el-form-item>
-  </el-form>
+          <el-form-item label="Activity name">
+            <el-input v-model="form.name" />
+          </el-form-item>
+          <el-form-item label="年级">
+            <el-cascader
+              v-model="value"
+              :options="options"
+              :props="props"
+              @change="handleChange"
+            />
+            <el-select v-model="form.region" placeholder="请选择你的年级">
+              <el-option label="一年级" value="1" />
+              <el-option label="二年级" value="2" />
+              <el-option label="三年级" value="3" />
+              <el-option label="四年级" value="4" />
+              <el-option label="五年级" value="5" />
+              <el-option label="六年级" value="6" />
+              <el-option label="七年级" value="7" />
+              <el-option label="八年级" value="8" />
+              <el-option label="国内九年级" vale="n9" />
+              <el-option label="国内十年级" value="n10" />
+              <el-option label="国内十一年级" value="n11" />
+              <el-option label="国内十二年级" value="n12" />
+              <el-option label="国际九年级" value="w9" />
+              <el-option label="国际十年级" value="w10" />
+              <el-option label="国际十一年级" value="w11" />
+              <el-option label="国际十二年级" value="w12" />
+              <el-option label="114514年级" value="114514" />
+              <el-option label="保密年级" value="0" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="Instant delivery">
+            <el-switch v-model="form.delivery" />
+          </el-form-item>
+          <el-form-item label="Activity type">
+            <el-checkbox-group v-model="form.type">
+              <el-checkbox label="Online activities" name="type" />
+              <el-checkbox label="Promotion activities" name="type" />
+              <el-checkbox label="Offline activities" name="type" />
+              <el-checkbox label="Simple brand exposure" name="type" />
+            </el-checkbox-group>
+          </el-form-item>
+          <el-form-item label="性别">
+            <el-radio-group v-model="form.resource">
+              <el-radio label="男" />
+              <el-radio label="女" />
+              <el-radio label="保密" />
+            </el-radio-group>
+          </el-form-item>
+          <el-form-item label="简介">
+            <el-input v-model="form.desc" type="textarea" />
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click="onSubmit">确定</el-button>
+            <el-button>取消</el-button>
+          </el-form-item>
+        </el-form>
       </el-card>
     </el-col>
   </el-row>
@@ -88,6 +90,7 @@
 
 <script>
 import { reactive } from "vue";
+import { ref } from "vue";
 
 export default {
   data() {
@@ -111,11 +114,128 @@ export default {
         resource: "",
         desc: "",
       }),
+
+      value: ref([
+
+      ]),
+
+      props: {
+        expandTrigger: "hover",
+      },
+
+      options: [
+        {
+          value: "xiaoxue",
+          label: "小学部",
+          children: [
+            {
+              value: "yi",
+              label: "一年级",
+            },
+            {
+              value: "er",
+              label: "二年级",
+              
+            },
+            {
+              value: "san",
+              label: "三年级",
+              
+            },
+            {
+              value: "si",
+              label: "四年级",
+              
+            },
+            {
+              value: "wu",
+              label: "五年级",
+              
+            },
+          ],
+        },
+        {
+          value: "chuzhong",
+          label: "初中部",
+          children: [
+            {
+              value: "liu",
+              label: "六年级",
+            },
+            {
+              value: "qi",
+              label: "七年级",
+            },
+            {
+              value: "ba",
+              label: "八年级",
+            },
+          ],
+        },
+        {
+          value: "gaozhong",
+          label: "高中部",
+          children: [
+            {
+              value: "jiu",
+              label: "九年级",
+            },
+            {
+              value: "shi",
+              label: "十年级",
+            },
+            {
+              value: "shiyi",
+              label: "十一年级",
+              
+            },
+            {
+              value: "shier",
+              label: "十二年级",
+            },
+          ],
+        },
+        {
+          value: "guoji",
+          label: "国际部",
+          children: [
+            {
+              value: "guojijiu",
+              label: "国际九年级",
+            },
+            {
+              value: "guojishi",
+              label: "国际十年级",
+            },
+            {
+              value: "guojishiyi",
+              label: "国际十一年级",
+              
+            },
+            {
+              value: "guojishier",
+              label: "国际十二年级",
+            },
+          ],
+        },
+        {
+          value: "qita",
+          label: "其他年级",
+        },
+        {
+          value: "baomi",
+          label: "保密年级",
+        },
+        
+      ],
     };
   },
   methods: {
     onSubmit: () => {
       console.log("submit!");
+    },
+    handleChange: (value) => {
+      console.log(value);
     },
   },
 };
