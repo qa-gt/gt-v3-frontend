@@ -40,7 +40,7 @@
               </template>
             </el-popover></el-card
           >
-          >
+          
         </p>
       </el-scrollbar>
     </el-col>
