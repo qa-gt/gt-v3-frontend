@@ -1,5 +1,5 @@
 <template>
-  <el-row justify="space-evenly" >
+  <el-row justify="space-evenly">
     <el-col :span="5" :xs="24" :sm="18" :md="6" style="margin-bottom: 20px">
       <el-card shadow="hover" class="box-card">
         <template #header>
@@ -29,19 +29,38 @@
           placeholder="写点东西……"
           @input="change($event)"
         />
+        <br />
+        <el-upload
+          class="upload-demo"
+          drag
+          action="https://jsonplaceholder.typicode.com/posts/"
+          multiple
+          type="flex"
+        >
+          <el-icon class="el-icon--upload"><upload-filled /></el-icon>
+          <div class="el-upload__text">
+            拖动文件到这里 或 <em>点击上传</em>
+          </div>
+          <template #tip>
+            <div class="el-upload__tip">
+              jpg/png 文件，不大于 5Mb。
+              最多支持20张。
+            </div>
+          </template>
+        </el-upload>
       </el-card>
     </el-col>
   </el-row>
 </template>
 
 <script>
-
-import { ref } from 'vue'
+import { ref } from "vue";
+import { UploadFilled } from '@element-plus/icons-vue'
 
 export default {
-
-
-
+    components: {
+        'UploadFilled': UploadFilled
+    },
   data() {
     return {
       username: "test",
@@ -50,7 +69,7 @@ export default {
       sex: "♂",
       tags: "创始人",
       activeName: ref("first"),
-      article: article
+      article: article,
     };
   },
 
@@ -62,8 +81,7 @@ export default {
   },
 };
 
-const article = ref('')
-
+const article = ref("");
 </script>
 
 <style>
