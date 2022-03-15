@@ -22,8 +22,8 @@
       <el-card full shadow="hover">
         <h2>编辑文章</h2>
         <el-divider />
-        <el-form :model="form" label-width="120px">
-          <el-form-item lable="标题：">
+        <el-form label-position="top">
+          <el-form-item>
             <el-input
               v-model="articletitle"
               class="w-50 m-2"
@@ -31,6 +31,7 @@
               @input="change($event)"
             />
           </el-form-item>
+
           <el-input
             v-model="article"
             :rows="17"
@@ -38,9 +39,11 @@
             placeholder="写点东西……"
             @input="change($event)"
           />
+
           <br />
 
           <br />
+
           <el-upload
             class="upload-demo"
             drag
@@ -49,6 +52,7 @@
             on-preview
             file-list
             on-remove
+            full
           >
             <el-icon class="el-icon--upload"><upload-filled /></el-icon>
             <div class="el-upload__text">
@@ -60,6 +64,15 @@
               </div>
             </template>
           </el-upload>
+          <br /><br />
+          <el-form-item>
+            <el-button type="primary" @click="confirm"> 确 定 </el-button>
+            <el-popconfirm title="确认要取消吗？本次编辑内容将不会保存。">
+              <template #reference>
+                <el-button> 取 消 </el-button>
+              </template>
+            </el-popconfirm>
+          </el-form-item>
         </el-form>
       </el-card>
     </el-col>
@@ -69,7 +82,7 @@
 <script>
 import { ref } from "vue";
 import { UploadFilled } from "@element-plus/icons-vue";
-
+import { ElMessage } from "element-plus";
 export default {
   components: {
     UploadFilled: UploadFilled,
@@ -91,6 +104,11 @@ export default {
     return {
       e: e, //返回值
     };
+  },
+  methods: {
+    confirm: () => {
+      ElMessage.success("提交成功！");
+    },
   },
 };
 
