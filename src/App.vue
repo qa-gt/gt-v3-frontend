@@ -26,7 +26,10 @@
       <router-link to="/about">About</router-link> |
       <router-link to="/test">Test</router-link> |
       <router-link to="/layout">Layout</router-link> |
-      <router-link to="/user">User</router-link>
+      <router-link to="/user">User</router-link> |
+      <router-link to="/write">Write</router-link> |
+      <router-link to="/Article">Article</router-link> |
+      <router-link to="/login">Login</router-link> |
       <router-view style="margin-top: 30px;" />
     </nav>
   </el-header>
