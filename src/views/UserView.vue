@@ -27,7 +27,7 @@
       <el-card full>
         <h2>个人信息编辑</h2>
         <el-divider />
-        <el-form :model="form" :label-position="top" label-width="120px">
+        <el-form :model="form" label-position='top' label-width="120px">
           <el-form-item label="真实姓名">
             <el-input v-model="form.name" />
           </el-form-item>
@@ -73,6 +73,7 @@
           <el-form-item label="pushplus token">
             <el-input v-model="form.token" />
           </el-form-item>
+          <br />
           <el-form-item>
             <el-button type="primary" @click="onSubmit">确定</el-button>
             <el-button>取消</el-button>
