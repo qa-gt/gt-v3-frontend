@@ -7,7 +7,7 @@ body {
 }
 
 p {
-    width: 99.87588882446%;
+    width: 99.7% !important;
 }
 
 //.el-row {
@@ -50,4 +50,10 @@ p {
     height    : 90%;
     overflow-y: auto;
     overflow-x: hidden;
+}
+
+.el-message--success,
+.el-message--info {
+    // max-width: 300px !important;
+    min-width: 200px !important;
 }
