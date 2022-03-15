@@ -2,9 +2,13 @@
   <el-header class="header" style="::shadow ">
     <h3>{{ title }}</h3>
     <div class="user">
-      <bell style="width: 1em; height: 1em; margin-right: " />
-      <user style="width: 1em; height: 1em;" />
-      {{ username }}
+      <bell
+        style="width: 1em; height: 1em; margin-right: 10px"
+        v-if="this.$store.state.loggedIn"
+      />
+      <user style="width: 1em; height: 1em" />
+      <!-- {{ username }} -->
+      {{ this.$store.state.user.name }}
     </div>
     <nav>
       <router-link to="/">Home</router-link> |
@@ -17,7 +21,6 @@
       <router-link to="/login">Login</router-link> |
       <router-view style="margin-top: 30px" />
     </nav>
-    
   </el-header>
 </template>
 

@@ -7,7 +7,7 @@
         <br />
         <el-form :model="form" @submit.prevent>
           <el-input
-            v-model="username"
+            v-model="name"
             class="w-50 m-2"
             placeholder="用户名"
             maxlength="30"
@@ -44,13 +44,13 @@
 
 <script>
 import { ElMessage } from "element-plus";
-import { ref } from "vue";
+// import { ref } from "vue";
 
 export default {
   data() {
     return {
-      username: username,
-      password: password,
+      name: "",
+      password: "",
     };
   },
   change(e) {
@@ -61,8 +61,12 @@ export default {
   },
 
   methods: {
-    login: () => {
-      ElMessage.success("登录成功！");
+    login: function () {
+      this.$store.commit("login", {
+        name: this.name,
+        password: this.password,
+      });
+      ElMessage.success(`${this.name}，欢迎回来！`);
     },
     repass: () => {
       ElMessage.info("请联系网站管理员进行更改");
@@ -70,8 +74,6 @@ export default {
   },
 };
 
-const username = ref("");
-const password = ref("");
 </script>
 
 <style>
