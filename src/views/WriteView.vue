@@ -22,34 +22,45 @@
       <el-card full shadow="hover">
         <h2>编辑文章</h2>
         <el-divider />
-        <el-input
-          v-model="article"
-          :rows="17"
-          type="textarea"
-          placeholder="写点东西……"
-          @input="change($event)"
-        />
-        <br>
-        
-        <br>
-        <el-upload
-          class="upload-demo"
-          drag
-          action="https://jsonplaceholder.typicode.com/posts/"
-          multiple
-          type="flex"
-        >
-          <el-icon class="el-icon--upload"><upload-filled /></el-icon>
-          <div class="el-upload__text">
-            拖动文件到这里 或 <em>点击上传</em>
-          </div>
-          <template #tip>
-            <div class="el-upload__tip">
-              jpg/png 文件，不大于 5Mb。
-              最多支持20张。
+        <el-form :model="form" label-width="120px">
+          <el-form-item lable="标题：">
+            <el-input
+              v-model="articletitle"
+              class="w-50 m-2"
+              placeholder="起个名字……"
+              @input="change($event)"
+            />
+          </el-form-item>
+          <el-input
+            v-model="article"
+            :rows="17"
+            type="textarea"
+            placeholder="写点东西……"
+            @input="change($event)"
+          />
+          <br />
+
+          <br />
+          <el-upload
+            class="upload-demo"
+            drag
+            action="https://jsonplaceholder.typicode.com/posts/"
+            multiple
+            on-preview
+            file-list
+            on-remove
+          >
+            <el-icon class="el-icon--upload"><upload-filled /></el-icon>
+            <div class="el-upload__text">
+              拖动文件到这里 或 <em>点击上传</em>
             </div>
-          </template>
-        </el-upload>
+            <template #tip>
+              <div class="el-upload__tip">
+                jpg/png 文件，不大于 5Mb。 最多支持20张。
+              </div>
+            </template>
+          </el-upload>
+        </el-form>
       </el-card>
     </el-col>
   </el-row>
@@ -57,12 +68,12 @@
 
 <script>
 import { ref } from "vue";
-import { UploadFilled } from '@element-plus/icons-vue'
+import { UploadFilled } from "@element-plus/icons-vue";
 
 export default {
-    components: {
-        'UploadFilled': UploadFilled
-    },
+  components: {
+    UploadFilled: UploadFilled,
+  },
   data() {
     return {
       username: "test",
@@ -87,4 +98,7 @@ const article = ref("");
 </script>
 
 <style>
+.upload-demo {
+  width: 100%;
+}
 </style>
