@@ -61,6 +61,9 @@ export default {
     login: () => {
       ElMessage.success("登录成功！");
     },
+    repass: () => {
+        ElMessage.info("请联系网站管理员进行更改")
+    },
   },
 };
 
