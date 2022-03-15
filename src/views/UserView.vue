@@ -17,7 +17,7 @@
         </div>
       </el-card>
       <br />
-      
+    </el-col>
     <el-col :span="18" style="min-width: 300px">
       <el-card full shadow="hover">
         <h2>个人信息编辑</h2>
