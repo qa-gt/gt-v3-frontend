@@ -17,14 +17,9 @@
         </div>
       </el-card>
       <br />
-      <el-scrollbar height="300px">
-        <p v-for="item in 20" :key="item" class="scrollbar-message">
-          <el-card shadow="hover" class="message-card">{{ item }}</el-card>
-        </p>
-      </el-scrollbar>
-    </el-col>
+      
     <el-col :span="18" style="min-width: 300px">
-      <el-card full>
+      <el-card full shadow="hover">
         <h2>个人信息编辑</h2>
         <el-divider />
         <el-form :model="form" label-position='top' label-width="120px">
@@ -33,7 +28,7 @@
           </el-form-item>
           <el-form-item label="年级">
             <el-cascader
-              v-model="grade"
+              v-model="form.grade"
               :options="options"
               :props="props"
               @change="handleChange"
@@ -87,6 +82,7 @@
 <script>
 import { reactive } from "vue";
 import { ref } from "vue";
+import { ElMessage } from 'element-plus'
 
 export default {
   data() {
@@ -216,7 +212,9 @@ export default {
   },
   methods: {
     onSubmit: () => {
-      console.log("submit!");
+      ElMessage.success (
+        '提交成功！'
+      )
     },
     handleChange: (value) => {
       console.log(value);
