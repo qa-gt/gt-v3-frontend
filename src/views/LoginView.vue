@@ -27,8 +27,9 @@
             <el-button type="primary" @click="login">
               &#8195;&#8195;&#8195;登&#8195;录&#8195;&#8195;&#8195;
             </el-button>
-            <span style="font-size: 14px;">
-               忘记密码？
+            <br /><br />
+            <span style="font-size: 14px">
+              &#8195;忘记密码？
               <el-button type="text" @click="repass"> 点此重置 </el-button>
             </span>
           </el-col>
