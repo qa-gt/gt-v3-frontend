@@ -1,5 +1,5 @@
 <template>
-  <el-header class="header">
+  <el-header class="header" style="::shadow">
     <h3>{{ title }}</h3>
     <div class="user">
       <div class="svg">

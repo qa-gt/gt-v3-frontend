@@ -11,7 +11,7 @@
           <div>ID:{{ id }} | {{ grade }} | {{ sex }}</div>
           <br />
           <div>
-            <b>认证:{{ tags }}</b>
+            <b>认证: {{ tags }}</b>
           </div>
           <br />
         </div>
@@ -25,58 +25,53 @@
     </el-col>
     <el-col :span="18" style="min-width: 300px">
       <el-card full>
-        <el-form :label-position="top" :model="form" label-width="120px">
-          <el-form-item label="Activity name">
+        <h2>个人信息编辑</h2>
+        <el-divider />
+        <el-form :model="form" :label-position="top" label-width="120px">
+          <el-form-item label="真实姓名">
             <el-input v-model="form.name" />
           </el-form-item>
           <el-form-item label="年级">
             <el-cascader
-              v-model="value"
+              v-model="grade"
               :options="options"
               :props="props"
               @change="handleChange"
             />
-            <el-select v-model="form.region" placeholder="请选择你的年级">
-              <el-option label="一年级" value="1" />
-              <el-option label="二年级" value="2" />
-              <el-option label="三年级" value="3" />
-              <el-option label="四年级" value="4" />
-              <el-option label="五年级" value="5" />
-              <el-option label="六年级" value="6" />
-              <el-option label="七年级" value="7" />
-              <el-option label="八年级" value="8" />
-              <el-option label="国内九年级" vale="n9" />
-              <el-option label="国内十年级" value="n10" />
-              <el-option label="国内十一年级" value="n11" />
-              <el-option label="国内十二年级" value="n12" />
-              <el-option label="国际九年级" value="w9" />
-              <el-option label="国际十年级" value="w10" />
-              <el-option label="国际十一年级" value="w11" />
-              <el-option label="国际十二年级" value="w12" />
-              <el-option label="114514年级" value="114514" />
-              <el-option label="保密年级" value="0" />
+            <el-select v-model="form.grade" placeholder="请选择你的年级">
+              <el-option label="一年级" value="一年级" />
+              <el-option label="二年级" value="二年级" />
+              <el-option label="三年级" value="三年级" />
+              <el-option label="四年级" value="四年级" />
+              <el-option label="五年级" value="五年级" />
+              <el-option label="六年级" value="六年级" />
+              <el-option label="七年级" value="七年级" />
+              <el-option label="八年级" value="八年级" />
+              <el-option label="国内九年级" vale="国内九年级" />
+              <el-option label="国内十年级" value="国内十年级" />
+              <el-option label="国内十一年级" value="国内十一年级" />
+              <el-option label="国内十一年级" value="国内十一年级" />
+              <el-option label="国际九年级" value="国际九年级" />
+              <el-option label="国际十年级" value="国际十年级" />
+              <el-option label="国际十一年级" value="国际十一年级" />
+              <el-option label="国际十二年级" value="国际十二年级" />
+              <el-option label="114514年级" value="114514年级" />
+              <el-option label="保密年级" value="保密年级" />
             </el-select>
           </el-form-item>
-          <el-form-item label="Instant delivery">
-            <el-switch v-model="form.delivery" />
-          </el-form-item>
-          <el-form-item label="Activity type">
-            <el-checkbox-group v-model="form.type">
-              <el-checkbox label="Online activities" name="type" />
-              <el-checkbox label="Promotion activities" name="type" />
-              <el-checkbox label="Offline activities" name="type" />
-              <el-checkbox label="Simple brand exposure" name="type" />
-            </el-checkbox-group>
-          </el-form-item>
+
           <el-form-item label="性别">
-            <el-radio-group v-model="form.resource">
+            <el-radio-group v-model="form.sex">
               <el-radio label="男" />
               <el-radio label="女" />
               <el-radio label="保密" />
             </el-radio-group>
           </el-form-item>
           <el-form-item label="简介">
-            <el-input v-model="form.desc" type="textarea" />
+            <el-input v-model="form.about" type="textarea" />
+          </el-form-item>
+          <el-form-item label="pushplus token">
+            <el-input v-model="form.token" />
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="onSubmit">确定</el-button>
@@ -106,18 +101,13 @@ export default {
       password: "yxzlwzh",
       form: reactive({
         name: "",
-        region: "",
-        date1: "",
-        date2: "",
-        delivery: false,
-        type: [],
-        resource: "",
-        desc: "",
+        grade: "",
+        sex: "",
+        about: "",
+        token: "",
       }),
 
-      value: ref([
-
-      ]),
+      value: ref([]),
 
       props: {
         expandTrigger: "hover",
@@ -135,22 +125,18 @@ export default {
             {
               value: "er",
               label: "二年级",
-              
             },
             {
               value: "san",
               label: "三年级",
-              
             },
             {
               value: "si",
               label: "四年级",
-              
             },
             {
               value: "wu",
               label: "五年级",
-              
             },
           ],
         },
@@ -187,7 +173,6 @@ export default {
             {
               value: "shiyi",
               label: "十一年级",
-              
             },
             {
               value: "shier",
@@ -210,7 +195,6 @@ export default {
             {
               value: "guojishiyi",
               label: "国际十一年级",
-              
             },
             {
               value: "guojishier",
@@ -226,7 +210,6 @@ export default {
           value: "baomi",
           label: "保密年级",
         },
-        
       ],
     };
   },

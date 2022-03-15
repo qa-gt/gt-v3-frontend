@@ -1,6 +1,6 @@
 body {
-    margin          : 0;
-    padding         : 0;
+    margin: 0;
+    padding: 0;
     background-color: rgb(250, 250, 250);
 }
 
@@ -16,29 +16,28 @@ body {
 //     margin-left: 0;
 //     margin-right: 0;
 // }
-
 .header {
-    padding         : 15px;
-    height          : 50px;
+    padding: 15px;
+    height: 50px;
     background-color: #fff;
-    text-align      : left;
+    text-align: left;
 }
 
 .header>h3 {
-    margin : 0;
+    margin: 0;
     padding: 0;
     display: inline;
 }
 
 .header>div.user {
-    display   : inline;
-    float     : right;
-    margin    : auto;
+    display: inline;
+    float: right;
+    margin: auto;
     margin-top: -2px;
-    font-size : 1.4rem;
+    font-size: 1.4rem;
 }
 
 .svg {
     display: inline-block;
-    margin : 0 5px;
+    margin: 0 5px;
 }
