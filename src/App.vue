@@ -25,7 +25,7 @@
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link> |
       <router-link to="/test">Test</router-link> |
-      <router-link to="/layout">Layout</router-link> |
+      <router-link to="/index">Index</router-link> |
       <router-link to="/user">User</router-link> |
       <router-link to="/write">Write</router-link> |
       <router-link to="/Article">Article</router-link> |

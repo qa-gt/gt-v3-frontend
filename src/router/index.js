@@ -22,10 +22,10 @@ const routes = [{
             import ( /* webpackChunkName: "about" */ '../views/TestView.vue')
     },
     {
-        path: "/layout",
-        name: "layout",
+        path: "/index",
+        name: "index",
         component: () =>
-            import ('../views/LayoutView.vue')
+            import ('../views/IndexView.vue')
     },
     {
         path: "/user",

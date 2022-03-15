@@ -80,7 +80,7 @@
         </p>
         <el-pagination
           background
-          layout="prev, pager, next, jumper"
+          index="prev, pager, next, jumper"
           style="max-width: 100%"
           :total="200"
           :page-size="5"
@@ -91,7 +91,7 @@
         </el-pagination>
         <el-pagination
           small
-          layout="prev, pager, next"
+          index="prev, pager, next"
           :total="50"
           :page-size="5"
           :pager-count="6"
@@ -106,7 +106,7 @@
 </template>
 
 <style lang="scss" scoped>
-@import url("@/../public/scss/Layout.scss");
+@import url("@/../public/scss/Index.scss");
 </style>
 
 <script>
