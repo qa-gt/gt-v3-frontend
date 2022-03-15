@@ -1,6 +1,6 @@
 <template>
-  <el-row justify="space-around">
-    <el-col :span="5" class="user-info">
+  <el-row justify="space-evenly">
+    <el-col :span="5" :xs="24" :sm="18" :md="6" style="margin-bottom: 20px;" >
       <el-card shadow="hover" class="box-card">
         <template #header>
           <div class="card-header">
@@ -18,7 +18,7 @@
       </el-card>
       <br />
     </el-col>
-    <el-col :span="18" style="min-width: 300px">
+    <el-col :span="19" :xs="24" :sm="18" :md="17" style="min-width: 300px">
       <el-card full shadow="hover">
         <h2>个人信息编辑</h2>
         <el-divider />
