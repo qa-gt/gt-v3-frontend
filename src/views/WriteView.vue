@@ -25,18 +25,22 @@
         <el-form label-position="top">
           <el-form-item>
             <el-input
-              v-model="articletitle"
+              v-model="articleTitle"
               class="w-50 m-2"
+              maxlength="100"
+              show-word-limit
               placeholder="起个名字……"
               @input="change($event)"
             />
           </el-form-item>
 
           <el-input
-            v-model="article"
+            v-model="articleContent"
             :rows="17"
             type="textarea"
             placeholder="写点东西……"
+            maxlength="10000"
+            show-word-limit
             @input="change($event)"
           />
 
@@ -95,7 +99,8 @@ export default {
       sex: "♂",
       tags: "创始人",
       activeName: ref("first"),
-      article: article,
+      articleContent: "",
+      articleTitle: ""
     };
   },
 
@@ -112,7 +117,6 @@ export default {
   },
 };
 
-const article = ref("");
 </script>
 
 <style>

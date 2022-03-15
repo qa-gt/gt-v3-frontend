@@ -10,6 +10,7 @@
             v-model="username"
             class="w-50 m-2"
             placeholder="用户名"
+            maxlength="30"
             @input="change($event)"
           />
           <br /><br />
@@ -18,6 +19,7 @@
             type="password"
             class="w-50 m-2"
             placeholder="密码"
+            maxlength="30"
             @input="change($event)"
             show-password
           />

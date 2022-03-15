@@ -63,7 +63,7 @@
             </el-radio-group>
           </el-form-item>
           <el-form-item label="简介">
-            <el-input v-model="form.about" type="textarea" />
+            <el-input v-model="form.about" type="textarea" maxlength="100" />
           </el-form-item>
           <el-form-item label="pushplus token">
             <el-input v-model="form.token" />
