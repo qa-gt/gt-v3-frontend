@@ -40,30 +40,35 @@
               </template>
             </el-popover></el-card
           >
-          
         </p>
       </el-scrollbar>
     </el-col>
 
     <el-col :span="19" :xs="24" :sm="18" :md="17" :lg="18" :xl="19">
       <el-row justify="left">
-        <el-card shadow="hover" class="content-card" style="padding: -10px;">
-          <el-tabs
-            v-model="activeName"
-            class="demo-tabs"
-            @tab-click="handleClick"
-            style="padding: -10px;"
-          >
-            <el-tab-pane label="全部帖子" name="first"></el-tab-pane>
-            <el-tab-pane label="默认分类" name="second"></el-tab-pane>
-            <el-tab-pane label="八卦内容" name="third"></el-tab-pane>
-            <el-tab-pane label="消息通知" name="fourth"></el-tab-pane>
-            <el-tab-pane label="知识相关" name="fifth"></el-tab-pane>
-            <el-tab-pane label="时政新闻" name="seventh"></el-tab-pane>
-            <el-tab-pane label="灌 水 区" name="eighth"></el-tab-pane>
-            <el-tab-pane label="站    务" name="ninth"></el-tab-pane>
-            <el-tab-pane label="校方讯息" name="tenth"></el-tab-pane>
-          </el-tabs>
+        <el-card shadow="hover" class="content-card" style="padding: -10px">
+          <el-scrollbar>
+            
+              <el-card class="scrollbar-demo-item">
+                <el-tabs
+                  v-model="activeName"
+                  class="demo-tabs"
+                  @tab-click="handleClick"
+                  style="padding: -10px"
+                >
+                  <el-tab-pane label="全部帖子" name="first"></el-tab-pane>
+                  <el-tab-pane label="默认分类" name="second"></el-tab-pane>
+                  <el-tab-pane label="八卦内容" name="third"></el-tab-pane>
+                  <el-tab-pane label="消息通知" name="fourth"></el-tab-pane>
+                  <el-tab-pane label="知识相关" name="fifth"></el-tab-pane>
+                  <el-tab-pane label="时政新闻" name="seventh"></el-tab-pane>
+                  <el-tab-pane label="灌 水 区" name="eighth"></el-tab-pane>
+                  <el-tab-pane label="站    务" name="ninth"></el-tab-pane>
+                  <el-tab-pane label="校方讯息" name="tenth"></el-tab-pane>
+                </el-tabs>
+              </el-card>
+            
+          </el-scrollbar>
         </el-card>
       </el-row>
 
@@ -133,3 +138,21 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.scrollbar-flex-content {
+  display: flex;
+}
+.scrollbar-demo-item {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1000px;
+  height: 100px;
+  margin: 10px;
+  text-align: center;
+  border-radius: 4px;
+  
+}
+</style>
