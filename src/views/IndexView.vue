@@ -49,7 +49,7 @@
         <el-card shadow="hover" class="content-card" style="padding: -10px">
           <el-scrollbar>
             
-              <el-card class="scrollbar-demo-item">
+              <el-card shadow="hover" class="scrollbar-demo-item">
                 <el-tabs
                   v-model="activeName"
                   class="demo-tabs"
@@ -140,15 +140,13 @@ export default {
 </script>
 
 <style scoped>
-.scrollbar-flex-content {
-  display: flex;
-}
+
 .scrollbar-demo-item {
+  box-shadow: 0px;
   flex-shrink: 0;
-  display: flex;
   align-items: center;
   justify-content: center;
-  width: 1000px;
+  width: 900px;
   height: 100px;
   margin: 10px;
   text-align: center;
