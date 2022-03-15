@@ -40,27 +40,29 @@
               </template>
             </el-popover></el-card
           >
+          >
         </p>
       </el-scrollbar>
     </el-col>
 
     <el-col :span="19" :xs="24" :sm="18" :md="17" :lg="18" :xl="19">
       <el-row justify="left">
-        <el-card shadow="hover" class="content-card">
+        <el-card shadow="hover" class="content-card" style="padding: -10px;">
           <el-tabs
             v-model="activeName"
             class="demo-tabs"
             @tab-click="handleClick"
+            style="padding: -10px;"
           >
-            <el-tab-pane label="全部帖子" name="first">全部帖子</el-tab-pane>
-            <el-tab-pane label="默认分类" name="second">默认分类</el-tab-pane>
-            <el-tab-pane label="八卦内容" name="third">八卦内容</el-tab-pane>
-            <el-tab-pane label="消息通知" name="fourth">消息通知</el-tab-pane>
-            <el-tab-pane label="知识相关" name="fifth">知识相关</el-tab-pane>
-            <el-tab-pane label="时政新闻" name="seventh">时政新闻</el-tab-pane>
-            <el-tab-pane label="灌 水 区" name="eighth">灌水区</el-tab-pane>
-            <el-tab-pane label="站    务" name="ninth">站 务</el-tab-pane>
-            <el-tab-pane label="校方讯息" name="tenth">校方讯息</el-tab-pane>
+            <el-tab-pane label="全部帖子" name="first"></el-tab-pane>
+            <el-tab-pane label="默认分类" name="second"></el-tab-pane>
+            <el-tab-pane label="八卦内容" name="third"></el-tab-pane>
+            <el-tab-pane label="消息通知" name="fourth"></el-tab-pane>
+            <el-tab-pane label="知识相关" name="fifth"></el-tab-pane>
+            <el-tab-pane label="时政新闻" name="seventh"></el-tab-pane>
+            <el-tab-pane label="灌 水 区" name="eighth"></el-tab-pane>
+            <el-tab-pane label="站    务" name="ninth"></el-tab-pane>
+            <el-tab-pane label="校方讯息" name="tenth"></el-tab-pane>
           </el-tabs>
         </el-card>
       </el-row>
@@ -107,7 +109,7 @@
 </template>
 
 <style lang="scss" scoped>
-@import url("@/../public/scss/Index.scss");
+@import url("@/assets/scss/Index.scss");
 </style>
 
 <script>

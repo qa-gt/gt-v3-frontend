@@ -1,0 +1,95 @@
+.el-row {
+    margin-bottom: 20px;
+}
+
+.el-row:last-child {
+    margin-bottom: 0;
+}
+
+.el-col {
+    border-radius: 4px;
+}
+
+.bg-purple-dark {
+    background: #99a9bf;
+}
+
+.bg-purple {
+    background: #d3dce6;
+}
+
+.bg-purple-light {
+    background: #e5e9f2;
+}
+
+.grid-content {
+    border-radius: 4px;
+    min-height   : 36px;
+}
+
+.row-bg {
+    padding         : 10px 0;
+    background-color: #f9fafc;
+}
+
+.scrollbar-content {
+    display        : 100%;
+    align-items    : center;
+    justify-content: left;
+    height         : 230px;
+    margin         : 10px 0;
+    text-align     : left;
+    border-radius  : 4px;
+    background     : var(--el-color-primary-light-9);
+    color          : var(--el-color-primary);
+}
+
+.scrollbar-message {
+    display         : flex;
+    align-items     : center;
+    justify-content : center;
+    height          : 70px;
+    margin          : 0px;
+    text-align      : center;
+    border-radius   : 4px;
+    background-color: #8ac4ff54;
+    color           : var(--el-color-primary);
+}
+
+.box-card-header {
+    display        : flex;
+    justify-content: space-around;
+    align-items    : center;
+}
+
+.content-card-header {
+    display        : flex;
+    justify-content: space-between;
+    align-items    : center;
+}
+
+.text {
+    font-size: 14px;
+}
+
+.item {
+    margin-bottom: 18px;
+}
+
+.content-card {
+    width : 100%;
+    height: 100%;
+}
+
+.message-card {
+    width : 95%;
+    height: 90%;
+}
+
+
+.demo-tabs>.el-tabs__content {
+    padding    : 3px;
+    color      : #6b778c;
+    font-size  : 16px;
+    font-weight: 80;
+}
