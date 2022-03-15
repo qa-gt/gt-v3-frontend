@@ -2,7 +2,8 @@
   <el-header class="header" style="::shadow ">
     <h3>{{ title }}</h3>
     <div class="user">
-      <user style="width: 1em; height: 1em; margin-right: 8px" />
+      <bell style="width: 1em; height: 1em; margin-right: " />
+      <user style="width: 1em; height: 1em;" />
       {{ username }}
     </div>
     <nav>

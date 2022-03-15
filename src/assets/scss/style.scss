@@ -53,7 +53,9 @@ p {
 }
 
 .el-message--success,
-.el-message--info {
+.el-message--info,
+.el-message--warning,
+.el-message--error {
     // max-width: 300px !important;
     min-width: 200px !important;
 }
