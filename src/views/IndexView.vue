@@ -47,9 +47,7 @@
     <el-col :span="19" :xs="24" :sm="18" :md="17" :lg="18" :xl="19">
       <el-row justify="left">
         <el-card shadow="hover" class="content-card" style="padding: -10px">
-          <el-scrollbar>
-            
-              <el-card shadow="hover" class="scrollbar-demo-item">
+          
                 <el-tabs
                   v-model="activeName"
                   class="demo-tabs"
@@ -68,8 +66,7 @@
                 </el-tabs>
               </el-card>
             
-          </el-scrollbar>
-        </el-card>
+         
       </el-row>
 
       <el-scrollbar>
@@ -138,19 +135,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-
-.scrollbar-demo-item {
-  box-shadow: 0px;
-  flex-shrink: 0;
-  align-items: center;
-  justify-content: center;
-  width: 1140px;
-  height: 100px;
-  margin: 10px;
-  text-align: center;
-  border-radius: 4px;
-  
-}
-</style>
