@@ -1,6 +1,6 @@
 <template>
   <el-row justify="space-evenly">
-    <el-col :span="5" :xs="24" :sm="18" :md="6">
+    <el-col :span="5" :xs="24" :sm="18" :md="6" style="margin-bottom: 20px;">
       <el-card shadow="hover" class="box-card">
         <template #header>
           <div class="card-header">
@@ -62,6 +62,7 @@
           v-for="item in 20"
           :key="item"
           class="scrollbar-content"
+          style="margin: 0;"
         >
           <el-card shadow="hover" class="content-card">
             <template #header>
@@ -85,7 +86,7 @@
           :page-size="5"
           :pager-count="7"
           :hide-on-single-page="true"
-          v-if="!isMobile"
+          class="hidden-sm-and-down"
         >
         </el-pagination>
         <el-pagination
@@ -95,13 +96,12 @@
           :page-size="5"
           :pager-count="6"
           :hide-on-single-page="true"
-          v-if="isMobile"
+          class="hidden-md-and-up"
         >
         </el-pagination>
       </el-scrollbar>
     </el-col>
 
-    <!--<el-col :span="6"><div class="grid-content bg-purple"></div></el-col>-->
   </el-row>
 </template>
 
