@@ -146,7 +146,7 @@ export default {
   flex-shrink: 0;
   align-items: center;
   justify-content: center;
-  width: 900px;
+  width: 1140px;
   height: 100px;
   margin: 10px;
   text-align: center;
