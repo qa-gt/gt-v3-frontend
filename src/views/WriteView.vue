@@ -29,7 +29,9 @@
           placeholder="写点东西……"
           @input="change($event)"
         />
-        <br />
+        <br>
+        
+        <br>
         <el-upload
           class="upload-demo"
           drag
