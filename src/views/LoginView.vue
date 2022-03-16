@@ -11,7 +11,6 @@
             class="w-50 m-2"
             placeholder="用户名"
             maxlength="30"
-            @input="change($event)"
           />
           <br /><br />
           <el-input
@@ -20,7 +19,6 @@
             class="w-50 m-2"
             placeholder="密码"
             maxlength="30"
-            @input="change($event)"
             show-password
           />
           <br /><br /><br />
@@ -45,21 +43,18 @@
 <script>
 import { ElMessage } from "element-plus";
 // import { ref } from "vue";
+import { mapState } from "vuex";
 
 export default {
+  computed: {
+    ...mapState(["user"]),
+  },
   data() {
     return {
       name: "",
       password: "",
     };
   },
-  change(e) {
-    // this.$forceUpdate(); // 更新视图
-    return {
-      e: e, //返回值
-    };
-  },
-
   methods: {
     login: function () {
       this.$store.commit("login", {
@@ -73,7 +68,6 @@ export default {
     },
   },
 };
-
 </script>
 
 <style>

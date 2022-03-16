@@ -8,7 +8,7 @@
       />
       <user style="width: 1em; height: 1em" />
       <!-- {{ username }} -->
-      {{ this.$store.state.user.name }}
+      {{ this.user.name }}
     </div>
     <nav>
       <router-link to="/">Home</router-link> |
@@ -48,7 +48,12 @@ nav a.router-link-exact-active {
 </style>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
+  computed: {
+    ...mapState(["user"]),
+  },
   data() {
     sessionStorage.setItem(
       "isMobile",

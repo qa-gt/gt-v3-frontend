@@ -47,7 +47,7 @@
 
     <el-col :span="19" :xs="24" :sm="18" :md="17" :lg="18" :xl="19">
       <el-row justify="left">
-        <el-card shadow="hover" class="content-card" style="padding: -10px">
+        <el-card shadow="hover" class="content-card" style="padding: -10px; width: 99%;">
           <el-tabs
             v-model="activeName"
             class="demo-tabs hidden-sm-and-down"
