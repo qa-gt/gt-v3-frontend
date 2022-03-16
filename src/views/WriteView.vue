@@ -39,7 +39,7 @@
             :rows="17"
             type="textarea"
             placeholder="写点东西..."
-            maxlength="10000"
+            maxlength="8000"
             show-word-limit
             @input="change($event)"
           />
@@ -47,24 +47,37 @@
           <br />
 
           <br />
-
-          <el-upload
-            class="upload-demo"
-            action="http://127.0.0.1:5000/upload"
-            :on-change="handleChange"
-            :file-list="fileList"
-            :on-success="uploadSuccess"
-            :on-error="uploadError"
-            show-file-list="true"
-            multiple="true"
-            limit="2"
-            accept=".jpg, .jpeg, .png, .gif"
-          >
-            <el-button type="primary">点击上传</el-button>
-            <template #tip>
-              <div class="el-upload__tip">仅限大小小于5MB的图片文件</div>
-            </template>
-          </el-upload>
+          <el-row gutter="20" justify="space-between">
+            <el-col>
+              <el-upload
+                class="upload-demo"
+                action="http://127.0.0.1:5000/upload"
+                :on-change="handleChange"
+                :file-list="fileList"
+                :on-success="uploadSuccess"
+                :on-error="uploadError"
+                show-file-list="true"
+                multiple="true"
+                limit="2"
+                accept=".jpg, .jpeg, .png, .gif"
+              >
+                <el-row gutter="20" justify="space-between">
+                  <el-col span="24">
+                    <el-button type="primary">点击上传图片</el-button>
+                    &emsp;&emsp;&emsp;
+                    <el-select
+                      v-model="whichtopic"
+                      placeholder="请选择一个主题"
+                    >
+                    </el-select
+                  ></el-col>
+                </el-row>
+                <template #tip>
+                  <div class="el-upload__tip">仅限大小小于5MB的图片文件</div>
+                </template>
+              </el-upload>
+            </el-col>
+          </el-row>
           <br /><br />
           <el-form-item>
             <el-button type="primary" @click="confirm"> 提 交 </el-button>

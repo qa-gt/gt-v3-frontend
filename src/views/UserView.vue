@@ -24,7 +24,7 @@
         <el-divider />
         <el-form :model="form" label-position='top' label-width="120px">
           <el-form-item label="真实姓名">
-            <el-input v-model="form.name" />
+            <el-input v-model="form.name" maxlength="5" show-word-limit/>
           </el-form-item>
           <el-form-item label="年级">
             <el-cascader
@@ -63,7 +63,7 @@
             </el-radio-group>
           </el-form-item>
           <el-form-item label="简介">
-            <el-input v-model="form.about" type="textarea" maxlength="100" />
+            <el-input v-model="form.about" type="textarea" maxlength="200" show-word-limit />
           </el-form-item>
           <el-form-item label="pushplus token">
             <el-input v-model="form.token" />
