@@ -11,7 +11,6 @@
         v-if="this.$store.state.loggedIn"
       />
       <user style="width: 1em; height: 1em" />
-      <!-- {{ username }} -->
       {{ user.name }}
     </div>
     <nav>
@@ -24,9 +23,10 @@
       <router-link to="/Article">Article</router-link> |
       <router-link to="/login">Login</router-link> |
       <router-link to="/password">Password</router-link>
-      <router-view style="margin-top: 30px" />
     </nav>
   </el-header>
+  <router-view style="margin-top: 50px" />
+  <router-view />
 </template>
 
 <style lang="scss" scoped>
@@ -54,25 +54,17 @@ nav a.router-link-exact-active {
 
 <script>
 import { mapState } from "vuex";
-// import changeTheme from "@/assets/js/theme.js";
 
 export default {
   computed: {
-    ...mapState(["user", "theme"]),
+    ...mapState(["user", "theme", "isMobile"]),
   },
   data() {
-    sessionStorage.setItem(
-      "isMobile",
-      (navigator.userAgent.match(
-        /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i
-      ) &&
-        "true") ||
-        ""
-    );
     return {
       title: "QA瓜田",
       username: "test",
-      isMobile: sessionStorage.getItem("isMobile"),
+      isMobile: this.isMobile,
+      viewTransition: "slide-right-leave-active",
     };
   },
   methods: {
@@ -80,6 +72,10 @@ export default {
       this.$store.commit("changeTheme");
       document.getElementsByTagName("html")[0].className = this.theme;
     },
+  },
+  created() {
+    console.log(this.theme);
+    document.getElementsByTagName("html")[0].className = this.theme;
   },
 };
 </script>

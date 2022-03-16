@@ -58,7 +58,7 @@
         </transition>
         <el-row
           justify="right"
-          :style="{ float: 'right', 'margin-top': showComment ? '10px' : '0' }"
+          style="float: right;"
         >
           <el-button
             type="primary"

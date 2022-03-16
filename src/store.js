@@ -12,7 +12,10 @@ const store = createStore({
                 sex: '',
                 grade: '',
             },
-            theme: 'light',
+            theme: localStorage.getItem("theme"),
+            isMobile: (navigator.userAgent.match(
+                /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i
+            ) && true) || false,
         }
     },
     mutations: {
@@ -24,6 +27,7 @@ const store = createStore({
         },
         changeTheme(state) {
             state.theme = state.theme === 'light' ? 'dark' : 'light';
+            localStorage.setItem('theme', state.theme);
         },
     }
 })
