@@ -10,7 +10,7 @@
         style="width: 1em; height: 1em; margin-right: 10px"
         v-if="this.$store.state.loggedIn"
       />
-      <user style="width: 1em; height: 1em" @click="changeTheme()" />
+      <user style="width: 1em; height: 1em" />
       <!-- {{ username }} -->
       {{ user.name }}
     </div>
