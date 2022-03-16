@@ -11,7 +11,8 @@ const store = createStore({
                 introduction: '',
                 sex: '',
                 grade: '',
-            }
+            },
+            theme: 'light',
         }
     },
     mutations: {
@@ -20,7 +21,10 @@ const store = createStore({
             for (let i in data) {
                 state.user[i] = data[i];
             }
-        }
+        },
+        changeTheme(state) {
+            state.theme = state.theme === 'light' ? 'dark' : 'light';
+        },
     }
 })
 

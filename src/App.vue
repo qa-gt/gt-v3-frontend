@@ -2,13 +2,17 @@
   <el-header class="header" style="::shadow ">
     <h3>{{ title }}</h3>
     <div class="user">
+      <el-icon style="margin-right: 10px" @click="changeTheme()">
+        <sunny v-if="theme === 'light'" />
+        <moon v-else />
+      </el-icon>
       <bell
         style="width: 1em; height: 1em; margin-right: 10px"
         v-if="this.$store.state.loggedIn"
       />
-      <user style="width: 1em; height: 1em" />
+      <user style="width: 1em; height: 1em" @click="changeTheme()" />
       <!-- {{ username }} -->
-      {{ this.user.name }}
+      {{ user.name }}
     </div>
     <nav>
       <router-link to="/">Home</router-link> |
@@ -24,7 +28,7 @@
   </el-header>
 </template>
 
-<style>
+<style lang="scss" scoped>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -49,10 +53,11 @@ nav a.router-link-exact-active {
 
 <script>
 import { mapState } from "vuex";
+// import changeTheme from "@/assets/js/theme.js";
 
 export default {
   computed: {
-    ...mapState(["user"]),
+    ...mapState(["user", "theme"]),
   },
   data() {
     sessionStorage.setItem(
@@ -68,6 +73,12 @@ export default {
       username: "test",
       isMobile: sessionStorage.getItem("isMobile"),
     };
+  },
+  methods: {
+    changeTheme() {
+      this.$store.commit("changeTheme");
+      document.getElementsByTagName("html")[0].className = this.theme;
+    },
   },
 };
 </script>

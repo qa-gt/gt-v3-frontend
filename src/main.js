@@ -7,7 +7,7 @@ import App from './App.vue';
 import router from './router';
 
 //导入scss文件
-import "@/assets/scss/style.scss";
+import "./assets/scss/style.scss";
 // import "../public/scss/Index.scss";
 // import elementIcons from "./utils/elementIcons";
 

@@ -25,7 +25,7 @@
         </div>
       </el-card>
       <br />
-      <el-scrollbar height="300px">
+      <!-- <el-scrollbar height="300px">
         <p v-for="item in 20" :key="item" class="scrollbar-message">
           <el-card shadow="hover" class="message-card">
             <el-popover
@@ -42,27 +42,24 @@
           >
           >
         </p>
-      </el-scrollbar>
+      </el-scrollbar> -->
     </el-col>
 
     <el-col :span="19" :xs="24" :sm="18" :md="17" :lg="18" :xl="19">
       <el-row justify="left">
-        <el-card shadow="hover" class="content-card" style="padding: -10px; width: 99%;">
+        <el-card shadow="hover" class="content-card" style="padding: -10px">
           <el-tabs
-            v-model="activeName"
+            v-model="value"
             class="demo-tabs hidden-sm-and-down"
             @tab-click="handleClick"
             style="padding: -10px"
           >
-            <el-tab-pane label="全部帖子" name="first"></el-tab-pane>
-            <el-tab-pane label="默认分类" name="second"></el-tab-pane>
-            <el-tab-pane label="八卦内容" name="third"></el-tab-pane>
-            <el-tab-pane label="消息通知" name="fourth"></el-tab-pane>
-            <el-tab-pane label="知识相关" name="fifth"></el-tab-pane>
-            <el-tab-pane label="时政新闻" name="seventh"></el-tab-pane>
-            <el-tab-pane label="灌 水 区" name="eighth"></el-tab-pane>
-            <el-tab-pane label="站    务" name="ninth"></el-tab-pane>
-            <el-tab-pane label="校方讯息" name="tenth"></el-tab-pane>
+            <el-tab-pane
+              v-for="item in options"
+              :key="item.value"
+              v-bind:label="item.label"
+              v-bind:name="item.value"
+            ></el-tab-pane>
           </el-tabs>
           <el-select
             v-model="value"
@@ -95,49 +92,47 @@
         </el-card>
       </el-row>
 
-      <el-scrollbar>
-        <p v-for="item in 20" :key="item" class="scrollbar-content">
-          <el-card shadow="hover" class="content-card">
-            <template #header>
-              <div class="content-card-header">
-                <span>Card name</span>
-                <el-button class="button" type="text"
-                  >Operation button</el-button
-                >
-              </div>
-            </template>
-            <div v-for="o in 4" :key="o" class="text item">
-              {{ "List item " + o }}
-            </div>
-          </el-card>
-        </p>
-        <el-pagination
-          background
-          index="prev, pager, next, jumper"
-          :total="200"
-          :page-size="5"
-          :pager-count="7"
-          :hide-on-single-page="true"
-          class="hidden-sm-and-down"
-        >
-        </el-pagination>
-        <el-pagination
-          small
-          index="prev, pager, next"
-          :total="50"
-          :page-size="5"
-          :pager-count="6"
-          :hide-on-single-page="true"
-          class="hidden-md-and-up"
-        >
-        </el-pagination>
-      </el-scrollbar>
+      <el-card
+        shadow="hover"
+        class="content-card"
+        v-for="item in 20"
+        :key="item"
+      >
+        <template #header>
+          <div class="content-card-header">
+            <span>Card name</span>
+            <el-button class="button" type="text">Operation button</el-button>
+          </div>
+        </template>
+        <div v-for="o in 4" :key="o" class="text item">
+          {{ "List item " + o }}
+        </div>
+      </el-card>
+      <el-pagination
+        background
+        layout="prev, pager, next, jumper, ->, total"
+        :total="200"
+        :page-size="5"
+        :pager-count="7"
+        :hide-on-single-page="true"
+        class="hidden-sm-and-down"
+      />
+      <el-pagination
+        layout="prev, pager, next"
+        :total="50"
+        :page-size="5"
+        :pager-count="5"
+        :hide-on-single-page="true"
+        class="hidden-md-and-up"
+      />
     </el-col>
   </el-row>
 </template>
 
 <style lang="scss" scoped>
+@import url("@/assets/scss/style.scss");
 @import url("@/assets/scss/Index.scss");
+// @import url("@/assets/scss/config-dark.scss");
 </style>
 
 <script>
@@ -147,6 +142,7 @@ export default {
   data() {
     this.isMobile = sessionStorage.getItem("isMobile");
     return {
+      theme: "light",
       username: "test",
       id: "1",
       grade: "九年级",
