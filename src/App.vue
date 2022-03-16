@@ -23,6 +23,7 @@
       <router-link to="/write">Write</router-link> |
       <router-link to="/Article">Article</router-link> |
       <router-link to="/login">Login</router-link> |
+      <router-link to="/password">Password</router-link>
       <router-view style="margin-top: 30px" />
     </nav>
   </el-header>
