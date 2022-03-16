@@ -50,6 +50,12 @@ const routes = [{
         name: "write",
         component: () =>
             import ('../views/WriteView.vue')
+    },
+    {
+        path: "/password",
+        name: "password",
+        component: () =>
+            import ('../views/PasswordView.vue')
     }
 ]
 
