@@ -1,7 +1,7 @@
 <template>
   <el-row style="text-align: center; justify-content: center">
     <el-col :span="24" style="max-width: 450px">
-      <el-card full class="login-card">
+      <el-card full class="login-card shadow-1">
         <h3>登录到瓜田</h3>
         <el-divider />
         <br />
@@ -39,6 +39,7 @@
     </el-col>
   </el-row>
 </template>
+
 
 <script>
 import { ElMessage } from "element-plus";
