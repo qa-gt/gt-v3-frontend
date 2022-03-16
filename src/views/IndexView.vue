@@ -80,7 +80,7 @@
           <div class="mt-4">
             <el-input
               v-model="searchInput"
-              placeholder="Please input"
+              placeholder="想找什么？"
               class="input-with-select"
             >
               <template #append>
