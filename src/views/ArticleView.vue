@@ -31,7 +31,7 @@
               }}<el-divider direction="vertical" /> 阅读量: {{ reads }}
             </div>
           </el-col>
-          <el-col :span="3">
+          <el-col :span="2">
             <el-button type="danger" size="small" plain @click="report">
               <el-icon>
                 <Warning class="report-icon" />
@@ -74,20 +74,21 @@
           </el-col>
         </el-row>
         <el-divider />
-        <el-row>
+        <el-row gutter="3">
           <el-col :span="22">
             <el-input
             v-model="comment"
             maxlength="200"
             placeholder="说点什么……"
             show-word-limit
+            :rows="3"
             type="textarea"
             @input="comment"
             >
             </el-input>
           </el-col>
           <el-col :span="2">
-            <el-button type="primary" plain @click="oncomment">评论
+            <el-button type="primary" plain @click="oncomment" class="oncomment-button">&ensp;评&ensp;论&ensp; 
             </el-button>
           </el-col>
         </el-row>
@@ -146,7 +147,7 @@ export default {
 }
 
 .read-card {
-  min-height: 600px;
+  min-height: 550px;
 }
 
 .conments-card {
@@ -157,5 +158,10 @@ export default {
 .report-icon {
   width: 20px;
   height: 20px;
+}
+
+.oncomment-button {
+  width: 100%;
+  height: 100%;
 }
 </style>
