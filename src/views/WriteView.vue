@@ -29,7 +29,7 @@
               class="w-50 m-2"
               maxlength="100"
               show-word-limit
-              placeholder="起个名字……"
+              placeholder="起个名字..."
               @input="change($event)"
             />
           </el-form-item>
@@ -38,7 +38,7 @@
             v-model="articleContent"
             :rows="17"
             type="textarea"
-            placeholder="写点东西……"
+            placeholder="写点东西..."
             maxlength="10000"
             show-word-limit
             @input="change($event)"
@@ -50,27 +50,24 @@
 
           <el-upload
             class="upload-demo"
-            drag
-            action="https://jsonplaceholder.typicode.com/posts/"
-            multiple
-            on-preview
-            file-list
-            on-remove
-            full
+            action="http://127.0.0.1:5000/upload"
+            :on-change="handleChange"
+            :file-list="fileList"
+            :on-success="uploadSuccess"
+            :on-error="uploadError"
+            show-file-list="true"
+            multiple="true"
+            limit="2"
+            accept=".jpg, .jpeg, .png, .gif"
           >
-            <el-icon class="el-icon--upload"><upload-filled /></el-icon>
-            <div class="el-upload__text">
-              拖动文件到这里 或 <em>点击上传</em>
-            </div>
+            <el-button type="primary">点击上传</el-button>
             <template #tip>
-              <div class="el-upload__tip">
-                jpg/png 文件，不大于 5Mb。 最多支持20张。
-              </div>
+              <div class="el-upload__tip">仅限大小小于5MB的图片文件</div>
             </template>
           </el-upload>
           <br /><br />
           <el-form-item>
-            <el-button type="primary" @click="confirm"> 确 定 </el-button>
+            <el-button type="primary" @click="confirm"> 提 交 </el-button>
             <el-popconfirm title="确认要取消吗？本次编辑内容将不会保存。">
               <template #reference>
                 <el-button> 取 消 </el-button>
@@ -85,12 +82,8 @@
 
 <script>
 import { ref } from "vue";
-import { UploadFilled } from "@element-plus/icons-vue";
 import { ElMessage } from "element-plus";
 export default {
-  components: {
-    UploadFilled: UploadFilled,
-  },
   data() {
     return {
       username: "test",
@@ -100,7 +93,8 @@ export default {
       tags: "创始人",
       activeName: ref("first"),
       articleContent: "",
-      articleTitle: ""
+      articleTitle: "",
+      fileList: [],
     };
   },
 
@@ -114,13 +108,14 @@ export default {
     confirm: () => {
       ElMessage.success("提交成功！");
     },
+    uploadSuccess(res) {
+      console.log(res);
+      ElMessage.success("上传成功！");
+    },
+    uploadError(err) {
+      console.log(err);
+      ElMessage.error("上传失败: " + err);
+    },
   },
 };
-
 </script>
-
-<style>
-.upload-demo {
-  width: 100%;
-}
-</style>
