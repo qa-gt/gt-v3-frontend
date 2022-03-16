@@ -88,7 +88,7 @@
             </el-input>
           </el-col>
           <el-col :span="2">
-            <el-button type="primary" plain @click="oncomment" class="oncomment-button">&ensp;评&ensp;论&ensp; 
+            <el-button type="primary" plain @click="oncomment" class="oncomment-button">&ensp;评&emsp;论&ensp; 
             </el-button>
           </el-col>
         </el-row>
@@ -107,7 +107,7 @@ export default {
       ElMessage.warning("已举报");
     },
     oncomment: () => {
-      ElMessage.success("评论成功1")
+      ElMessage.success("评论成功！")
     },
     like: () => {
       ElMessage.success("点赞成功！")
