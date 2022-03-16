@@ -74,7 +74,23 @@
           </el-col>
         </el-row>
         <el-divider />
-        
+        <el-row>
+          <el-col :span="22">
+            <el-input
+            v-model="comment"
+            maxlength="200"
+            placeholder="说点什么……"
+            show-word-limit
+            type="textarea"
+            @input="comment"
+            >
+            </el-input>
+          </el-col>
+          <el-col :span="2">
+            <el-button type="primary" plain @click="oncomment">评论
+            </el-button>
+          </el-col>
+        </el-row>
       </el-card>
     </el-col>
   </el-row>
@@ -89,6 +105,12 @@ export default {
     report: () => {
       ElMessage.warning("已举报");
     },
+    oncomment: () => {
+      ElMessage.success("评论成功1")
+    },
+    like: () => {
+      ElMessage.success("点赞成功！")
+    }
   },
 
   data() {
