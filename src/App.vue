@@ -27,7 +27,7 @@
       </el-icon>
       {{ user.name }}
     </div>
-    <nav>
+    <!-- <nav>
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link> |
       <router-link to="/test">Test</router-link> |
@@ -37,7 +37,7 @@
       <router-link to="/Article">Article</router-link> |
       <router-link to="/login">Login</router-link> |
       <router-link to="/password">Password</router-link>
-    </nav>
+    </nav> -->
   </el-header>
   <router-view style="margin: 50px 25px" />
 </template>

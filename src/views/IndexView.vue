@@ -1,5 +1,5 @@
 <template>
-  <el-row justify="space-evenly" style="margin-top: 50px;">
+  <el-row justify="space-evenly" style="margin-top: 50px">
     <el-col
       :span="5"
       :xs="24"
@@ -83,15 +83,25 @@
       >
         <template #header>
           <div class="content-card-header">
-            <el-button type="text" style="color: black;font-width: 2500px;font-size: 18px" @click="route_to_article()">
-            Card name
+            <el-button
+              type="text"
+              style="color: black; font-width: 2500px; font-size: 18px"
+              @click="route_to_article()"
+            >
+              Card name
             </el-button>
             <el-button class="button" type="text">Operation button</el-button>
           </div>
         </template>
-        <div v-for="o in 4" :key="o" class="text item">
-          {{ "List item " + o }}
-        </div>
+        <el-button
+          type="text"
+          style="color: black; font-width: 2500px; font-size: 13px"
+          @click="route_to_article()"
+        >
+          <div v-for="o in 4" :key="o" class="text item">
+            {{ "List item " + o }} <br /><br />
+          </div>
+        </el-button>
       </el-card>
       <el-pagination
         background
@@ -125,10 +135,8 @@
 import { ref } from "vue";
 import { mapState } from "vuex";
 
-import { ElMessageBox } from 'element-plus';
-import { ElMessage } from 'element-plus';
-
-
+import { ElMessageBox } from "element-plus";
+import { ElMessage } from "element-plus";
 
 export default {
   computed: {
@@ -179,11 +187,11 @@ export default {
     },
     router: (article_id) => {
       console.log(article_id);
-      ElMessage.info("clicked!")
+      ElMessage.info("clicked!");
     },
     route_to_article() {
-      location.replace("/#/article") //要加上文章的id
-    }
+      location.replace("/#/article"); //要加上文章的id
+    },
   },
 };
 </script>
