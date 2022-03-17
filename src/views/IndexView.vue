@@ -9,7 +9,7 @@
       :xl="4"
       style="margin-bottom: 20px"
     >
-      <!-- <el-card shadow="hover" class="box-card">
+      <el-card shadow="hover" class="box-card">
         <template #header>
           <div class="card-header">
             <h2>{{ username }}</h2>
@@ -24,7 +24,7 @@
           <br />
         </div>
       </el-card>
-      <br /> -->
+      <br />
       <!-- <el-scrollbar height="300px">
         <p v-for="item in 20" :key="item" class="scrollbar-message">
           <el-card shadow="hover" class="message-card">

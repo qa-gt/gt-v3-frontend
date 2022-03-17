@@ -26,7 +26,6 @@
     </nav>
   </el-header>
   <router-view style="margin-top: 50px" />
-  <router-view />
 </template>
 
 <style lang="scss" scoped>
