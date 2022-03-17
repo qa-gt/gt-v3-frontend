@@ -1,7 +1,11 @@
 <template>
   <el-header class="header" style="::shadow ">
-    <el-button type="text" style="font-size: 20px; color: #000000; font-weight: 600; " @click="home()">
-    {{ title }}
+    <el-button
+      type="text"
+      style="font-size: 20px; color: #000000; font-weight: 600"
+      @click="home()"
+    >
+      {{ title }}
     </el-button>
     <div class="user">
       <el-icon style="margin-right: 10px" @click="changeTheme()">
@@ -12,7 +16,9 @@
         style="width: 1em; height: 1em; margin-right: 10px"
         v-if="this.$store.state.loggedIn"
       />
-      <user style="width: 1em; height: 1em" />
+      <el-icon @click="route_to_user()">
+        <user style="width: 1em; height: 1em" />
+      </el-icon>
       {{ user.name }}
     </div>
     <nav>
@@ -54,7 +60,6 @@ nav a.router-link-exact-active {
 </style>
 
 <script>
-//import { RouterLink } from 'vue-router';
 import { mapState } from "vuex";
 
 export default {
@@ -74,14 +79,16 @@ export default {
       this.$store.commit("changeTheme");
       document.getElementsByTagName("html")[0].className = this.theme;
     },
+    home() {
+      location.replace("/#/index");
+    },
+    route_to_user() {
+      location.replace("/#/user");
+    },
   },
   created() {
     console.log(this.theme);
     document.getElementsByTagName("html")[0].className = this.theme;
   },
-  home() {
-    location.replace("/#/index");
-    
-  }
 };
 </script>
