@@ -138,7 +138,7 @@ export default {
   },
   methods: {
     doSubmit: function () {
-      ElMessage.success("贴子发布成功!");
+      ElMessage.success("贴子发布成功！");
       this.$router.push({ name: "article" });
       location.href="/#/article/"; //在后面加上帖子id
     },
