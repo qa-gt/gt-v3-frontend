@@ -25,7 +25,7 @@
       <router-link to="/password">Password</router-link>
     </nav>
   </el-header>
-  <router-view style="margin-top: 50px" />
+  <router-view style="margin: 50px 25px" />
 </template>
 
 <style lang="scss" scoped>

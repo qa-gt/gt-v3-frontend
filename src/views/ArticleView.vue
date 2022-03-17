@@ -1,5 +1,5 @@
 <template>
-  <el-row justify="space-evenly">
+  <el-row justify="space-evenly" style="margin-bottom: 50px">
     <el-col :span="5" :xs="24" :sm="18" :md="6" style="margin-bottom: 20px">
       <el-card shadow="hover" class="box-card">
         <template #header>
@@ -56,10 +56,7 @@
             </el-col>
           </el-row>
         </transition>
-        <el-row
-          justify="right"
-          style="float: right;"
-        >
+        <el-row justify="right" style="float: right">
           <el-button
             type="primary"
             style="padding: 10px; margin-right: 5px"
@@ -68,7 +65,7 @@
           >
             发表评论
           </el-button>
-          <el-dropdown trigger="click">
+          <el-dropdown trigger="hover">
             <el-button type="primary" style="padding: 10px">
               互动<el-icon style="margin-left: 10px"><arrow-down /></el-icon>
             </el-button>
