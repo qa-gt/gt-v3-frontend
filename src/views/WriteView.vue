@@ -88,7 +88,7 @@
           </el-row>
           <br /><br />
           <el-form-item>
-            <el-button type="primary" @click="doSubmit"> 提 交 </el-button>
+            <el-button type="primary" @click="doSubmit"> <el-icon><promotion /></el-icon> &emsp;提&ensp;交 &ensp;</el-button>
             <el-popconfirm 
             title="确认要取消吗？本次编辑内容将不会保存。" 
             confirm-button-text="确定取消"

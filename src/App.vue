@@ -8,6 +8,9 @@
       {{ title }}
     </el-button>
     <div class="user">
+      <el-icon style="width: 1em; height: 1em; margin-right: 10px" @click="home()">
+        <home-filled />
+      </el-icon>
       <el-icon style="margin-right: 10px" @click="changeTheme()">
         <sunny v-if="theme === 'light'" />
         <moon v-else />
@@ -16,6 +19,9 @@
         style="width: 1em; height: 1em; margin-right: 10px"
         v-if="this.$store.state.loggedIn"
       />
+      <el-icon style="width: 1em; height: 1em; margin-right: 10px" @click="route_to_write()">
+        <edit />
+      </el-icon>
       <el-icon @click="route_to_user()">
         <user style="width: 1em; height: 1em" />
       </el-icon>
@@ -85,6 +91,9 @@ export default {
     route_to_user() {
       location.replace("/#/user");
     },
+    route_to_write() {
+      location.replace("/#/write")
+    }
   },
   created() {
     console.log(this.theme);
