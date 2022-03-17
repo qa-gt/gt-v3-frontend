@@ -1,5 +1,5 @@
 <template>
-  <el-row justify="space-evenly" style="margin-top: 50px;">
+  <el-row justify="space-evenly" style="margin-top: 50px; padding: 0 25px">
     <el-col
       :span="5"
       :xs="24"

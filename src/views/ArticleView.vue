@@ -107,17 +107,81 @@
           </el-dropdown>
         </el-row>
         <el-divider style="margin-top: 60px" />
+        <p style="font-weight: bold; font-size: 1.1rem">赞</p>
         <el-row justify="left">
-          <div class="info-2">赞: {{ users }}</div>
+          <div class="info-2">{{ users }}</div>
         </el-row>
         <el-divider />
-        
+        <p style="font-weight: bold; font-size: 1.1rem">评论</p>
+        <el-row class="comment-item" v-for="i in [1, 2]" :key="i">
+          <el-col :xs="4" :sm="3" :md="2" :lg="2" :xl="2" style="padding: 5px">
+            <img
+              src="https://start.yixiangzhilv.com/static/background.jpg"
+              style="width: 100%"
+            />
+          </el-col>
+          <el-col :xs="20" :sm="21" :md="22" :lg="22" :xl="22">
+            <div
+              class="comment-content"
+              :style="{ 'padding-left': isMobile ? '5px' : '20px' }"
+            >
+              <div class="comment-title">
+                <span>
+                  <span class="comment comment-user">Test</span>
+                  <span class="comment comment-time">
+                    <el-popover
+                      placement="top-end"
+                      :width="20"
+                      trigger="hover"
+                      content="ID:1"
+                    >
+                      <template #reference> {{ time }} </template>
+                    </el-popover>
+                  </span>
+                </span>
+              </div>
+              <div class="comment comment-text">
+                commentTextcommentTextcommentTextcommentTextcommentTextcommentTextcommentText
+              </div>
+            </div>
+          </el-col>
+          <el-divider class="comment-divider" />
+        </el-row>
       </el-card>
     </el-col>
   </el-row>
 </template>
 
 <style>
+.comment-item {
+  margin-top: -5px;
+  padding: 5px 15px;
+  flex-wrap: wrap;
+}
+
+.comment {
+  word-break: break-all;
+}
+
+.comment-user {
+  font-weight: bold;
+}
+
+.comment-title {
+  margin-bottom: 5px;
+}
+
+.comment-time {
+  float: right;
+  color: rgb(185, 185, 185);
+}
+
+.comment-divider {
+  margin: 10px;
+  /* margin-left: 5%; */
+  /* width: 90%; */
+}
+
 .el-collapse-item__header,
 .el-collapse-item__wrap {
   border-bottom: 0px solid rgba(255, 255, 255, 0) !important;
@@ -143,15 +207,26 @@
 <script>
 import { ElMessage } from "element-plus";
 import Velocity from "velocity-animate";
+import moment from "moment";
+import { mapState } from "vuex";
 //import { Warning } from '@element-plus/icons-vue'
 
+moment.locale("zh-cn");
 export default {
+  computed: {
+    ...mapState(["user", "theme", "isMobile"]),
+  },
   methods: {
     report: () => {
       ElMessage.warning("已举报");
     },
-    commentSubmit: () => {
+    commentSubmit: function () {
       ElMessage.success("评论成功！");
+      let that = this;
+      setTimeout(() => {
+        that.comment = "";
+        that.showComment = false;
+      }, 100);
     },
     writeComment: function () {
       this.showComment = !this.showComment;
@@ -191,7 +266,7 @@ export default {
       articleContent: "test",
       articleTitle: "test",
       writer: "test",
-      time: "2022/03/16 10:16:59",
+      time: "1647374705000",
       topic: "默认话题",
       articleid: "1",
       reads: "100",
@@ -199,57 +274,16 @@ export default {
         "aaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,ddd",
       comment: "",
       who: "test",
-      comments: "zbczbczbczbczbc"
+      comments: "zbczbczbczbczbc",
     };
+  },
+  created() {
+    this.time = moment(Number(this.time)).fromNow();
   },
 };
 </script>
 
 <style>
-/* .v-enter-active {
-  transition: opacity 0.5s;
-}
-.v-enter {
-  opacity: 0;
-}
-.v-leave-active {
-  transition: opacity 0.5s;
-}
-.v-leave-to {
-  opacity: 0;
-} */
-/* 
-@keyframes show {
-  0% {
-    opacity: 0;
-    left: 32px;
-  }
-  100% {
-    opacity: 1;
-    left: 0;
-  }
-}
-@keyframes hide {
-  0% {
-    opacity: 1;
-    left: 0;
-  }
-  100% {
-    opacity: 0;
-    left: -32px;
-  }
-}
-.v-enter-active {
-  animation: show 1.2s;
-}
-.v-leave-active {
-  animation: hide 1.2s;
-}
-.v-enter,
-.v-leave-to {
-  opacity: 0;
-} */
-
 .info {
   font-size: 14px;
   color: #7a7a7a;
