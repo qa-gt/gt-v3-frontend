@@ -1,5 +1,5 @@
 <template>
-  <el-row justify="space-evenly">
+  <el-row justify="space-evenly" style="margin-top: 50px;">
     <el-col
       :span="5"
       :xs="24"
@@ -61,10 +61,10 @@
               v-model="searchInput"
               placeholder="想找什么？"
               class="input-with-select"
-              @submit="doSearch"
+              @keydown.enter.self.stop="doSearch(searchInput)"
             >
               <template #append>
-                <el-button type="primary" @submit="doSearch">
+                <el-button type="primary" @click="doSearch(searchInput)">
                   <el-icon style="vertical-align: middle">
                     <search />
                   </el-icon>
@@ -122,7 +122,7 @@
 <script>
 import { ref } from "vue";
 import { mapState } from "vuex";
-import { ElMessageBox } from 'element-plus';
+import { ElMessageBox } from "element-plus";
 
 export default {
   computed: {
@@ -167,9 +167,9 @@ export default {
     handleClick: (tab, event) => {
       console.log(tab, event);
     },
-    doSearch: () => {
-      console.log(this.searchInput);
-      ElMessageBox.alert("搜索：" + this.searchInput);
+    doSearch: (text) => {
+      if (!text) return;
+      ElMessageBox.alert("搜索：" + text);
     },
   },
 };
