@@ -70,7 +70,7 @@
           </el-form-item>
           <br />
           <el-form-item>
-            <el-button type="primary" @click="onSubmit">确定</el-button>
+            <el-button type="primary" @click="confirm">保存</el-button>
             <el-popconfirm 
             title="确认要取消吗？本次编辑内容将不会保存。" 
             confirm-button-text="确定取消"
@@ -220,10 +220,12 @@ export default {
     };
   },
   methods: {
-    onSubmit: () => {
+    confirm: () => {
+      location.replace("/#/index");
       ElMessage.success (
-        '提交成功！'
-      )
+        '保存成功！'
+      );
+      
     },
     handleChange: (value) => {
       console.log(value);
