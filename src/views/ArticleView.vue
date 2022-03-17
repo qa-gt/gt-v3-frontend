@@ -68,9 +68,9 @@
           >
             发表评论
           </el-button>
-          <el-dropdown trigger="click">
+          <el-dropdown trigger="hover">
             <el-button type="primary" style="padding: 10px">
-              互动<el-icon style="margin-left: 10px"><arrow-down /></el-icon>
+              互动<el-icon style="margin-left: 10px" ><arrow-down /></el-icon>
             </el-button>
             <template v-slot:dropdown>
               <el-dropdown-menu>
