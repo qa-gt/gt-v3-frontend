@@ -105,7 +105,7 @@ export default {
       ElMessage.warning("已举报");
     },
     commentSubmit: () => {
-      ElMessage.success("评论成功1");
+      ElMessage.success("评论成功！");
     },
     writeComment: function () {
       this.showComment = !this.showComment;
