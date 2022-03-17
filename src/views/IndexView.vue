@@ -83,7 +83,9 @@
       >
         <template #header>
           <div class="content-card-header">
-            <span>Card name</span>
+            <el-button type="text" style="color: black;font-width: 2500px;font-size: 18px" @click="route_to_article()">
+            Card name
+            </el-button>
             <el-button class="button" type="text">Operation button</el-button>
           </div>
         </template>
@@ -178,6 +180,9 @@ export default {
     router: (article_id) => {
       console.log(article_id);
       ElMessage.info("clicked!")
+    },
+    route_to_article() {
+      location.replace("/#/article") //要加上文章的id
     }
   },
 };
