@@ -20,18 +20,41 @@
     </el-col>
     <el-col :span="19" :xs="24" :sm="18" :md="17" style="min-width: 300px">
       <el-card shadow="hover" full class="read-card">
-        <h2>{{ articleTitle }}</h2>
-        <!-- <el-row justify="space-between"> -->
-        <!-- <el-col :span="12"> -->
         <div class="info">
-          作者: {{ writer }}<el-divider direction="vertical" /> 发布时间:{{
-            time
-          }}<el-divider direction="vertical" /> 话题: {{ topic
-          }}<el-divider direction="vertical" /> ID: {{ articleid
-          }}<el-divider direction="vertical" /> 阅读量: {{ reads }}
+          <el-collapse
+            v-model="activeNames"
+            @change="handleChange"
+            style="border: 0"
+          >
+            <el-collapse-item name="1" class="articleInfo">
+              <template #title>
+                <h2 class="overflow">{{ articleTitle }}</h2>
+              </template>
+              <p>标题&emsp;{{ articleTitle }}</p>
+              <p>话题&emsp;{{ topic }}</p>
+              <p>作者&emsp;{{ writer }}</p>
+              <p>发布时间&emsp;{{ time }}</p>
+              <p>阅读量&emsp;{{ reads }}</p>
+              <p>
+                ID&emsp;{{ articleid }}
+                <el-button
+                  type="danger"
+                  size="small"
+                  plain
+                  @click="report"
+                  style="float: right"
+                >
+                  <el-icon>
+                    <Warning class="report-icon" />
+                  </el-icon>
+                  <div style="font-size: 12px">&ensp;举&ensp;报</div>
+                </el-button>
+              </p>
+            </el-collapse-item>
+          </el-collapse>
         </div>
-        <el-divider />
-        <div>
+        <el-divider style="margin-top: 10px" />
+        <div style="min-height: 250px">
           {{ articleContent }}
         </div>
       </el-card>
@@ -67,7 +90,7 @@
           </el-button>
           <el-dropdown trigger="hover">
             <el-button type="primary" style="padding: 10px">
-              互动<el-icon style="margin-left: 10px" ><arrow-down /></el-icon>
+              互动<el-icon style="margin-left: 10px"><arrow-down /></el-icon>
             </el-button>
             <template v-slot:dropdown>
               <el-dropdown-menu>
@@ -90,6 +113,29 @@
     </el-col>
   </el-row>
 </template>
+
+<style>
+.el-collapse-item__header,
+.el-collapse-item__wrap {
+  border-bottom: 0px solid rgba(255, 255, 255, 0) !important;
+}
+
+.overflow {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+}
+
+.articleInfo,
+.el-collapse-item__content {
+  border: 0;
+  margin-bottom: 0 !important;
+}
+.articleInfo p {
+  margin: 5px !important;
+}
+</style>
 
 <script>
 import { ElMessage } from "element-plus";
