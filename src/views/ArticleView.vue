@@ -11,7 +11,7 @@
           <div>ID:{{ id }} | {{ grade }} | {{ sex }}</div>
           <br />
           <div>
-            <b>认证:{{ tags }}</b>
+            <b>认证: {{ tags }}</b>
           </div>
           <br />
         </div>

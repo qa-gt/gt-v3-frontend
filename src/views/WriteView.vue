@@ -11,7 +11,7 @@
           <div>ID:{{ id }} | {{ grade }} | {{ sex }}</div>
           <br />
           <div>
-            <b>认证:{{ tags }}</b>
+            <b>认证: {{ tags }}</b>
           </div>
           <br />
         </div>
@@ -88,7 +88,7 @@
           </el-row>
           <br /><br />
           <el-form-item>
-            <el-button type="primary" @click="doSubmit"> 提 交 </el-button>
+            <el-button type="primary" @click="doSubmit"> <el-icon><promotion /></el-icon> &emsp;提&ensp;交 &ensp;</el-button>
             <el-popconfirm 
             title="确认要取消吗？本次编辑内容将不会保存。" 
             confirm-button-text="确定取消"
@@ -138,7 +138,7 @@ export default {
   },
   methods: {
     doSubmit: function () {
-      ElMessage.success("贴子发布成功!");
+      ElMessage.success("贴子发布成功！");
       this.$router.push({ name: "article" });
       location.href="/#/article/"; //在后面加上帖子id
     },
