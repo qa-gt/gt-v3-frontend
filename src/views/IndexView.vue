@@ -123,6 +123,7 @@
 import { ref } from "vue";
 import { mapState } from "vuex";
 import { ElMessageBox } from 'element-plus';
+import { ElMessage } from 'element-plus';
 
 export default {
   computed: {
@@ -171,6 +172,10 @@ export default {
       console.log(this.searchInput);
       ElMessageBox.alert("搜索：" + this.searchInput);
     },
+    router: (article_id) => {
+      console.log(article_id);
+      ElMessage.info("clicked!")
+    }
   },
 };
 </script>

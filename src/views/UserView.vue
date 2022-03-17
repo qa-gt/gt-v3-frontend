@@ -23,16 +23,13 @@
         <h2>个人信息编辑</h2>
         <el-divider />
         <el-form :model="form" label-position='top' label-width="120px">
+          <el-form-item>
+            <el-button type="primary" @click="turn_to_password">修改密码</el-button>
+          </el-form-item>
           <el-form-item label="真实姓名">
-            <el-input v-model="form.name" maxlength="5" show-word-limit/>
+            <el-input placeholder="请输入" v-model="form.name" maxlength="5" />
           </el-form-item>
           <el-form-item label="年级">
-            <el-cascader
-              v-model="form.grade"
-              :options="options"
-              :props="props"
-              @change="handleChange"
-            />
             <el-select v-model="form.grade" placeholder="请选择你的年级">
               <el-option label="一年级" value="一年级" />
               <el-option label="二年级" value="二年级" />
@@ -63,15 +60,26 @@
             </el-radio-group>
           </el-form-item>
           <el-form-item label="简介">
-            <el-input v-model="form.about" type="textarea" maxlength="200" show-word-limit />
+            <el-input placeholder="介绍自己……" v-model="form.about" type="textarea" maxlength="100" show-word-limit />
+          </el-form-item>
+          <el-form-item label="邮箱">
+            <el-input placeholder="" v-model="form.mail" maxlength="70" />
           </el-form-item>
           <el-form-item label="pushplus token">
-            <el-input v-model="form.token" />
+            <el-input maxlength="32" v-model="form.token" />
           </el-form-item>
           <br />
           <el-form-item>
             <el-button type="primary" @click="onSubmit">确定</el-button>
-            <el-button>取消</el-button>
+            <el-popconfirm 
+            title="确认要取消吗？本次编辑内容将不会保存。" 
+            confirm-button-text="确定取消"
+            cancel-button-text="再想想看"
+            @confirm="cancel" >
+              <template #reference>
+                <el-button > 取 消 </el-button>
+              </template>
+            </el-popconfirm>
           </el-form-item>
         </el-form>
       </el-card>
@@ -102,6 +110,7 @@ export default {
         sex: "",
         about: "",
         token: "",
+        mail: "",
       }),
 
       value: ref([]),
@@ -219,6 +228,14 @@ export default {
     handleChange: (value) => {
       console.log(value);
     },
+    turn_to_password: () => {
+      location.href="/#/password";
+    },
+    cancel: () => {
+      location.href="/#/index";
+      ElMessage.info("已取消")
+    },
+      
   },
 };
 </script>

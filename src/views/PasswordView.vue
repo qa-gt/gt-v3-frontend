@@ -65,17 +65,10 @@ export default {
     };
   },
   methods: {
-    login: function () {
-      this.$store.commit("login", {
-        name: this.name,
-        password: this.password,
-      });
-      ElMessage.success(`${this.name}，欢迎回来！`);
-    },
-
     contrast: function () {
         if (this.password == this.password2 && this.password != "") {
             ElMessage.success("更改成功！");
+            location.href="/#/user"
 
         } else if (this.password != this.password2) {
             ElMessage.error("两次密码不匹配，请确认重新输入！");

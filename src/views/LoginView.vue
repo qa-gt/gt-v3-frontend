@@ -24,9 +24,11 @@
           <br /><br /><br />
           <!-- <el-row> -->
           <!-- <el-col :span="10" :offset="6"> -->
+            
           <el-button type="primary" native-type="submit" @click="login">
             &emsp;&emsp;&emsp;登&emsp;录&emsp;&emsp;&emsp;
           </el-button>
+          
           <br /><br />
           <span style="font-size: 14px">
             &#8195;忘记密码？
@@ -62,6 +64,7 @@ export default {
         name: this.name,
         password: this.password,
       });
+      location.href="/#/index";
       ElMessage.success(`${this.name}，欢迎回来！`);
     },
     repass: () => {

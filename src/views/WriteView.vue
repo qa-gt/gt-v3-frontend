@@ -89,9 +89,13 @@
           <br /><br />
           <el-form-item>
             <el-button type="primary" @click="doSubmit"> 提 交 </el-button>
-            <el-popconfirm title="确认要取消吗？本次编辑内容将不会保存。">
+            <el-popconfirm 
+            title="确认要取消吗？本次编辑内容将不会保存。" 
+            confirm-button-text="确定取消"
+            cancel-button-text="再想想看"
+            @confirm="cancel" >
               <template #reference>
-                <el-button> 取 消 </el-button>
+                <el-button > 取 消 </el-button>
               </template>
             </el-popconfirm>
           </el-form-item>
@@ -122,6 +126,7 @@ export default {
       articleTitle: "",
       articleTopic: "",
       fileList: [],
+      article_id: "1"
     };
   },
 
@@ -135,6 +140,7 @@ export default {
     doSubmit: function () {
       ElMessage.success("贴子发布成功!");
       this.$router.push({ name: "article" });
+      location.href="/#/article/"; //在后面加上帖子id
     },
     uploadSuccess(res) {
       console.log(res);
@@ -144,6 +150,10 @@ export default {
       console.log(err);
       ElMessage.error("上传失败: " + err);
     },
+    cancel: () => {
+      location.href="/#/index";
+      ElMessage.info("已取消")
+    }
   },
 };
 </script>
