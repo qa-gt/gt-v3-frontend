@@ -69,7 +69,7 @@
             <el-col :span="24">
               <el-input
                 v-model="comment"
-                maxlength="200"
+                maxlength="400"
                 placeholder="说点什么……"
                 show-word-limit
                 :rows="3"
@@ -95,7 +95,9 @@
             <template v-slot:dropdown>
               <el-dropdown-menu>
                 <span>
-                  <el-dropdown-item @click="like">赞</el-dropdown-item>
+                  <el-dropdown-item @click="like"
+                    >&ensp;赞&ensp;</el-dropdown-item
+                  >
                   <el-dropdown-item @click="writeComment"
                     >评论</el-dropdown-item
                   >
@@ -108,7 +110,8 @@
         <el-row justify="left">
           <div class="info-2">赞: {{ users }}</div>
         </el-row>
-        <!-- 往后评论加在这里，新开一个el-row -->
+        <el-divider />
+        
       </el-card>
     </el-col>
   </el-row>
@@ -195,6 +198,8 @@ export default {
       users:
         "aaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,ddd",
       comment: "",
+      who: "test",
+      comments: "zbczbczbczbczbc"
     };
   },
 };
