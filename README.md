@@ -1,32 +1,21 @@
-# qagt
-## 主要关注src目录下的文件
+# QA瓜田项目前端仓库
 
 ## 环境准备
 
-Vue3   Vue_CLI
-
-Element Plus
-
+保你的电脑上安装有(Node.js)[https://nodejs.org/zh-cn/]
 
 ## Project setup
 ```
-npm install
+npm install cnpm -g --registry=https://registry.npmmirror.com/
+cnpm install
 ```
 
 ### Compiles and hot-reloads for development
 ```
-npm run serve
+cnpm run serve
 ```
 
 ### Compiles and minifies for production
 ```
-npm run build
+cnpm run build
 ```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
