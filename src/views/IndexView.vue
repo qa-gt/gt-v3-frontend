@@ -25,24 +25,6 @@
         </div>
       </el-card>
       <br />
-      <!-- <el-scrollbar height="300px">
-        <p v-for="item in 20" :key="item" class="scrollbar-message">
-          <el-card shadow="hover" class="message-card">
-            <el-popover
-              v-bind:placement="isMobile ? 'top' : 'right'"
-              v-bind:title="item"
-              :width="200"
-              trigger="click"
-              content="this is content, this is content, this is content"
-            >
-              <template #reference>
-                <el-button>Click to activate</el-button>
-              </template>
-            </el-popover></el-card
-          >
-          >
-        </p>
-      </el-scrollbar> -->
     </el-col>
 
     <el-col :span="19" :xs="24" :sm="18" :md="17" :lg="18" :xl="19">
@@ -79,9 +61,10 @@
               v-model="searchInput"
               placeholder="想找什么？"
               class="input-with-select"
+              @submit="doSearch"
             >
               <template #append>
-                <el-button type="primary">
+                <el-button type="primary" @submit="doSearch">
                   <el-icon style="vertical-align: middle">
                     <search />
                   </el-icon>
@@ -139,6 +122,7 @@
 <script>
 import { ref } from "vue";
 import { mapState } from "vuex";
+import { ElMessageBox } from 'element-plus';
 
 export default {
   computed: {
@@ -182,6 +166,10 @@ export default {
   methods: {
     handleClick: (tab, event) => {
       console.log(tab, event);
+    },
+    doSearch: () => {
+      console.log(this.searchInput);
+      ElMessageBox.alert("搜索：" + this.searchInput);
     },
   },
 };

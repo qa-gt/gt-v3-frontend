@@ -36,7 +36,7 @@
 
           <el-input
             v-model="articleContent"
-            :rows="17"
+            :autosize="{ minRows: 15, maxRows: 30 }"
             type="textarea"
             placeholder="写点东西..."
             maxlength="8000"
@@ -60,27 +60,35 @@
                 multiple="true"
                 limit="2"
                 accept=".jpg, .jpeg, .png, .gif"
+                :style="{
+                  display: 'inline-block',
+                  width: isMobile ? '50%' : '0',
+                }"
               >
-                <el-row gutter="20" justify="space-between">
-                  <el-col span="24">
-                    <el-button type="primary">点击上传图片</el-button>
-                    &emsp;&emsp;&emsp;
-                    <el-select
-                      v-model="whichtopic"
-                      placeholder="请选择一个主题"
-                    >
-                    </el-select
-                  ></el-col>
-                </el-row>
-                <template #tip>
-                  <div class="el-upload__tip">仅限大小小于5MB的图片文件</div>
-                </template>
+                <el-button type="primary"> 点我上传图片 </el-button>
               </el-upload>
+              <el-select
+                v-model="articleTopic"
+                placeholder="请选择话题"
+                :style="{
+                  float: 'right',
+                  width: isMobile ? '45%' : '25%',
+                  'min-width': '120px',
+                  'margin-right': isMobile ? '5%' : '55%',
+                }"
+              >
+                <el-option
+                  key="item.value"
+                  label="item.lab21e212e1e12el"
+                  value="item.value"
+                >
+                </el-option>
+              </el-select>
             </el-col>
           </el-row>
           <br /><br />
           <el-form-item>
-            <el-button type="primary" @click="confirm"> 提 交 </el-button>
+            <el-button type="primary" @click="doSubmit"> 提 交 </el-button>
             <el-popconfirm title="确认要取消吗？本次编辑内容将不会保存。">
               <template #reference>
                 <el-button> 取 消 </el-button>
@@ -95,8 +103,13 @@
 
 <script>
 import { ref } from "vue";
+import { mapState } from "vuex";
+
 import { ElMessage } from "element-plus";
 export default {
+  computed: {
+    ...mapState(["user", "isMobile"]),
+  },
   data() {
     return {
       username: "test",
@@ -107,6 +120,7 @@ export default {
       activeName: ref("first"),
       articleContent: "",
       articleTitle: "",
+      articleTopic: "",
       fileList: [],
     };
   },
@@ -118,8 +132,9 @@ export default {
     };
   },
   methods: {
-    confirm: () => {
-      ElMessage.success("提交成功！");
+    doSubmit: function () {
+      ElMessage.success("贴子发布成功!");
+      this.$router.push({ name: "article" });
     },
     uploadSuccess(res) {
       console.log(res);
