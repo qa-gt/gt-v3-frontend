@@ -2,7 +2,7 @@
 
 ## 环境准备
 
-确保你的电脑上安装有(Node.js)[https://nodejs.org/zh-cn/]
+确保你的电脑上安装有[Node.js](https://nodejs.org/zh-cn/)
 
 ## Project setup
 ```
