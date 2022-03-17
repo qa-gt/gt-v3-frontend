@@ -127,6 +127,7 @@
       />
     </el-col>
   </el-row>
+  <el-backtop />
 </template>
 
 <style lang="scss" scoped>
