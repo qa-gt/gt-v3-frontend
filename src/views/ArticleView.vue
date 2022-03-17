@@ -69,7 +69,7 @@
             <el-col :span="24">
               <el-input
                 v-model="comment"
-                maxlength="200"
+                maxlength="400"
                 placeholder="说点什么……"
                 show-word-limit
                 :rows="3"
