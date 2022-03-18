@@ -3,15 +3,24 @@
     <el-col :span="5" :xs="24" :sm="18" :md="6" style="margin-bottom: 20px">
       <el-card shadow="hover" class="box-card">
         <template #header>
-          <div class="card-header">
+          <div class="card-header" style="justify-content: space-around;">
             <h2>{{ username }}</h2>
+            
           </div>
         </template>
         <div>
           <div>ID:{{ id }} | {{ grade }} | {{ sex }}</div>
           <br />
           <div>
-            <b>认证: {{ tags }}</b>
+            <b>认证: &ensp;</b
+            ><el-tag v-for="tag in tags" :key="tag" class="mx-1" style="justify-content: space-around;margin: 10px 0;">{{
+              tag
+            }}</el-tag>&ensp;
+          </div>
+          <br />
+          <div>
+            <b>实名认证: &ensp;</b
+            ><el-tag class="mx-1" type="info">{{ real_info }}</el-tag>
           </div>
           <br />
         </div>
@@ -120,13 +129,18 @@ export default {
       id: "1",
       grade: "九年级",
       sex: "♂",
-      tags: "创始人",
+      //tags: "创始人",
       activeName: ref("first"),
       articleContent: "",
       articleTitle: "",
       articleTopic: "",
       fileList: [],
-      article_id: "1"
+      article_id: "1",
+      real_info: "王**（210819**）",
+      tags: ref([
+        "创始人",
+        "超级管理员",
+      ]),
     };
   },
 

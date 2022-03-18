@@ -19,7 +19,15 @@
           <div>ID:{{ id }} | {{ grade }} | {{ sex }}</div>
           <br />
           <div>
-            <b>认证: {{ tags }}</b>
+            <b>认证: &ensp;</b
+            ><el-tag v-for="tag in tags" :key="tag" class="mx-1" style="justify-content: space-around;">{{
+              tag
+            }}</el-tag>&ensp;
+          </div>
+          <br />
+          <div>
+            <b>实名认证: &ensp;</b
+            ><el-tag class="mx-1" type="info">{{ real_info }}</el-tag>
           </div>
           <br />
         </div>
@@ -149,29 +157,34 @@ export default {
       id: "1",
       grade: "九年级",
       sex: "♂",
-      tags: "创始人",
+      //tags: "创始人",
       activeName: ref("first"),
       searchInput: "",
       value: "0",
+      real_info: "王**（210819**）",
+      tags: ref([
+        "创始人",
+        "超级管理员",
+      ]),
       options: [
         {
           value: "0",
           label: "默认分类",
         },
         {
-          value: "Option2",
+          value: "1",
           label: "fdsjhlllllllllsjfjhaflahjd",
         },
         {
-          value: "Option3",
+          value: "2",
           label: "Option3",
         },
         {
-          value: "Option4",
+          value: "3",
           label: "Option4",
         },
         {
-          value: "Option5",
+          value: "4",
           label: "Option5",
         },
       ],

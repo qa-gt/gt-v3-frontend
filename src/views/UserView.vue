@@ -1,6 +1,6 @@
 <template>
   <el-row justify="space-evenly">
-    <el-col :span="5" :xs="24" :sm="18" :md="6" style="margin-bottom: 20px;" >
+    <el-col :span="5" :xs="24" :sm="18" :md="6" style="margin-bottom: 20px">
       <el-card shadow="hover" class="box-card">
         <template #header>
           <div class="card-header">
@@ -11,7 +11,15 @@
           <div>ID:{{ id }} | {{ grade }} | {{ sex }}</div>
           <br />
           <div>
-            <b>认证: {{ tags }}</b>
+            <b>认证: &ensp;</b
+            ><el-tag v-for="tag in tags" :key="tag" class="mx-1" style="justify-content: space-around;">{{
+              tag
+            }}</el-tag>&ensp;
+          </div>
+          <br />
+          <div>
+            <b>实名认证: &ensp;</b
+            ><el-tag class="mx-1" type="info">{{ real_info }}</el-tag>
           </div>
           <br />
         </div>
@@ -22,9 +30,11 @@
       <el-card full shadow="hover">
         <h2>个人信息编辑</h2>
         <el-divider />
-        <el-form :model="form" label-position='top' label-width="120px">
+        <el-form :model="form" label-position="top" label-width="120px">
           <el-form-item>
-            <el-button type="primary" @click="turn_to_password">修改密码</el-button>
+            <el-button type="primary" @click="turn_to_password"
+              >修改密码</el-button
+            >
           </el-form-item>
           <el-form-item label="真实姓名">
             <el-input placeholder="请输入" v-model="form.name" maxlength="5" />
@@ -60,7 +70,13 @@
             </el-radio-group>
           </el-form-item>
           <el-form-item label="简介">
-            <el-input placeholder="介绍自己……" v-model="form.about" type="textarea" maxlength="100" show-word-limit />
+            <el-input
+              placeholder="介绍自己……"
+              v-model="form.about"
+              type="textarea"
+              maxlength="100"
+              show-word-limit
+            />
           </el-form-item>
           <el-form-item label="邮箱">
             <el-input placeholder="" v-model="form.mail" maxlength="70" />
@@ -71,13 +87,14 @@
           <br />
           <el-form-item>
             <el-button type="primary" @click="confirm">保存</el-button>
-            <el-popconfirm 
-            title="确认要取消吗？本次编辑内容将不会保存。" 
-            confirm-button-text="确定取消"
-            cancel-button-text="再想想看"
-            @confirm="cancel" >
+            <el-popconfirm
+              title="确认要取消吗？本次编辑内容将不会保存。"
+              confirm-button-text="确定取消"
+              cancel-button-text="再想想看"
+              @confirm="cancel"
+            >
               <template #reference>
-                <el-button > 取 消 </el-button>
+                <el-button> 取 消 </el-button>
               </template>
             </el-popconfirm>
           </el-form-item>
@@ -90,7 +107,7 @@
 <script>
 import { reactive } from "vue";
 import { ref } from "vue";
-import { ElMessage } from 'element-plus'
+import { ElMessage } from "element-plus";
 
 export default {
   data() {
@@ -99,11 +116,19 @@ export default {
       id: "1",
       grade: "九年级",
       sex: "♂",
-      tags: "创始人",
+      //tags: "创始人",
       turename: "王子涵",
       mail: "yxzl",
       sign: "官方账户",
       password: "yxzlwzh",
+      real_info: "王**（210819**）",
+      tags: ref([
+        "创始人",
+        "超级管理员",
+      ]),
+        
+      
+
       form: reactive({
         name: "",
         grade: "",
@@ -114,130 +139,23 @@ export default {
       }),
 
       value: ref([]),
-
-      props: {
-        expandTrigger: "hover",
-      },
-
-      options: [
-        {
-          value: "xiaoxue",
-          label: "小学部",
-          children: [
-            {
-              value: "yi",
-              label: "一年级",
-            },
-            {
-              value: "er",
-              label: "二年级",
-            },
-            {
-              value: "san",
-              label: "三年级",
-            },
-            {
-              value: "si",
-              label: "四年级",
-            },
-            {
-              value: "wu",
-              label: "五年级",
-            },
-          ],
-        },
-        {
-          value: "chuzhong",
-          label: "初中部",
-          children: [
-            {
-              value: "liu",
-              label: "六年级",
-            },
-            {
-              value: "qi",
-              label: "七年级",
-            },
-            {
-              value: "ba",
-              label: "八年级",
-            },
-          ],
-        },
-        {
-          value: "gaozhong",
-          label: "高中部",
-          children: [
-            {
-              value: "jiu",
-              label: "九年级",
-            },
-            {
-              value: "shi",
-              label: "十年级",
-            },
-            {
-              value: "shiyi",
-              label: "十一年级",
-            },
-            {
-              value: "shier",
-              label: "十二年级",
-            },
-          ],
-        },
-        {
-          value: "guoji",
-          label: "国际部",
-          children: [
-            {
-              value: "guojijiu",
-              label: "国际九年级",
-            },
-            {
-              value: "guojishi",
-              label: "国际十年级",
-            },
-            {
-              value: "guojishiyi",
-              label: "国际十一年级",
-            },
-            {
-              value: "guojishier",
-              label: "国际十二年级",
-            },
-          ],
-        },
-        {
-          value: "qita",
-          label: "其他年级",
-        },
-        {
-          value: "baomi",
-          label: "保密年级",
-        },
-      ],
     };
   },
   methods: {
     confirm: () => {
       location.replace("/#/index");
-      ElMessage.success (
-        '保存成功！'
-      );
-      
+      ElMessage.success("保存成功！");
     },
     handleChange: (value) => {
       console.log(value);
     },
     turn_to_password: () => {
-      location.href="/#/password";
+      location.href = "/#/password";
     },
     cancel: () => {
-      location.href="/#/index";
-      ElMessage.info("已取消")
+      location.href = "/#/index";
+      ElMessage.info("已取消");
     },
-      
   },
 };
 </script>
