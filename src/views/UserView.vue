@@ -37,7 +37,7 @@
               <el-option label="国内九年级" vale="国内九年级" />
               <el-option label="国内十年级" value="国内十年级" />
               <el-option label="国内十一年级" value="国内十一年级" />
-              <el-option label="国内十一年级" value="国内十一年级" />
+              <el-option label="国内十二年级" value="国内十二年级" />
               <el-option label="国际九年级" value="国际九年级" />
               <el-option label="国际十年级" value="国际十年级" />
               <el-option label="国际十一年级" value="国际十一年级" />
