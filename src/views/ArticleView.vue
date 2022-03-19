@@ -18,12 +18,12 @@
         <div>
           <div>ID:{{ id }} | {{ grade }} | {{ sex }}</div>
           <br />
-          <div style="display: inline">
+          <div style="display: inline; margin : 5 0px;" >
             <b>认证: &ensp;</b
             ><el-tag
               v-for="tag in tags"
               :key="tag"
-              style="justify-content: space-around"
+              style="margin : 0 2px;"
               :type="tag.type"
               >{{ tag.text }}</el-tag
             >

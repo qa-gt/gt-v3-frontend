@@ -31,7 +31,7 @@
             ><el-tag
               v-for="tag in tags"
               :key="tag"
-              style="justify-content: space-around"
+              style="margin : 0 2px;"
               :type="tag.type"
               >{{ tag.text }}</el-tag
             >
