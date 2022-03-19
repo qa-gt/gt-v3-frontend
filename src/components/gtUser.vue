@@ -1,7 +1,8 @@
 <template>
   <el-card shadow="hover" class="box-card">
     <template #header>
-      <div class="card-header" style="justify: space-around">
+      <div class="card-header">
+        <el-avatar :size="40" :src="circleUrl" style="" fit="cover" />&emsp;
         <b style="font-size: 28px">{{ username }}</b>
         <el-button
           type="primary"
@@ -49,6 +50,12 @@ export default {
       type: String,
       default: "",
     },
+  },
+  data() {
+    return {
+      circleUrl:
+        "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
+    };
   },
 };
 </script>
