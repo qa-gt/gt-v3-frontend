@@ -9,7 +9,6 @@
               type="primary"
               size="small"
               style="float: right; margin-top: 10px"
-              
               @click="follow"
               >关&ensp;注</el-button
             >
@@ -18,12 +17,12 @@
         <div>
           <div>ID:{{ id }} | {{ grade }} | {{ sex }}</div>
           <br />
-          <div style="display: inline; margin : 5 0px;" >
+          <div style="display: inline; margin: 5 0px">
             <b>认证: &ensp;</b
             ><el-tag
               v-for="tag in tags"
               :key="tag"
-              style="margin : 0 2px;"
+              style="margin: 0 2px"
               :type="tag.type"
               >{{ tag.text }}</el-tag
             >
@@ -45,7 +44,9 @@
           >
             <el-collapse-item name="1" class="articleInfo">
               <template #title>
-                <h2 class="overflow">{{ articleTitle }}</h2>
+                <h2 class="overflow" style="float: left">{{ articleTitle }}</h2>
+                
+               
               </template>
               <p>标题&emsp;{{ articleTitle }}</p>
               <p>话题&emsp;{{ topic }}</p>
@@ -105,6 +106,7 @@
           >
             发表评论
           </el-button>
+           
           <el-dropdown trigger="hover">
             <el-button type="primary" style="padding: 10px">
               互动<el-icon style="margin-left: 10px"><arrow-down /></el-icon>
@@ -113,18 +115,19 @@
               <el-dropdown-menu>
                 <span>
                   <el-dropdown-item @click="like"
-                    >&ensp;赞&ensp;</el-dropdown-item
+                    ><el-icon><watermelon /></el-icon>&ensp;吃&ensp;瓜&ensp;</el-dropdown-item
                   >
                   <el-dropdown-item @click="writeComment"
-                    >评论</el-dropdown-item
+                    ><el-icon><comment /></el-icon>&ensp;评&ensp;论&ensp;</el-dropdown-item
                   >
+                  <el-dropdown-item @click="fav"><el-icon><star /></el-icon>&ensp;收&ensp;藏&ensp;</el-dropdown-item>
                 </span>
               </el-dropdown-menu>
             </template>
           </el-dropdown>
         </el-row>
         <el-divider style="margin-top: 60px" />
-        <p style="font-weight: bold; font-size: 1.1rem">赞</p>
+        <p style="font-weight: bold; font-size: 1.1rem">吃瓜</p>
         <el-row justify="left">
           <div class="info-2">{{ users }}</div>
         </el-row>
@@ -231,6 +234,34 @@ import { ref } from "vue";
 
 moment.locale("zh-cn");
 export default {
+  data() {
+    return {
+      showComment: false,
+      username: "test",
+      id: "1",
+      grade: "九年级",
+      sex: "♂",
+      //tags: "创始人",
+      articleContent: "test",
+      articleTitle: "test",
+      writer: "test",
+      time: "1647374705000",
+      topic: "默认话题",
+      articleid: "1",
+      reads: "100",
+      users:
+        "aaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,ddd",
+      comment: "",
+      who: "test",
+      comments: "zbczbczbczbczbc",
+      real_info: "王**（210819**）",
+      tags: ref([
+        { text: "创始人", type: "" },
+        { text: "超级管理员", type: "" },
+        { text: "实名信息：王**(210819**)", type: "info" },
+      ]),
+    };
+  },
   computed: {
     ...mapState(["user", "theme", "isMobile"]),
   },
@@ -239,7 +270,11 @@ export default {
       ElMessage.warning("已举报");
     },
     commentSubmit: function () {
-      ElMessage.success("评论成功！");
+      if (this.comment == "") {
+        ElMessage.error("你还没有写下你的评论！")
+      } else if (this.comment != "") {
+        ElMessage.success("评论成功！");
+      }
       let that = this;
       setTimeout(() => {
         that.comment = "";
@@ -271,36 +306,20 @@ export default {
         { duration: 300, complete: done }
       );
     },
+    fav: () => {
+      ElMessage.success("已添加到“我的收藏”！")
+    },
+    follow: function () {
+      this.$store.commit("follow", {
+        username: this.username,
+      });
+      ElMessage.success(`已关注 ${ this.username }！`)
+    },
+      
+    
   },
 
-  data() {
-    return {
-      showComment: false,
-      username: "test",
-      id: "1",
-      grade: "九年级",
-      sex: "♂",
-      //tags: "创始人",
-      articleContent: "test",
-      articleTitle: "test",
-      writer: "test",
-      time: "1647374705000",
-      topic: "默认话题",
-      articleid: "1",
-      reads: "100",
-      users:
-        "aaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,ddd",
-      comment: "",
-      who: "test",
-      comments: "zbczbczbczbczbc",
-      real_info: "王**（210819**）",
-      tags: ref([
-        {text: "创始人", type: ""}, 
-        {text: "超级管理员",type: ""},
-        {text: "实名信息：王**(210819**)", type: "info"}
-        ]),
-    };
-  },
+  
   created() {
     this.time = moment(Number(this.time)).fromNow();
   },
