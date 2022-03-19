@@ -11,24 +11,33 @@
     >
       <el-card shadow="hover" class="box-card">
         <template #header>
-          <div class="card-header">
-            <h2>{{ username }}</h2>
+          <div class="card-header" style="justify: space-around">
+            <b style="font-size: 28px">{{ username }}</b>
+            <el-button
+              type="primary"
+              size="small"
+              style="float: right; margin-top: 10px"
+              
+              @click="follow"
+              >关&ensp;注</el-button
+            >
           </div>
         </template>
         <div>
           <div>ID:{{ id }} | {{ grade }} | {{ sex }}</div>
           <br />
-          <div>
+          <div style="display: inline">
             <b>认证: &ensp;</b
-            ><el-tag v-for="tag in tags" :key="tag" class="mx-1" style="justify-content: space-around;">{{
-              tag
-            }}</el-tag>&ensp;
+            ><el-tag
+              v-for="tag in tags"
+              :key="tag"
+              style="justify-content: space-around"
+              :type="tag.type"
+              >{{ tag.text }}</el-tag
+            >
           </div>
           <br />
-          <div>
-            <b>实名认证: &ensp;</b
-            ><el-tag class="mx-1" type="info">{{ real_info }}</el-tag>
-          </div>
+          <br />
           <br />
         </div>
       </el-card>
@@ -163,9 +172,10 @@ export default {
       value: "0",
       real_info: "王**（210819**）",
       tags: ref([
-        "创始人",
-        "超级管理员",
-      ]),
+        {text: "创始人", type: ""}, 
+        {text: "超级管理员",type: ""},
+        {text: "实名信息：王**(210819**)", type: "info"}
+        ]),
       options: [
         {
           value: "0",
