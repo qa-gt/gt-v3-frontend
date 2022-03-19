@@ -1,41 +1,17 @@
 <template>
   <el-row justify="space-evenly" style="margin-bottom: 50px">
-    <el-col :span="5" :xs="24" :sm="18" :md="6" style="margin-bottom: 20px">
-      <el-card shadow="hover" class="box-card">
-        <template #header>
-          <div class="card-header" style="justify: space-around">
-            <b style="font-size: 28px">{{ username }}</b>
-            <el-button
-              type="primary"
-              size="small"
-              style="float: right; margin-top: 10px"
-              
-              @click="follow"
-              >关&ensp;注</el-button
-            >
-          </div>
-        </template>
-        <div>
-          <div>ID:{{ id }} | {{ grade }} | {{ sex }}</div>
-          <br />
-          <div style="display: inline; margin : 5 0px;" >
-            <b>认证: &ensp;</b
-            ><el-tag
-              v-for="tag in tags"
-              :key="tag"
-              style="margin : 0 2px;"
-              :type="tag.type"
-              >{{ tag.text }}</el-tag
-            >
-          </div>
-          <br />
-          <br />
-          <br />
-        </div>
-      </el-card>
-      <br />
+    <el-col
+      :xs="24"
+      :sm="18"
+      :md="6"
+      :lg="5"
+      :xl="4"
+      style="margin-bottom: 20px"
+    >
+      <gt-user username="ets"></gt-user>
     </el-col>
-    <el-col :span="19" :xs="24" :sm="18" :md="17" style="min-width: 300px">
+
+    <el-col :xs="24" :sm="18" :md="17" :lg="18" :xl="19">
       <el-card shadow="hover" full class="read-card">
         <div class="info">
           <el-collapse
@@ -228,6 +204,7 @@ import moment from "moment";
 import { mapState } from "vuex";
 import { ref } from "vue";
 //import { Warning } from '@element-plus/icons-vue'
+import gtUser from "@/components/gtUser";
 
 moment.locale("zh-cn");
 export default {
@@ -272,7 +249,9 @@ export default {
       );
     },
   },
-
+  components: {
+    gtUser,
+  },
   data() {
     return {
       showComment: false,
@@ -295,10 +274,10 @@ export default {
       comments: "zbczbczbczbczbc",
       real_info: "王**（210819**）",
       tags: ref([
-        {text: "创始人", type: ""}, 
-        {text: "超级管理员",type: ""},
-        {text: "实名信息：王**(210819**)", type: "info"}
-        ]),
+        { text: "创始人", type: "" },
+        { text: "超级管理员", type: "" },
+        { text: "实名信息：王**(210819**)", type: "info" },
+      ]),
     };
   },
   created() {

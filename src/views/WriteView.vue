@@ -1,41 +1,16 @@
 <template>
   <el-row justify="space-evenly">
-    <el-col :span="5" :xs="24" :sm="18" :md="6" style="margin-bottom: 20px">
-      <el-card shadow="hover" class="box-card">
-        <template #header>
-          <div class="card-header" style="justify: space-around">
-            <b style="font-size: 28px">{{ username }}</b>
-            <el-button
-              type="primary"
-              size="small"
-              style="float: right; margin-top: 10px"
-              
-              @click="follow"
-              >关&ensp;注</el-button
-            >
-          </div>
-        </template>
-        <div>
-          <div>ID:{{ id }} | {{ grade }} | {{ sex }}</div>
-          <br />
-          <div style="display: inline">
-            <b>认证: &ensp;</b
-            ><el-tag
-              v-for="tag in tags"
-              :key="tag"
-              style="margin : 0 2px;"
-              :type="tag.type"
-              >{{ tag.text }}</el-tag
-            >
-          </div>
-          <br />
-          <br />
-          <br />
-        </div>
-      </el-card>
-      <br />
+    <el-col
+      :xs="24"
+      :sm="18"
+      :md="6"
+      :lg="5"
+      :xl="4"
+      style="margin-bottom: 20px"
+    >
+      <gt-user username="ets"></gt-user>
     </el-col>
-    <el-col :span="19" :xs="24" :sm="18" :md="17" style="min-width: 300px">
+    <el-col :xs="24" :sm="18" :md="17" :lg="18" :xl="19">
       <el-card full shadow="hover">
         <h2>编辑文章</h2>
         <el-divider />
@@ -105,14 +80,18 @@
           </el-row>
           <br /><br />
           <el-form-item>
-            <el-button type="primary" @click="doSubmit"> <el-icon><promotion /></el-icon> &emsp;提&ensp;交 &ensp;</el-button>
-            <el-popconfirm 
-            title="确认要取消吗？本次编辑内容将不会保存。" 
-            confirm-button-text="确定取消"
-            cancel-button-text="再想想看"
-            @confirm="cancel" >
+            <el-button type="primary" @click="doSubmit">
+              <el-icon><promotion /></el-icon> &emsp;提&ensp;交
+              &ensp;</el-button
+            >
+            <el-popconfirm
+              title="确认要取消吗？本次编辑内容将不会保存。"
+              confirm-button-text="确定取消"
+              cancel-button-text="再想想看"
+              @confirm="cancel"
+            >
               <template #reference>
-                <el-button > 取 消 </el-button>
+                <el-button> 取 消 </el-button>
               </template>
             </el-popconfirm>
           </el-form-item>
@@ -125,6 +104,7 @@
 <script>
 import { ref } from "vue";
 import { mapState } from "vuex";
+import gtUser from "@/components/gtUser";
 
 import { ElMessage } from "element-plus";
 export default {
@@ -146,13 +126,15 @@ export default {
       article_id: "1",
       real_info: "王**（210819**）",
       tags: ref([
-        {text: "创始人", type: ""}, 
-        {text: "超级管理员",type: ""},
-        {text: "实名信息：王**(210819**)", type: "info"}
-        ]),
+        { text: "创始人", type: "" },
+        { text: "超级管理员", type: "" },
+        { text: "实名信息：王**(210819**)", type: "info" },
+      ]),
     };
   },
-
+  components: {
+    gtUser,
+  },
   change(e) {
     this.$forceUpdate(); // 更新视图
     return {
@@ -163,7 +145,7 @@ export default {
     doSubmit: function () {
       ElMessage.success("贴子发布成功！");
       this.$router.push({ name: "article" });
-      location.href="/#/article/"; //在后面加上帖子id
+      location.href = "/#/article/"; //在后面加上帖子id
     },
     uploadSuccess(res) {
       console.log(res);
@@ -174,9 +156,9 @@ export default {
       ElMessage.error("上传失败: " + err);
     },
     cancel: () => {
-      location.href="/#/index";
-      ElMessage.info("已取消")
-    }
+      location.href = "/#/index";
+      ElMessage.info("已取消");
+    },
   },
 };
 </script>
