@@ -14,12 +14,8 @@
     <el-col :xs="24" :sm="18" :md="17" :lg="18" :xl="19">
       <el-card shadow="hover" full class="read-card">
         <div class="info">
-          <el-collapse
-            v-model="activeNames"
-            @change="handleChange"
-            style="border: 0"
-          >
-            <el-collapse-item name="1" class="articleInfo">
+          <el-collapse style="border: 0">
+            <el-collapse-item class="articleInfo">
               <template #title>
                 <h2 class="overflow" style="float: left">{{ articleTitle }}</h2>
               </template>
@@ -37,9 +33,7 @@
                   @click="report"
                   style="float: right"
                 >
-                  <el-icon>
-                    <Warning class="report-icon" />
-                  </el-icon>
+                  <el-icon><Warning class="report-icon" /></el-icon>
                   <div style="font-size: 12px">&ensp;举&ensp;报</div>
                 </el-button>
               </p>
@@ -127,16 +121,30 @@
             >
               <div class="comment-title">
                 <span>
-                  <span class="comment comment-user">Test</span>
+                  <span class="comment comment-user"
+                    >abcdefghigklmnopqrstuvwxyz</span
+                  >
                   <span class="comment comment-time">
-                    <el-popover
-                      placement="top-end"
-                      :width="20"
-                      trigger="hover"
-                      content="ID:1"
-                    >
-                      <template #reference> {{ time }} </template>
-                    </el-popover>
+                    {{ time }}
+                    <el-dropdown trigger="hover">
+                      <el-icon style="margin-left: 5px; margin-top: 4px">
+                        <!-- <arrow-down /> -->
+                        <plus style="color: rgb(185, 185, 185)" />
+                      </el-icon>
+                      <template v-slot:dropdown>
+                        <el-dropdown-menu>
+                          <span>
+                            <el-dropdown-item disabled>
+                              ID: 123
+                            </el-dropdown-item>
+                            <el-dropdown-item @click="like">
+                              <el-icon><warning /></el-icon>
+                              &ensp;举&ensp;报&ensp;
+                            </el-dropdown-item>
+                          </span>
+                        </el-dropdown-menu>
+                      </template>
+                    </el-dropdown>
                   </span>
                 </span>
               </div>
@@ -200,7 +208,7 @@
   margin-bottom: 0 !important;
 }
 .articleInfo p {
-  margin: 5px !important;
+  margin: 0 5px !important;
 }
 </style>
 
@@ -210,7 +218,6 @@ import Velocity from "velocity-animate";
 import moment from "moment";
 import { mapState } from "vuex";
 import { ref } from "vue";
-//import { Warning } from '@element-plus/icons-vue'
 import gtUser from "@/components/gtUser";
 
 moment.locale("zh-cn");
