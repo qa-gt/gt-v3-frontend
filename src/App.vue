@@ -87,13 +87,13 @@ export default {
       document.getElementsByTagName("html")[0].className = this.theme;
     },
     home() {
-      location.replace("/#/index");
+      location.assign("/#/index");
     },
     route_to_user() {
-      location.replace("/#/user");
+      location.assign("/#/user/edit");
     },
     route_to_write() {
-      location.replace("/#/write")
+      location.assign("/#/write")
     }
   },
   created() {

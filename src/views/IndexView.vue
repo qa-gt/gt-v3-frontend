@@ -144,6 +144,7 @@ export default {
         { text: "超级管理员", type: "" },
         { text: "实名信息：王**(210819**)", type: "info" },
       ]),
+      article_id: "1",
       options: [
         {
           value: "0",
@@ -184,7 +185,7 @@ export default {
       ElMessage.info("clicked!");
     },
     route_to_article() {
-      location.replace("/#/article"); //要加上文章的id
+      location.href="/#/article/"; //要加上文章的id
     },
   },
   name: 'IndexView',
