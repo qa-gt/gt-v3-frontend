@@ -4,18 +4,18 @@
 
 确保你的电脑上安装有[Node.js](https://nodejs.org/zh-cn/)
 
-## Project setup
+## 初始化
 ```
-npm install cnpm -g --registry=https://registry.npmmirror.com/
-cnpm install
-```
-
-### Compiles and hot-reloads for development
-```
-cnpm run serve
+yarn config set registry https://registry.npm.taobao.org/
+yarn
 ```
 
-### Compiles and minifies for production
+### 开发模式
 ```
-cnpm run build
+yarn serve
+```
+
+### 生产模式模式
+```
+yarn build
 ```
