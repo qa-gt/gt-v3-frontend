@@ -5,7 +5,7 @@ const store = createStore({
         return {
             loggedIn: sessionStorage.getItem('jwt') && true || false,
             jwt: sessionStorage.getItem('jwt'),
-            user: sessionStorage.getItem('user') && JSON.parse(sessionStorage.getItem('user')) || null,
+            user: sessionStorage.getItem('user') && JSON.parse(sessionStorage.getItem('user')) || {},
             theme: localStorage.getItem("theme"),
             isMobile: (navigator.userAgent.match(
                 /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i
