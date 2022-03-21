@@ -218,7 +218,7 @@ import Velocity from "velocity-animate";
 import moment from "moment";
 import { mapState } from "vuex";
 import { ref } from "vue";
-import gtUser from "@/components/gtUser";
+import gtUser from "@/components/gtUser.vue";
 
 moment.locale("zh-cn");
 export default {

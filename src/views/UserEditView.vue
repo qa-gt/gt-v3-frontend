@@ -105,7 +105,7 @@
 import { reactive, ref } from "vue";
 import { mapState } from "vuex";
 import { ElMessage } from "element-plus";
-import gtUser from "@/components/gtUser";
+import gtUser from "@/components/gtUser.vue";
 import axios from "axios";
 
 export default {

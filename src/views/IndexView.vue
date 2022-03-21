@@ -121,7 +121,7 @@ import { mapState } from "vuex";
 
 import { ElMessageBox } from "element-plus";
 import { ElMessage } from "element-plus";
-import gtUser from "@/components/gtUser";
+import gtUser from "@/components/gtUser.vue";
 
 export default {
   computed: {

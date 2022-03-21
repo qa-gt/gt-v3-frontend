@@ -104,7 +104,7 @@
 <script>
 import { ref } from "vue";
 import { mapState } from "vuex";
-import gtUser from "@/components/gtUser";
+import gtUser from "@/components/gtUser.vue";
 
 import { ElMessage } from "element-plus";
 export default {
