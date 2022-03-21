@@ -69,6 +69,7 @@ nav a.router-link-exact-active {
 import { mapState } from "vuex";
 
 export default {
+  mode: 'history',
   computed: {
     ...mapState(["user", "theme", "isMobile"]),
   },

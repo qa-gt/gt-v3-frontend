@@ -187,5 +187,7 @@ export default {
       location.replace("/#/article"); //要加上文章的id
     },
   },
+  name: 'IndexView',
+  
 };
 </script>
