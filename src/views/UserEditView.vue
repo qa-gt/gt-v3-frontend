@@ -21,9 +21,9 @@
               >修改密码</el-button
             >
           </el-form-item>
-          <el-form-item label="真实姓名">
+          <!-- <el-form-item label="真实姓名">
             <el-input placeholder="请输入" v-model="form.name" maxlength="5" />
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item label="年级">
             <el-select v-model="form.grade" placeholder="请选择你的年级">
               <el-option label="一年级" value="一年级" />
@@ -34,37 +34,37 @@
               <el-option label="六年级" value="六年级" />
               <el-option label="七年级" value="七年级" />
               <el-option label="八年级" value="八年级" />
-              <el-option label="国内九年级" vale="国内九年级" />
-              <el-option label="国内十年级" value="国内十年级" />
-              <el-option label="国内十一年级" value="国内十一年级" />
-              <el-option label="国内十二年级" value="国内十二年级" />
+              <el-option label="九年级" vale="九年级" />
+              <el-option label="十年级" value="十年级" />
+              <el-option label="十一年级" value="十一年级" />
+              <el-option label="十二年级" value="十二年级" />
               <el-option label="国际九年级" value="国际九年级" />
               <el-option label="国际十年级" value="国际十年级" />
               <el-option label="国际十一年级" value="国际十一年级" />
               <el-option label="国际十二年级" value="国际十二年级" />
-              <el-option label="114514年级" value="114514年级" />
-              <el-option label="保密年级" value="保密年级" />
+              <!-- <el-option label="114514年级" value="114514年级" /> -->
+              <el-option label="保密" value="保密" />
             </el-select>
           </el-form-item>
 
           <el-form-item label="性别">
-            <el-radio-group v-model="form.sex">
-              <el-radio label="男" />
-              <el-radio label="女" />
-              <el-radio label="保密" />
+            <el-radio-group v-model="form.gender">
+              <el-radio label="1">男</el-radio>
+              <el-radio label="2">女</el-radio>
+              <el-radio label="0">保密</el-radio>
             </el-radio-group>
           </el-form-item>
           <el-form-item label="简介">
             <el-input
               placeholder="介绍自己……"
-              v-model="form.about"
+              v-model="form.introduction"
               type="textarea"
               maxlength="100"
               show-word-limit
             />
           </el-form-item>
           <el-form-item label="邮箱">
-            <el-input placeholder="" v-model="form.mail" maxlength="70" />
+            <el-input placeholder="" v-model="form.email" maxlength="70" />
           </el-form-item>
           <el-form-item label="pushplus token">
             <el-input maxlength="32" v-model="form.token" />
@@ -102,12 +102,16 @@
 </template>
 
 <script>
-import { reactive } from "vue";
-import { ref } from "vue";
+import { reactive, ref } from "vue";
+import { mapState } from "vuex";
 import { ElMessage } from "element-plus";
 import gtUser from "@/components/gtUser";
+import axios from "axios";
 
 export default {
+  computed: {
+    ...mapState(["user", "loggedIn"]),
+  },
   data() {
     return {
       username: "test",
@@ -126,15 +130,14 @@ export default {
         { text: "实名信息：王**(210819**)", type: "info" },
       ]),
 
-      form: reactive({
-        name: "",
-        grade: "",
-        sex: "",
-        about: "",
-        token: "",
-        mail: "",
+      formm: reactive({
+        // grade: this.user.grade,
+        // gender: this.user.gender,
+        // introduction: "",
+        // token: "",
+        // email: "",
       }),
-
+      form: this.$store.state.user,
       value: ref([]),
     };
   },
@@ -142,9 +145,26 @@ export default {
     gtUser,
   },
   methods: {
-    confirm: () => {
-      location.replace("/#/index");
-      ElMessage.success("保存成功！");
+    confirm: function () {
+      if (!this.loggedIn) {
+        ElMessage.error("请先登录");
+        location.replace("/#/login");
+        return;
+      }
+      axios
+        .patch(`user/${this.$store.state.user.id}/`, this.form, {
+          headers: {
+            Authorization: `${this.$store.state.jwt}`,
+          },
+        })
+        .then((res) => {
+          this.$store.commit("setUser", res.data);
+          ElMessage.success("保存成功");
+        })
+        .catch((err) => {
+          console.log(err.response.data);
+          ElMessage.error(err.response.data);
+        });
     },
     handleChange: (value) => {
       console.log(value);
@@ -157,9 +177,12 @@ export default {
       ElMessage.info("已取消");
     },
   },
+  created() {
+    if (!this.loggedIn) {
+      this.$router.push({ path: "/login", query: { back: true } });
+    }
+  },
 };
-
-
 </script>
 
 <style>

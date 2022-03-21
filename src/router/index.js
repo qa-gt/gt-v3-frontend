@@ -28,10 +28,10 @@ const routes = [{
             import ('../views/IndexView.vue')
     },
     {
-        path: "/user",
-        name: "user",
+        path: "/user/edit",
+        name: "user_edit",
         component: () =>
-            import ('../views/UserView.vue')
+            import ('../views/UserEditView.vue')
     },
     {
         path: "/article",

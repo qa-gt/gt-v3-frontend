@@ -7,7 +7,7 @@
         <br />
         <el-form :model="form" @submit.prevent>
           <el-input
-            v-model="name"
+            v-model="username"
             class="w-50 m-2"
             placeholder="用户名"
             maxlength="30"
@@ -22,21 +22,17 @@
             show-password
           />
           <br /><br /><br />
-          <!-- <el-row> -->
-          <!-- <el-col :span="10" :offset="6"> -->
-            
+
           <el-button type="primary" native-type="submit" @click="login">
             &emsp;&emsp;&emsp;登&emsp;录&emsp;&emsp;&emsp;
           </el-button>
-          
+
           <br /><br />
           <span style="font-size: 14px">
             &#8195;忘记密码？
             <el-button type="text" @click="repass"> 点此重置 </el-button>
           </span>
         </el-form>
-        <!-- </el-col> -->
-        <!-- </el-row> -->
       </el-card>
     </el-col>
   </el-row>
@@ -47,6 +43,7 @@
 import { ElMessage } from "element-plus";
 // import { ref } from "vue";
 import { mapState } from "vuex";
+import axios from "axios";
 
 export default {
   computed: {
@@ -54,18 +51,33 @@ export default {
   },
   data() {
     return {
-      name: "",
+      username: "",
       password: "",
     };
   },
   methods: {
     login: function () {
-      this.$store.commit("login", {
-        name: this.name,
-        password: this.password,
-      });
-      location.href="/#/index";
-      ElMessage.success(`${this.name}，欢迎回来！`);
+      // if (this.username === "" || this.password === "") {
+      //   ElMessage.error("用户名或密码不能为空");
+      //   return;
+      // }
+      axios
+        .post("/user/login", {
+          username: this.username,
+          password: this.password,
+        })
+        .then((res) => {
+          console.log(res.data);
+          this.$store.commit("setJwt", res.data.token);
+          this.$store.commit("setUser", res.data.user);
+          if(this.$route.query.back) {
+            this.$router.go(-1);
+          }
+        })
+        .catch((err) => {
+          ElMessage.error(err.response.data.detail);
+        });
+      // location.href = "/#/index";
     },
     repass: () => {
       ElMessage.info("请联系网站管理员进行更改");

@@ -5,12 +5,13 @@ import 'element-plus/dist/index.css';
 import * as ElIcons from '@element-plus/icons'
 import App from './App.vue';
 import router from './router';
+import axios from 'axios';
 
 //导入scss文件
 import "./assets/scss/style.scss";
 // import "../public/scss/Index.scss";
 // import elementIcons from "./utils/elementIcons";
-
+axios.defaults.baseURL = 'http://127.0.0.1:8000/';
 
 const app = createApp(App);
 for (const name in ElIcons) {

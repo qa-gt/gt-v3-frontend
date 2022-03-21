@@ -25,7 +25,7 @@
       <el-icon @click="route_to_user()">
         <user style="width: 1em; height: 1em" />
       </el-icon>
-      {{ user.name }}
+      {{ user.username }}
     </div>
     <!-- <nav>
       <router-link to="/">Home</router-link> |
