@@ -10,13 +10,23 @@
   "dependencies": {
     "@element-plus/icons": "^0.0.11",
     "@element-plus/icons-vue": "^1.1.1",
+    "assert": "^2.0.0",
     "axios": "^0.26.1",
-    "core-js": "^3.8.3",
+    "cnpm": "^7.1.1",
+    "core-js": "^3.21.1",
+    "follow-redirects": "^1.14.9",
+    "http": "^0.0.1-security",
+    "https": "^1.0.0",
+    "https-browserify": "^1.0.0",
     "moment": "^2.29.1",
+    "stream": "^0.0.2",
+    "stream-http": "^3.2.0",
+    "url": "^0.11.0",
     "velocity-animate": "^1.5.2",
-    "vue": "^3.2.13",
-    "vue-router": "^4.0.3",
-    "vuex": "^4.0.2"
+    "vue": "^3.2.31",
+    "vue-router": "^4.0.14",
+    "vuex": "^4.0.2",
+    "zlib": "^1.0.5"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",
@@ -31,7 +41,6 @@
     "node-sass": "^7.0.1",
     "sass": "^1.49.9",
     "sass-loader": "^12.6.0",
-    "unplugin-auto-import": "^0.6.2",
     "unplugin-vue-components": "^0.17.21",
     "vue-loader": "^17.0.0",
     "vue-template-compiler": "^2.6.14"
