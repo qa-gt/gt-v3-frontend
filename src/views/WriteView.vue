@@ -26,7 +26,7 @@
             />
           </el-form-item>
 
-          <el-input
+          <!-- <el-input
             v-model="articleContent"
             :autosize="{ minRows: 15, maxRows: 30 }"
             type="textarea"
@@ -34,14 +34,29 @@
             maxlength="8000"
             show-word-limit
             @input="change($event)"
-          />
+          /> -->
+          <v-md-editor
+            v-model="articleContent"
+            height="600px"
+            style="box-shadow: 0 0"
+            :left-toolbar="
+              isMobile
+                ? 'undo redo | link image | save'
+                : 'undo redo | h bold italic strikethrough quote | ul ol table hr | link image | save'
+            "
+            :right-toolbar="
+              isMobile ? 'preview' : 'preview toc sync-scroll fullscreen'
+            "
+            :disabled-menus="[]"
+            :mode="isMobile ? 'edit' : 'editable'"
+            @upload-image="uploadImage"
+          ></v-md-editor>
 
           <br />
 
-          <br />
           <el-row gutter="20" justify="space-between">
             <el-col>
-              <el-upload
+              <!-- <el-upload
                 class="upload-demo"
                 action="http://127.0.0.1:5000/upload"
                 :on-change="handleChange"
@@ -58,8 +73,9 @@
                 }"
               >
                 <el-button type="primary"> 点我上传图片 </el-button>
-              </el-upload>
-              <el-select
+              </el-upload> -->
+              <el-select v-model="articleTopic" placeholder="请选择话题">
+                <!-- <el-select
                 v-model="articleTopic"
                 placeholder="请选择话题"
                 :style="{
@@ -68,7 +84,7 @@
                   'min-width': '120px',
                   'margin-right': isMobile ? '5%' : '55%',
                 }"
-              >
+              > -->
                 <el-option
                   key="item.value"
                   label="item.lab21e212e1e12el"
@@ -100,6 +116,13 @@
     </el-col>
   </el-row>
 </template>
+
+<style scoped>
+.v-md-editor {
+  box-shadow: 0 0px 0px rgba(0, 0, 0, 0);
+  border: 1px solid #dcdfe6;
+}
+</style>
 
 <script>
 import { ref } from "vue";

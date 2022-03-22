@@ -1,9 +1,26 @@
 <template>
   <el-card shadow="hover" class="box-card">
     <template #header>
-      <div class="card-header">
-        <el-avatar :size="40" :src="circleUrl" style="" fit="cover" />&emsp;
-        <b style="font-size: 28px">{{ username }}</b>
+      <div class="card-header" style="vertical-align: middle">
+        <el-avatar
+          :size="40"
+          :src="circleUrl"
+          fit="cover"
+          style="vertical-align: middle"
+        />&emsp;
+        <div
+          style="
+            font-size: 20px;
+            font-weight: bold;
+            display: inline-block;
+            word-break: break-all;
+            vertical-align: middle;
+            max-width: 120px;
+          "
+        >
+          <!-- {{ user.username }}12ewveaabtav -->
+          currentttttttttttttt
+        </div>
         <el-button
           type="primary"
           size="small"
@@ -14,19 +31,26 @@
       </div>
     </template>
     <div>
-      <div>ID:{{ id }} | {{ grade }} | {{ sex }}</div>
+      <div>
+        ID:{{ user.id }} | {{ user.grade }} |
+        {{ { 0: "性别保密", 1: "♂", 2: "♀" }[user.gender] }}
+      </div>
+      <br />
+      <div>
+        {{ user.introduction }}
+      </div>
       <br />
       <div style="display: inline">
-        <b>认证: &ensp;</b
-        ><el-tag
-          v-for="tag in tags"
+        <b>认证: &ensp;</b>
+        <el-tag
+          v-for="tag in user.tags"
           :key="tag"
           style="margin: 0 2px"
           :type="tag.type"
-          >{{ tag.text }}</el-tag
         >
+          {{ tag.text }}
+        </el-tag>
       </div>
-      <br />
       <br />
       <br />
     </div>
@@ -38,17 +62,9 @@
 export default {
   name: "gtUser",
   props: {
-    id: {
-      type: Number,
-      default: 0,
-    },
-    username: {
-      type: String,
-      default: "1",
-    },
-    grade: {
-      type: String,
-      default: "",
+    user: {
+      type: Object,
+      default: {},
     },
   },
   data() {

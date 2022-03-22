@@ -8,7 +8,7 @@
       :xl="4"
       style="margin-bottom: 20px"
     >
-      <gt-user username="ets"></gt-user>
+      <gt-user :user="this.user"></gt-user>
     </el-col>
 
     <el-col :xs="24" :sm="18" :md="17" :lg="18" :xl="19">
@@ -26,6 +26,7 @@
           </el-form-item> -->
           <el-form-item label="年级">
             <el-select v-model="form.grade" placeholder="请选择你的年级">
+              <el-option label="保密" value="保密" />
               <el-option label="一年级" value="一年级" />
               <el-option label="二年级" value="二年级" />
               <el-option label="三年级" value="三年级" />
@@ -34,7 +35,7 @@
               <el-option label="六年级" value="六年级" />
               <el-option label="七年级" value="七年级" />
               <el-option label="八年级" value="八年级" />
-              <el-option label="九年级" vale="九年级" />
+              <el-option label="九年级" value="九年级" />
               <el-option label="十年级" value="十年级" />
               <el-option label="十一年级" value="十一年级" />
               <el-option label="十二年级" value="十二年级" />
@@ -42,8 +43,7 @@
               <el-option label="国际十年级" value="国际十年级" />
               <el-option label="国际十一年级" value="国际十一年级" />
               <el-option label="国际十二年级" value="国际十二年级" />
-              <!-- <el-option label="114514年级" value="114514年级" /> -->
-              <el-option label="保密" value="保密" />
+              <el-option label="114514" value="114514" />
             </el-select>
           </el-form-item>
 
@@ -70,6 +70,9 @@
             <el-input maxlength="32" v-model="form.token" />
           </el-form-item>
           <el-form-item label="头像">
+            <el-input v-model="form.portrait" />
+          </el-form-item>
+          <!-- <el-form-item label="头像">
             <el-upload
               class="avatar-uploader"
               action="https://jsonplaceholder.typicode.com/posts/"
@@ -80,7 +83,7 @@
               <img v-if="imageUrl" :src="imageUrl" class="avatar" />
               <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
             </el-upload>
-          </el-form-item>
+          </el-form-item> -->
           <br />
           <el-form-item>
             <el-button type="primary" @click="confirm">保存</el-button>
@@ -102,7 +105,7 @@
 </template>
 
 <script>
-import { reactive, ref } from "vue";
+import { ref } from "vue";
 import { mapState } from "vuex";
 import { ElMessage } from "element-plus";
 import gtUser from "@/components/gtUser.vue";
@@ -114,31 +117,12 @@ export default {
   },
   data() {
     return {
-      username: "test",
-      id: "1",
-      grade: "九年级",
-      sex: "♂",
-      //tags: "创始人",
-      turename: "王子涵",
-      mail: "yxzl",
-      sign: "官方账户",
-      password: "yxzlwzh",
-      real_info: "王**（210819**）",
       tags: ref([
         { text: "创始人", type: "" },
         { text: "超级管理员", type: "" },
         { text: "实名信息：王**(210819**)", type: "info" },
       ]),
-
-      formm: reactive({
-        // grade: this.user.grade,
-        // gender: this.user.gender,
-        // introduction: "",
-        // token: "",
-        // email: "",
-      }),
-      form: this.$store.state.user,
-      value: ref([]),
+      form: { ...this.$store.state.user },
     };
   },
   components: {
@@ -146,11 +130,7 @@ export default {
   },
   methods: {
     confirm: function () {
-      if (!this.loggedIn) {
-        ElMessage.error("请先登录");
-        location.replace("/#/login");
-        return;
-      }
+      console.log(this.form);
       axios
         .patch(`user/${this.$store.state.user.id}/`, this.form, {
           headers: {
@@ -159,22 +139,23 @@ export default {
         })
         .then((res) => {
           this.$store.commit("setUser", res.data);
+          this.form = this.$store.state.user;
           ElMessage.success("保存成功");
         })
         .catch((err) => {
           console.log(err.response.data);
-          ElMessage.error(err.response.data);
+          ElMessage.error(err.response.data.detail);
         });
     },
     handleChange: (value) => {
       console.log(value);
     },
-    turn_to_password: () => {
-      location.href = "/#/password";
+    turn_to_password: function () {
+      this.$router.push("/password");
     },
     cancel: () => {
-      location.href = "/#/index";
       ElMessage.info("已取消");
+      this.$router.go(-1);
     },
   },
   created() {
