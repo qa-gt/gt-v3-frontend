@@ -124,7 +124,7 @@ export default {
     gtUser,
   },
   methods: {
-    confirm: function () {
+    confirm() {
       console.log(this.form);
       axios
         .patch(`user/${this.$store.state.user.id}/`, this.form, {
@@ -132,30 +132,30 @@ export default {
             Authorization: `${this.$store.state.jwt}`,
           },
         })
-        .then((res) => {
+        .then(res => {
           this.$store.commit("setUser", res.data);
-          this.form = {...this.$store.state.user};
+          this.form = { ...this.$store.state.user };
           ElMessage.success("保存成功");
         })
-        .catch((err) => {
+        .catch(err => {
           console.log(err.response.data);
           ElMessage.error(err.response.data.detail);
         });
     },
-    handleChange: (value) => {
+    handleChange(value) {
       console.log(value);
     },
-    turn_to_password: function () {
+    turn_to_password() {
       this.$router.push("/password");
     },
-    cancel: () => {
+    cancel() {
       ElMessage.info("已取消");
       this.$router.go(-1);
     },
   },
   created() {
     if (!this.loggedIn) {
-      this.$router.push({ path: "/login", query: { back: true } });
+      this.$router.push({ path: "/login" });
     }
   },
 };

@@ -6,7 +6,7 @@
         <el-divider />
         <br />
         <el-form :model="form" @submit.prevent>
-            <el-input
+          <el-input
             v-model="passwordold"
             type="password"
             class="w-50 m-2"
@@ -38,7 +38,6 @@
           <el-button type="primary" native-type="submit" @click="contrast">
             &emsp;&emsp;&emsp;确&emsp;认&emsp;&emsp;&emsp;
           </el-button>
-          
         </el-form>
         <!-- </el-col> -->
         <!-- </el-row> -->
@@ -49,7 +48,6 @@
 
 <script>
 import { ElMessage } from "element-plus";
-// import { ref } from "vue";
 import { mapState } from "vuex";
 
 export default {
@@ -65,26 +63,20 @@ export default {
     };
   },
   methods: {
-    contrast: function () {
-        if (this.password == this.password2 && this.password != "") {
-            ElMessage.success("更改成功！");
-            location.href="/#/user"
-
-        } else if (this.password != this.password2) {
-            ElMessage.error("两次密码不匹配，请确认重新输入！");
-        } else if (this.password == "") {
-            ElMessage.error("你还没有输入新密码！")
-        } else if (this.password2 == "") {
-            ElMessage.error("你还没有重复新密码！")
-        }
-
-        
-    },
-    notmatch: () => {
-      ElMessage.error("两次密码不匹配，请确认重新输入！");
-    },
-    match: () => {
+    contrast() {
+      if (this.password == this.password2 && this.password != "") {
         ElMessage.success("更改成功！");
+        location.href = "/#/user";
+      } else if (this.password != this.password2) {
+        ElMessage.error("两次密码不匹配，请确认重新输入！");
+      } else if (this.password == "") {
+        ElMessage.error("你还没有输入新密码！");
+      } else if (this.password2 == "") {
+        ElMessage.error("你还没有重复新密码！");
+      }
+    },
+    match() {
+      ElMessage.success("更改成功！");
     },
   },
 };

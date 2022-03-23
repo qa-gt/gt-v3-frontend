@@ -45,7 +45,9 @@
       <router-link to="/password">Password</router-link>
     </nav> -->
   </el-header>
-  <router-view style="margin: 50px 25px" />
+  <keep-alive>
+    <router-view style="margin: 50px 25px" />
+  </keep-alive>
 </template>
 
 <style lang="scss" scoped>

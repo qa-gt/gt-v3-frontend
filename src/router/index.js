@@ -9,7 +9,10 @@ const routes = [{
 {
     path: "/index",
     name: "index",
-    component: () => import('@/views/IndexView.vue')
+    component: () => import('@/views/IndexView.vue'),
+    meta: {
+        keepAlive: true,
+    }
 },
 {
     path: "/user/edit",
@@ -24,7 +27,10 @@ const routes = [{
 {
     path: "/user/login",
     name: "login",
-    component: () => import('@/views/LoginView.vue')
+    component: () => import('@/views/LoginView.vue'),
+    meta: {
+        keepAlive: true,
+    }
 },
 {
     path: "/write",

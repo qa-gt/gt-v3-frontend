@@ -1,32 +1,32 @@
 <template>
-  <el-row justify="space-evenly">
-    <el-col
-      :xs="24"
-      :sm="18"
-      :md="6"
-      :lg="5"
-      :xl="4"
-      style="margin-bottom: 20px"
-    >
-      <gt-user :user="user"></gt-user>
-    </el-col>
-    <el-col :xs="24" :sm="18" :md="17" :lg="18" :xl="19">
-      <el-card full shadow="hover">
-        <h2>编辑文章</h2>
-        <el-divider />
-        <el-form label-position="top">
-          <el-form-item>
-            <el-input
-              v-model="articleTitle"
-              class="w-50 m-2"
-              maxlength="100"
-              show-word-limit
-              placeholder="起个名字..."
-              @input="change($event)"
-            />
-          </el-form-item>
+    <el-row justify="space-evenly">
+        <el-col
+            :xs="24"
+            :sm="18"
+            :md="6"
+            :lg="5"
+            :xl="4"
+            style="margin-bottom: 20px"
+        >
+            <gt-user :user="user"></gt-user>
+        </el-col>
+        <el-col :xs="24" :sm="18" :md="17" :lg="18" :xl="19">
+            <el-card full shadow="hover">
+                <h2>编辑文章</h2>
+                <el-divider />
+                <el-form label-position="top">
+                    <el-form-item>
+                        <el-input
+                            v-model="articleTitle"
+                            class="w-50 m-2"
+                            maxlength="100"
+                            show-word-limit
+                            placeholder="起个名字..."
+                            @input="change($event)"
+                        />
+                    </el-form-item>
 
-          <!-- <el-input
+                    <!-- <el-input
             v-model="articleContent"
             :autosize="{ minRows: 15, maxRows: 30 }"
             type="textarea"
@@ -35,28 +35,30 @@
             show-word-limit
             @input="change($event)"
           /> -->
-          <v-md-editor
-            v-model="articleContent"
-            height="600px"
-            style="box-shadow: 0 0"
-            :left-toolbar="
-              isMobile
-                ? 'undo redo | link image | save'
-                : 'undo redo | h bold italic strikethrough quote | ul ol table hr | link image | save'
-            "
-            :right-toolbar="
-              isMobile ? 'preview' : 'preview toc sync-scroll fullscreen'
-            "
-            :disabled-menus="[]"
-            :mode="isMobile ? 'edit' : 'editable'"
-            @upload-image="uploadImage"
-          ></v-md-editor>
+                    <v-md-editor
+                        v-model="articleContent"
+                        height="600px"
+                        style="box-shadow: 0 0"
+                        :left-toolbar="
+                            isMobile
+                                ? 'undo redo | link image | save'
+                                : 'undo redo | h bold italic strikethrough quote | ul ol table hr | link image | save'
+                        "
+                        :right-toolbar="
+                            isMobile
+                                ? 'preview'
+                                : 'preview toc sync-scroll fullscreen'
+                        "
+                        :disabled-menus="[]"
+                        :mode="isMobile ? 'edit' : 'editable'"
+                        @upload-image="uploadImage"
+                    ></v-md-editor>
 
-          <br />
+                    <br />
 
-          <el-row gutter="20" justify="space-between">
-            <el-col>
-              <!-- <el-upload
+                    <el-row gutter="20" justify="space-between">
+                        <el-col>
+                            <!-- <el-upload
                 class="upload-demo"
                 action="http://127.0.0.1:5000/upload"
                 :on-change="handleChange"
@@ -74,8 +76,11 @@
               >
                 <el-button type="primary"> 点我上传图片 </el-button>
               </el-upload> -->
-              <el-select v-model="articleTopic" placeholder="请选择话题">
-                <!-- <el-select
+                            <el-select
+                                v-model="articleTopic"
+                                placeholder="请选择话题"
+                            >
+                                <!-- <el-select
                 v-model="articleTopic"
                 placeholder="请选择话题"
                 :style="{
@@ -85,42 +90,44 @@
                   'margin-right': isMobile ? '5%' : '55%',
                 }"
               > -->
-                <el-option
-                  key="item.value"
-                  label="item.lab21e212e1e12el"
-                  value="item.value"
-                >
-                </el-option>
-              </el-select>
-            </el-col>
-          </el-row>
-          <br /><br />
-          <el-form-item>
-            <el-button type="primary" @click="doSubmit">
-              <el-icon><promotion /></el-icon> &emsp;提&ensp;交
-              &ensp;</el-button
-            >
-            <el-popconfirm
-              title="确认要取消吗？本次编辑内容将不会保存。"
-              confirm-button-text="确定取消"
-              cancel-button-text="再想想看"
-              @confirm="cancel"
-            >
-              <template #reference>
-                <el-button> 取 消 </el-button>
-              </template>
-            </el-popconfirm>
-          </el-form-item>
-        </el-form>
-      </el-card>
-    </el-col>
-  </el-row>
+                                <el-option
+                                    key="item.value"
+                                    label="item.lab21e212e1e12el"
+                                    value="item.value"
+                                >
+                                </el-option>
+                            </el-select>
+                        </el-col>
+                    </el-row>
+                    <br /><br />
+                    <el-form-item>
+                        <el-button type="primary" @click="doSubmit">
+                            <el-icon><promotion /></el-icon> &emsp;提&ensp;交
+                            &ensp;</el-button
+                        >
+                        <el-popconfirm
+                            title="确认要取消吗？本次编辑内容将不会保存。"
+                            confirm-button-text="确定取消"
+                            cancel-button-text="再想想看"
+                            @confirm="cancel"
+                        >
+                            <template #reference>
+                                <el-button> 取 消 </el-button>
+                            </template>
+                        </el-popconfirm>
+                    </el-form-item>
+                </el-form>
+            </el-card>
+        </el-col>
+    </el-row>
 </template>
 
 <style scoped>
+@import "https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css";
+
 .v-md-editor {
-  box-shadow: 0 0px 0px rgba(0, 0, 0, 0);
-  border: 1px solid #dcdfe6;
+    box-shadow: 0 0px 0px rgba(0, 0, 0, 0);
+    border: 1px solid #dcdfe6;
 }
 </style>
 
@@ -129,59 +136,62 @@ import { ref } from "vue";
 import { mapState } from "vuex";
 import gtUser from "@/components/gtUser.vue";
 
+import VMdEditor from "@/plugins/mdEditor";
 import { ElMessage } from "element-plus";
+
 export default {
-  computed: {
-    ...mapState(["user", "isMobile"]),
-  },
-  data() {
-    return {
-      username: "test",
-      id: "1",
-      grade: "九年级",
-      sex: "♂",
-      //tags: "创始人",
-      activeName: ref("first"),
-      articleContent: "",
-      articleTitle: "",
-      articleTopic: "",
-      fileList: [],
-      article_id: "1",
-      real_info: "王**（210819**）",
-      tags: ref([
-        { text: "创始人", type: "" },
-        { text: "超级管理员", type: "" },
-        { text: "实名信息：王**(210819**)", type: "info" },
-      ]),
-    };
-  },
-  components: {
-    gtUser,
-  },
-  change(e) {
-    this.$forceUpdate(); // 更新视图
-    return {
-      e: e, //返回值
-    };
-  },
-  methods: {
-    doSubmit: function () {
-      ElMessage.success("贴子发布成功！");
-      this.$router.push({ name: "article" });
-      location.href = "/#/article/"; //在后面加上帖子id
+    computed: {
+        ...mapState(["user", "isMobile"]),
     },
-    uploadSuccess(res) {
-      console.log(res);
-      ElMessage.success("上传成功！");
+    components: {
+        gtUser,
+        VMdEditor,
     },
-    uploadError(err) {
-      console.log(err);
-      ElMessage.error("上传失败: " + err);
+    data() {
+        return {
+            username: "test",
+            id: "1",
+            grade: "九年级",
+            sex: "♂",
+            //tags: "创始人",
+            activeName: ref("first"),
+            articleContent: "",
+            articleTitle: "",
+            articleTopic: "",
+            fileList: [],
+            article_id: "1",
+            real_info: "王**（210819**）",
+            tags: ref([
+                { text: "创始人", type: "" },
+                { text: "超级管理员", type: "" },
+                { text: "实名信息：王**(210819**)", type: "info" },
+            ]),
+        };
     },
-    cancel: () => {
-      location.href = "/#/index";
-      ElMessage.info("已取消");
+    change(e) {
+        this.$forceUpdate(); // 更新视图
+        return {
+            e: e, //返回值
+        };
     },
-  },
+    methods: {
+        doSubmit() {
+            ElMessage.success("贴子发布成功！");
+            this.$router.push({ name: "article" });
+            location.href = "/#/article/"; //在后面加上帖子id
+        },
+        uploadSuccess(res) {
+            console.log(res);
+            ElMessage.success("上传成功！");
+        },
+        uploadError(err) {
+            console.log(err);
+            ElMessage.error("上传失败: " + err);
+        },
+        cancel: () => {
+            location.href = "/#/index";
+            ElMessage.info("已取消");
+        },
+    },
 };
 </script>

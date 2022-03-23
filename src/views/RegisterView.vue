@@ -65,10 +65,7 @@ export default {
     };
   },
   methods: {
-    make_vaptcha() {
-      this.vaptchaObj.validate();
-    },
-    register: function () {
+    register() {
       if (this.username === "" || this.password === "") {
         ElMessage.error("用户名或密码不能为空！");
         return;
@@ -77,7 +74,7 @@ export default {
         return;
       }
       if (!this.vaptchaData) {
-        this.make_vaptcha();
+        this.vaptchaObj.validate();
         return;
       }
       ElMessage.success("人机验证已通过!");
@@ -108,10 +105,10 @@ export default {
         })
         .finally(() => {
           this.vaptchaData = null;
-          this.vaptchaObj.reset()
-        })
+          this.vaptchaObj.reset();
+        });
     },
-    cancel: function () {
+    cancel() {
       this.$router.go(-1);
       ElMessage.info("已取消！");
     },
@@ -122,7 +119,7 @@ export default {
       mode: "invisible",
       scene: 1,
       area: "auto",
-    }).then(vaptchaObj => {
+    }).then((vaptchaObj) => {
       this.vaptchaObj = vaptchaObj;
       vaptchaObj.listen("pass", () => {
         let serverToken = vaptchaObj.getServerToken();
@@ -132,9 +129,9 @@ export default {
           scene: 1,
         };
         this.register();
-      })
-    })
-  }
+      });
+    });
+  },
 };
 </script>
 
