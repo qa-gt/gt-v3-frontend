@@ -22,7 +22,7 @@ const routes = [{
     component: () => import('@/views/ArticleView.vue')
 },
 {
-    path: "/login",
+    path: "/user/login",
     name: "login",
     component: () => import('@/views/LoginView.vue')
 },
@@ -32,7 +32,7 @@ const routes = [{
     component: () => import('@/views/WriteView.vue')
 },
 {
-    path: "/password",
+    path: "/user/repassword",
     name: "password",
     component: () => import('@/views/PasswordView.vue')
 },
@@ -42,7 +42,7 @@ const routes = [{
     component: () => import('@/views/UserInfoView.vue')
 },
 {
-    path: "/register",
+    path: "/user/register",
     name: "register",
     component: () => import('@/views/RegisterView.vue')
 },

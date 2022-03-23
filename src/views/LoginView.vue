@@ -26,11 +26,20 @@
           <el-button type="primary" native-type="submit" @click="login">
             &emsp;&emsp;&emsp;登&emsp;录&emsp;&emsp;&emsp;
           </el-button>
+          <el-button
+            type="primary"
+            native-type="submit"
+            @click="$router.push('/user/register')"
+          >
+            &emsp;&emsp;&emsp;注&emsp;册&emsp;&emsp;&emsp;
+          </el-button>
 
           <br /><br />
           <span style="font-size: 14px">
             &#8195;忘记密码？
-            <el-button type="text" @click="repass"> 点此重置 </el-button>
+            <el-button type="text" @click="$router.push('/user/repassword')">
+              点此重置
+            </el-button>
           </span>
         </el-form>
       </el-card>
@@ -57,10 +66,10 @@ export default {
   },
   methods: {
     login: function () {
-      // if (this.username === "" || this.password === "") {
-      //   ElMessage.error("用户名或密码不能为空");
-      //   return;
-      // }
+      if (this.username === "" || this.password === "") {
+        ElMessage.error("用户名或密码不能为空");
+        return;
+      }
       axios
         .post("/user/login", {
           username: this.username,
@@ -70,6 +79,7 @@ export default {
           console.log(res.data);
           this.$store.commit("setJwt", res.data.token);
           this.$store.commit("setUser", res.data.user);
+          ElMessage.success("登录成功");
           if (this.$route.query.next) {
             this.$router.push(this.$route.query.next);
           } else {
@@ -79,10 +89,6 @@ export default {
         .catch((err) => {
           ElMessage.error(err.response.data.detail);
         });
-      // location.href = "/#/index";
-    },
-    repass: () => {
-      ElMessage.info("请联系网站管理员进行更改");
     },
   },
 };
