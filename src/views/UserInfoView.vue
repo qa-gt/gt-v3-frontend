@@ -26,7 +26,7 @@
               v-bind:label="item.label"
               v-bind:name="item.value"
               v-model="which"
-              @tab-click="tabs"
+              @click="tabs()"
             ></el-tab-pane>
           </el-tabs>
           <el-select
@@ -74,7 +74,7 @@
               style="color: black; font-width: 2500px; font-size: 18px"
               @click="route_to_article()"
             >
-            <el-avatar :style="{display: SHOWIT}" :src="circleUrl">
+            <el-avatar :style="{display: SHOWIT?'block':'none'}" src='https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'>
             </el-avatar>
             &emsp;
 
@@ -153,7 +153,7 @@ export default {
       message: "message here",
       information: "information",
       article_id: "1",
-      SHOWIT: true,
+      SHOWIT: false,
       which: "0",
       options: [
         {
@@ -195,10 +195,12 @@ export default {
       location.href="/#/article/"; //要加上文章的id
     },
     tabs() {
-      if (this.which === '2' || this.which === '3') {
-        this.SHOWIT = true
+      ElMessage.info("clicked")
+      console.log(which)
+      if (which == '2' || which == '3') {
+        SHOWIT = true
       } else {
-        this.SHOWIT = false
+        SHOWIT = false
       }
     },
   },
