@@ -25,6 +25,8 @@
               :key="item.value"
               v-bind:label="item.label"
               v-bind:name="item.value"
+              v-model="which"
+              @tab-click="tabs"
             ></el-tab-pane>
           </el-tabs>
           <el-select
@@ -72,7 +74,11 @@
               style="color: black; font-width: 2500px; font-size: 18px"
               @click="route_to_article()"
             >
-              Card name
+            <el-avatar :style="{display: SHOWIT}" :src="circleUrl">
+            </el-avatar>
+            &emsp;
+
+              {{ message }}
             </el-button>
             <el-button class="button" type="text">Operation button</el-button>
           </div>
@@ -82,8 +88,8 @@
           style="color: black; font-width: 2500px; font-size: 13px"
           @click="route_to_article()"
         >
-          <div v-for="o in 4" :key="o" class="text item">
-            {{ "List item " + o }} <br /><br />
+          <div class="text item">
+            {{ information }} 
           </div>
         </el-button>
       </el-card>
@@ -144,7 +150,11 @@ export default {
         { text: "超级管理员", type: "" },
         { text: "实名信息：王**(210819**)", type: "info" },
       ]),
+      message: "message here",
+      information: "information",
       article_id: "1",
+      SHOWIT: true,
+      which: "0",
       options: [
         {
           value: "0",
@@ -184,8 +194,17 @@ export default {
     route_to_article() {
       location.href="/#/article/"; //要加上文章的id
     },
+    tabs() {
+      if (this.which === '2' || this.which === '3') {
+        this.SHOWIT = true
+      } else {
+        this.SHOWIT = false
+      }
+    },
   },
   name: 'UserInfoView',
   
 };
+
+
 </script>
