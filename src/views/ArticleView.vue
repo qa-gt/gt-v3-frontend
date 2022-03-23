@@ -295,7 +295,7 @@ export default {
       );
     },
     fav: () => {
-      ElMessage.success("已添加到“我的收藏”！");
+      ElMessage.success("已添加到 “我的收藏” ！");
     },
     follow: function () {
       this.$store.commit("follow", {
