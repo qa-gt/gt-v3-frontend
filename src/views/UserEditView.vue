@@ -134,7 +134,7 @@ export default {
         })
         .then((res) => {
           this.$store.commit("setUser", res.data);
-          this.form = this.$store.state.user;
+          this.form = {...this.$store.state.user};
           ElMessage.success("保存成功");
         })
         .catch((err) => {
