@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vite serve --port 18080",
+    "serve": "vite serve --port 18080 --host 0.0.0.0",
     "build": "vite build",
     "lint": "vite lint"
   },

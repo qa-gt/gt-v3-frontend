@@ -26,24 +26,11 @@
           </el-form-item> -->
           <el-form-item label="年级">
             <el-select v-model="form.grade" placeholder="请选择你的年级">
-              <el-option label="保密" value="保密" />
-              <el-option label="一年级" value="一年级" />
-              <el-option label="二年级" value="二年级" />
-              <el-option label="三年级" value="三年级" />
-              <el-option label="四年级" value="四年级" />
-              <el-option label="五年级" value="五年级" />
-              <el-option label="六年级" value="六年级" />
-              <el-option label="七年级" value="七年级" />
-              <el-option label="八年级" value="八年级" />
-              <el-option label="九年级" value="九年级" />
-              <el-option label="十年级" value="十年级" />
-              <el-option label="十一年级" value="十一年级" />
-              <el-option label="十二年级" value="十二年级" />
-              <el-option label="国际九年级" value="国际九年级" />
-              <el-option label="国际十年级" value="国际十年级" />
-              <el-option label="国际十一年级" value="国际十一年级" />
-              <el-option label="国际十二年级" value="国际十二年级" />
-              <el-option label="114514" value="114514" />
+              <el-option
+                v-for="item in grades"
+                v-bind:key="item"
+                v-bind:value="item"
+              />
             </el-select>
           </el-form-item>
 
@@ -72,18 +59,6 @@
           <el-form-item label="头像">
             <el-input v-model="form.portrait" />
           </el-form-item>
-          <!-- <el-form-item label="头像">
-            <el-upload
-              class="avatar-uploader"
-              action="https://jsonplaceholder.typicode.com/posts/"
-              :show-file-list="false"
-              :on-success="handleAvatarSuccess"
-              :before-upload="beforeAvatarUpload"
-            >
-              <img v-if="imageUrl" :src="imageUrl" class="avatar" />
-              <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
-            </el-upload>
-          </el-form-item> -->
           <br />
           <el-form-item>
             <el-button type="primary" @click="confirm">保存</el-button>
@@ -123,6 +98,26 @@ export default {
         { text: "实名信息：王**(210819**)", type: "info" },
       ]),
       form: { ...this.$store.state.user },
+      grades: [
+        "保密",
+        "一年级",
+        "二年级",
+        "三年级",
+        "四年级",
+        "五年级",
+        "六年级",
+        "七年级",
+        "八年级",
+        "九年级",
+        "十年级",
+        "十一年级",
+        "十二年级",
+        "国际九年级",
+        "国际十年级",
+        "国际十一年级",
+        "国际十二年级",
+        "114514",
+      ],
     };
   },
   components: {

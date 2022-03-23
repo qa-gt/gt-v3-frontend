@@ -17,15 +17,16 @@
           <el-collapse style="border: 0">
             <el-collapse-item class="articleInfo">
               <template #title>
-                <h2 class="overflow" style="float: left">{{ articleTitle }}</h2>
+                <h2 class="overflow" style="float: left">{{ atc.title }}</h2>
               </template>
-              <p>标题&emsp;{{ articleTitle }}</p>
-              <p>话题&emsp;{{ topic }}</p>
-              <p>作者&emsp;{{ writer }}</p>
-              <p>发布时间&emsp;{{ time }}</p>
-              <p>阅读量&emsp;{{ reads }}</p>
+              <p>标题&emsp;{{ atc.title }}</p>
+              <p>话题&emsp;{{ atc.topic.name }}</p>
+              <p>作者&emsp;{{ atc.author.username }}</p>
+              <p>发布时间&emsp;{{ atc.create_time }}</p>
+              <p>更新时间&emsp;{{ atc.update_time }}</p>
+              <p>阅读量&emsp;{{ atc.read_count }}</p>
               <p>
-                ID&emsp;{{ articleid }}
+                ID&emsp;{{ atc.id }}
                 <el-button
                   type="danger"
                   size="small"
@@ -42,7 +43,7 @@
         </div>
         <el-divider style="margin-top: 10px" />
         <div style="min-height: 250px">
-          {{ articleContent }}
+          {{ atc.content }}
         </div>
       </el-card>
       <br /><br />
@@ -216,27 +217,23 @@
 import { ElMessage } from "element-plus";
 import Velocity from "velocity-animate";
 import moment from "moment";
+import "moment/locale/zh-cn";
 import { mapState } from "vuex";
 import { ref } from "vue";
+import axios from "axios";
 import gtUser from "@/components/gtUser.vue";
+import { ElLoading } from "element-plus";
 
-moment.locale("zh-cn");
 export default {
   data() {
     return {
+      atc: { topic: {}, author: {} },
       showComment: false,
       username: "test",
       id: "1",
       grade: "九年级",
       sex: "♂",
       //tags: "创始人",
-      articleContent: "test",
-      articleTitle: "test",
-      writer: "test",
-      time: "1647374705000",
-      topic: "默认话题",
-      articleid: "1",
-      reads: "100",
       users:
         "aaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,ddd",
       comment: "",
@@ -308,7 +305,15 @@ export default {
     gtUser,
   },
   created() {
+    const loading = ElLoading.service({ fullscreen: true });
     this.time = moment(Number(this.time)).fromNow();
+    axios.get(`/article/${this.$route.params.id}`).then((res) => {
+      let data = res.data;
+      data.create_time = moment(data.create_time).format("YYYY-MM-DD HH:mm:ss");
+      data.update_time = moment(data.update_time).format("YYYY-MM-DD HH:mm:ss");
+      this.atc = data;
+      loading.close();
+    });
   },
 };
 </script>

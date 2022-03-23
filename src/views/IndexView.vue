@@ -8,7 +8,7 @@
       :xl="4"
       style="margin-bottom: 20px"
     >
-      <gt-user username="ets"></gt-user>
+      <gt-user :user="user"></gt-user>
     </el-col>
 
     <el-col :xs="24" :sm="18" :md="17" :lg="18" :xl="19">
@@ -21,10 +21,10 @@
             style="padding: -10px"
           >
             <el-tab-pane
-              v-for="item in options"
-              :key="item.value"
-              v-bind:label="item.label"
-              v-bind:name="item.value"
+              v-for="item in topics"
+              :key="item.id"
+              v-bind:label="item.name"
+              v-bind:name="item.id"
             ></el-tab-pane>
           </el-tabs>
           <el-select
@@ -34,10 +34,10 @@
             style="width: 100%; margin-bottom: 5px"
           >
             <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
+              v-for="item in topics"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
             />
           </el-select>
           <div class="mt-4">
@@ -62,22 +62,22 @@
       <el-card
         shadow="hover"
         class="content-card"
-        v-for="item in 20"
-        :key="item"
+        v-for="item in atcs.results"
+        :key="item.id"
       >
         <template #header>
           <div class="content-card-header">
             <el-button
               type="text"
               style="color: black; font-width: 2500px; font-size: 18px"
-              @click="route_to_article()"
+              @click="to_article(item.id)"
             >
-              Card name
+              {{ item.title }}
             </el-button>
             <el-button class="button" type="text">Operation button</el-button>
           </div>
         </template>
-        <el-button
+        <!-- <el-button
           type="text"
           style="color: black; font-width: 2500px; font-size: 13px"
           @click="route_to_article()"
@@ -85,7 +85,10 @@
           <div v-for="o in 4" :key="o" class="text item">
             {{ "List item " + o }} <br /><br />
           </div>
-        </el-button>
+        </el-button> -->
+        <div class="article-preview">
+          {{ item.content }}{{ item.content }}{{ item.content }}
+        </div>
       </el-card>
       <el-pagination
         background
@@ -112,7 +115,14 @@
 <style lang="scss" scoped>
 @import url("@/assets/scss/style.scss");
 @import url("@/assets/scss/Index.scss");
-// @import url("@/assets/scss/config-dark.scss");
+.article-preview {
+  word-break: break-all;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
 </style>
 
 <script>
@@ -122,6 +132,7 @@ import { mapState } from "vuex";
 import { ElMessageBox } from "element-plus";
 import { ElMessage } from "element-plus";
 import gtUser from "@/components/gtUser.vue";
+import axios from "axios";
 
 export default {
   computed: {
@@ -137,36 +148,10 @@ export default {
       //tags: "创始人",
       activeName: ref("first"),
       searchInput: "",
-      value: "0",
-      real_info: "王**（210819**）",
-      tags: ref([
-        { text: "创始人", type: "" },
-        { text: "超级管理员", type: "" },
-        { text: "实名信息：王**(210819**)", type: "info" },
-      ]),
       article_id: "1",
-      options: [
-        {
-          value: "0",
-          label: "默认分类",
-        },
-        {
-          value: "1",
-          label: "fdsjhlllllllllsjfjhaflahjd",
-        },
-        {
-          value: "2",
-          label: "Option3",
-        },
-        {
-          value: "3",
-          label: "Option4",
-        },
-        {
-          value: "4",
-          label: "Option5",
-        },
-      ],
+      topics: [],
+      value: 0,
+      atcs: {},
     };
   },
   components: {
@@ -184,11 +169,25 @@ export default {
       console.log(article_id);
       ElMessage.info("clicked!");
     },
-    route_to_article() {
-      location.href="/#/article/"; //要加上文章的id
+    to_article(atc_id) {
+      this.$router.push(`/article/${atc_id}`);
     },
   },
-  name: 'IndexView',
-  
+  name: "IndexView",
+  created() {
+    axios
+      .get("/article/")
+      .then((res) => res.data)
+      .then((data) => {
+        console.log(data);
+        this.atcs = data;
+      });
+    axios
+      .get("/topic/")
+      .then((res) => res.data)
+      .then((data) => {
+        this.topics = data.results;
+      });
+  },
 };
 </script>

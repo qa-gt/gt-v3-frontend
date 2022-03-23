@@ -27,7 +27,7 @@ const routes = [{
     component: () => import('@/views/UserEditView.vue')
 },
 {
-    path: "/article",
+    path: "/article/:id",
     name: "article",
     component: () => import('@/views/ArticleView.vue')
 },
@@ -47,7 +47,7 @@ const routes = [{
     component: () => import('@/views/PasswordView.vue')
 },
 {
-    path: "/user",
+    path: "/user/:id",
     name: "userinfo",
     component: () => import('@/views/UserInfoView.vue')
 },

@@ -8,7 +8,10 @@
       {{ title }}
     </el-button>
     <div class="user">
-      <el-icon style="width: 1em; height: 1em; margin-right: 10px" @click="home()">
+      <el-icon
+        style="width: 1em; height: 1em; margin-right: 10px"
+        @click="home()"
+      >
         <home-filled />
       </el-icon>
       <el-icon style="margin-right: 10px" @click="changeTheme()">
@@ -17,12 +20,15 @@
       </el-icon>
       <bell
         style="width: 1em; height: 1em; margin-right: 10px"
-        v-if="this.$store.state.loggedIn"
+        v-if="loggedIn"
       />
-      <el-icon style="width: 1em; height: 1em; margin-right: 10px" @click="route_to_write()">
+      <el-icon
+        style="width: 1em; height: 1em; margin-right: 10px"
+        @click="$router.push('/write')"
+      >
         <edit />
       </el-icon>
-      <el-icon @click="route_to_user()">
+      <el-icon @click="$router.push(loggedIn ? '/user/edit' : '/login')">
         <user style="width: 1em; height: 1em" />
       </el-icon>
       {{ user.username }}
@@ -69,9 +75,9 @@ nav a.router-link-exact-active {
 import { mapState } from "vuex";
 
 export default {
-  mode: 'history',
+  mode: "history",
   computed: {
-    ...mapState(["user", "theme", "isMobile"]),
+    ...mapState(["user", "theme", "isMobile", "loggedIn"]),
   },
   data() {
     return {
@@ -89,12 +95,9 @@ export default {
     home() {
       location.assign("/#/index");
     },
-    route_to_user() {
-      location.assign("/#/user/edit");
-    },
     route_to_write() {
-      location.assign("/#/write")
-    }
+      location.assign("/#/write");
+    },
   },
   created() {
     console.log(this.theme);

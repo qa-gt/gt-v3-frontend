@@ -70,7 +70,9 @@ export default {
           console.log(res.data);
           this.$store.commit("setJwt", res.data.token);
           this.$store.commit("setUser", res.data.user);
-          if(this.$route.query.back) {
+          if (this.$route.query.next) {
+            this.$router.push(this.$route.query.next);
+          } else {
             this.$router.go(-1);
           }
         })

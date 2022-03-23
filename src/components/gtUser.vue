@@ -1,5 +1,5 @@
 <template>
-  <el-card shadow="hover" class="box-card">
+  <el-card shadow="hover" class="box-card" v-if="user.id">
     <template #header>
       <div class="card-header" style="vertical-align: middle">
         <el-avatar
@@ -7,6 +7,7 @@
           :src="circleUrl"
           fit="cover"
           style="vertical-align: middle"
+          @click="$router.push('/user/' + user.id)"
         />&emsp;
         <div
           style="
@@ -17,9 +18,9 @@
             vertical-align: middle;
             max-width: 120px;
           "
+          @click="$router.push('/user/' + user.id)"
         >
-          <!-- {{ user.username }}12ewveaabtav -->
-          currentttttttttttttt
+          {{ user.username }}
         </div>
         <el-button
           type="primary"
@@ -54,6 +55,35 @@
       <br />
       <br />
     </div>
+  </el-card>
+  <el-card shadow="hover" class="box-card" v-else>
+    <template #header>
+      <h2 style="text-align: center">欢迎回来，请登录</h2>
+    </template>
+    <!-- <div>
+      <div>
+        ID:{{ user.id }} | {{ user.grade }} |
+        {{ { 0: "性别保密", 1: "♂", 2: "♀" }[user.gender] }}
+      </div>
+      <br />
+      <div>
+        {{ user.introduction }}
+      </div>
+      <br />
+      <div style="display: inline">
+        <b>认证: &ensp;</b>
+        <el-tag
+          v-for="tag in user.tags"
+          :key="tag"
+          style="margin: 0 2px"
+          :type="tag.type"
+        >
+          {{ tag.text }}
+        </el-tag>
+      </div>
+      <br />
+      <br />
+    </div> -->
   </el-card>
   <br />
 </template>
