@@ -4,7 +4,7 @@
       <div class="card-header" style="vertical-align: middle">
         <el-avatar
           :size="40"
-          :src="circleUrl"
+          :src="user.portrait || circleUrl"
           fit="cover"
           style="vertical-align: middle"
           @click="$router.push('/user/' + user.id)"

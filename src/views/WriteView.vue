@@ -8,7 +8,7 @@
       :xl="4"
       style="margin-bottom: 20px"
     >
-      <gt-user username="ets"></gt-user>
+      <gt-user :user="user"></gt-user>
     </el-col>
     <el-col :xs="24" :sm="18" :md="17" :lg="18" :xl="19">
       <el-card full shadow="hover">
