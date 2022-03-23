@@ -29,7 +29,7 @@
             placeholder="请再次输入密码"
             maxlength="30"
             show-password
-          />
+          /><br /><br />
           <el-input
             v-model="regist_code"
             class="w-50 m-2"
