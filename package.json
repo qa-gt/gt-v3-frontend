@@ -33,6 +33,7 @@
   "devDependencies": {
     "@babel/core": "^7.12.16",
     "@babel/eslint-parser": "^7.12.16",
+    "@babel/preset-env": "^7.16.11",
     "@vitejs/plugin-vue": "^2.2.4",
     "element-plus": "^2.0.5",
     "eslint": "^7.32.0",

@@ -66,25 +66,7 @@ export default {
   },
   methods: {
     make_vaptcha() {
-      let that = this;
-      vaptcha({
-        vid: "623adf7fe82e6539de8faf81",
-        mode: "invisible",
-        scene: 1,
-        area: "auto",
-      }).then(function (vaptchaObj) {
-        // that.vaptchaObj = vaptchaObj;
-        vaptchaObj.listen("pass", function () {
-          let serverToken = vaptchaObj.getServerToken();
-          that.vaptchaData = {
-            server: serverToken.server,
-            token: serverToken.token,
-            scene: 1,
-          };
-          that.register();
-        });
-        vaptchaObj.validate();
-      });
+      this.vaptchaObj.validate();
     },
     register: function () {
       if (this.username === "" || this.password === "") {
@@ -110,7 +92,6 @@ export default {
         .then((res) => {
           if (res.data.status !== "success") {
             ElMessage.error(res.data.detail);
-            this.vaptchaData = null;
             return;
           }
           this.$store.commit("setJwt", res.data.token);
@@ -124,13 +105,36 @@ export default {
         })
         .catch((err) => {
           ElMessage.error(err.response.data.detail);
-        });
+        })
+        .finally(() => {
+          this.vaptchaData = null;
+          this.vaptchaObj.reset()
+        })
     },
     cancel: function () {
       this.$router.go(-1);
       ElMessage.info("已取消！");
     },
   },
+  mounted() {
+    vaptcha({
+      vid: "623adf7fe82e6539de8faf81",
+      mode: "invisible",
+      scene: 1,
+      area: "auto",
+    }).then(vaptchaObj => {
+      this.vaptchaObj = vaptchaObj;
+      vaptchaObj.listen("pass", () => {
+        let serverToken = vaptchaObj.getServerToken();
+        this.vaptchaData = {
+          server: serverToken.server,
+          token: serverToken.token,
+          scene: 1,
+        };
+        this.register();
+      })
+    })
+  }
 };
 </script>
 

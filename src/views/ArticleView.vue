@@ -251,39 +251,38 @@ export default {
     ...mapState(["user", "theme", "isMobile"]),
   },
   methods: {
-    report: () => {
+    report() {
       ElMessage.warning("已举报");
     },
-    commentSubmit: function () {
+    commentSubmit() {
       if (this.comment == "") {
         ElMessage.error("你还没有写下你的评论！");
       } else if (this.comment != "") {
         ElMessage.success("评论成功！");
       }
-      let that = this;
       setTimeout(() => {
-        that.comment = "";
-        that.showComment = false;
+        this.comment = "";
+        this.showComment = false;
       }, 100);
     },
-    writeComment: function () {
+    writeComment() {
       this.showComment = !this.showComment;
       ElMessage.info("展示评论");
     },
-    like: () => {
+    like() {
       ElMessage.success("点赞成功！");
     },
     // 动画
-    beforeEnter: (el) => {
+    beforeEnter(el) {
       el.style.opacity = 0;
       el.style.height = 0;
       // console.log(el);
     },
-    enter: (el, done) => {
+    enter(el, done) {
       Velocity(el, { opacity: 1, height: "80px" }, { duration: 300 });
       done();
     },
-    leave: (el, done) => {
+    leave(el, done) {
       console.log(el);
       Velocity(
         el,
@@ -291,10 +290,10 @@ export default {
         { duration: 300, complete: done }
       );
     },
-    fav: () => {
+    fav() {
       ElMessage.success("已添加到 “我的收藏” ！");
     },
-    follow: function () {
+    follow() {
       this.$store.commit("follow", {
         username: this.username,
       });
