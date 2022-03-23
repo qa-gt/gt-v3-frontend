@@ -7,16 +7,6 @@ const routes = [{
     redirect: "/index",
 },
 {
-    path: '/about',
-    name: 'about',
-    component: () => import('@/views/AboutView.vue')
-},
-{
-    path: '/test',
-    name: 'test',
-    component: () => import('@/views/TestView.vue')
-},
-{
     path: "/index",
     name: "index",
     component: () => import('@/views/IndexView.vue')
