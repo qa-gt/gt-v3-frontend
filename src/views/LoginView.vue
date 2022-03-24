@@ -28,14 +28,15 @@
                         native-type="submit"
                         @click="login"
                     >
-                        &emsp;&emsp;&emsp;登&emsp;录&emsp;&emsp;&emsp;
-                    </el-button>
+                        &emsp;&emsp;&emsp;&emsp;登&emsp;录&emsp;&emsp;&emsp;&emsp;
+                    </el-button>&ensp;
                     <el-button
+                        plain
                         type="primary"
                         native-type="submit"
                         @click="$router.push('/user/register')"
                     >
-                        &emsp;&emsp;&emsp;注&emsp;册&emsp;&emsp;&emsp;
+                        &emsp;&emsp;&emsp;&emsp;注&emsp;册&emsp;&emsp;&emsp;&emsp;
                     </el-button>
 
                     <br /><br />
