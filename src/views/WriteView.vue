@@ -17,7 +17,7 @@
                 <el-form label-position="top">
                     <el-form-item>
                         <el-input
-                            v-model="articleTitle"
+                            v-model="ayc.title"
                             class="w-50 m-2"
                             maxlength="100"
                             show-word-limit
@@ -26,17 +26,8 @@
                         />
                     </el-form-item>
 
-                    <!-- <el-input
-            v-model="articleContent"
-            :autosize="{ minRows: 15, maxRows: 30 }"
-            type="textarea"
-            placeholder="写点东西..."
-            maxlength="8000"
-            show-word-limit
-            @input="change($event)"
-          /> -->
                     <v-md-editor
-                        v-model="articleContent"
+                        v-model="atc.content"
                         height="600px"
                         style="box-shadow: 0 0"
                         :left-toolbar="
@@ -51,6 +42,7 @@
                         "
                         :disabled-menus="[]"
                         :mode="isMobile ? 'edit' : 'editable'"
+                        :before-preview-change="beforePreviewChange"
                         @upload-image="uploadImage"
                     ></v-md-editor>
 
@@ -59,12 +51,12 @@
                     <el-row gutter="20" justify="space-between">
                         <el-col>
                             <el-select
-                                v-model="articleTopic"
+                                v-model="atc.topic"
                                 placeholder="请选择话题"
                             >
                                 <el-option
                                     key="item.value"
-                                    label="item.lab21e212e1e12el"
+                                    label="item.lable"
                                     value="item.value"
                                 />
                             </el-select>
@@ -94,8 +86,6 @@
 </template>
 
 <style scoped>
-@import "https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css";
-
 .v-md-editor {
     box-shadow: 0 0px 0px rgba(0, 0, 0, 0);
     border: 1px solid #dcdfe6;
@@ -107,7 +97,7 @@ import { ref } from "vue";
 import { mapState } from "vuex";
 import gtUser from "@/components/gtUser.vue";
 
-import VMdEditor from "@/plugins/mdEditor";
+import { VMdEditor, processMarkdown } from "@/plugins/mdEditor";
 import { ElMessage } from "element-plus";
 
 export default {
@@ -120,18 +110,13 @@ export default {
     },
     data() {
         return {
-            username: "test",
-            id: "1",
-            grade: "九年级",
-            sex: "♂",
-            //tags: "创始人",
             activeName: ref("first"),
-            articleContent: "",
-            articleTitle: "",
-            articleTopic: "",
-            fileList: [],
-            article_id: "1",
-            real_info: "王**（210819**）",
+            atc: {
+                id: "",
+                title: "",
+                content: "",
+                topic: "",
+            },
             tags: ref([
                 { text: "创始人", type: "" },
                 { text: "超级管理员", type: "" },
@@ -146,6 +131,10 @@ export default {
         };
     },
     methods: {
+        beforePreviewChange(text, next) {
+            console.log(text);
+            next(processMarkdown(text));
+        },
         doSubmit() {
             ElMessage.success("贴子发布成功！");
             this.$router.push({ name: "article" });
