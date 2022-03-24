@@ -28,7 +28,7 @@
       >
         <edit />
       </el-icon>
-      <el-icon @click="$router.push(loggedIn ? '/user/edit' : '/login')">
+      <el-icon @click="$router.push(loggedIn ? '/user/edit' : '/user/login')">
         <user style="width: 1em; height: 1em" />
       </el-icon>
       {{ user.username }}
