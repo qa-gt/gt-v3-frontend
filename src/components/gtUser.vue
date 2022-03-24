@@ -1,5 +1,5 @@
 <template>
-  <el-card shadow="hover" class="box-card" v-if="user.id">
+  <el-card shadow="hover" class="box-card" v-if="!user.id">
     <template #header>
       <div class="card-header" style="vertical-align: middle">
         <el-avatar
@@ -44,12 +44,12 @@
       <div style="display: inline">
         <b>认证: &ensp;</b>
         <el-tag
-          v-for="tag in user.tags"
+          v-for="tag in tags"
           :key="tag"
-          style="margin: 0 2px"
+          style="margin: 2px 2px !important"
           :type="tag.type"
         >
-          {{ tag.text }}
+          {{ tag }}
         </el-tag>
       </div>
       <br />
@@ -101,7 +101,18 @@ export default {
     return {
       circleUrl:
         "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
+
+      data: "",
+      tags: []
     };
   },
+  mounted() {
+    this.data = "创始人 超级管理 王子涵（210409**）";
+    var data1 = this.data;
+    var info = data1.split(' ');
+    //console.log(info);
+    this.tags = info;
+  },
 };
+  
 </script>
