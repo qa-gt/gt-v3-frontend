@@ -17,7 +17,7 @@
                 <el-form label-position="top">
                     <el-form-item>
                         <el-input
-                            v-model="ayc.title"
+                            v-model="atc.title"
                             class="w-50 m-2"
                             maxlength="100"
                             show-word-limit
@@ -140,16 +140,18 @@ export default {
             this.$router.push({ name: "article" });
             location.href = "/#/article/"; //在后面加上帖子id
         },
-        uploadSuccess(res) {
-            console.log(res);
-            ElMessage.success("上传成功！");
+        uploadImage(event, insertImage, files) {
+            const file = files[0];
+            const formData = new FormData();
+            formData.append("file", file);
+            ElMessage.info("正在上传图片...");
+            this.$axios.post("/utils/upload", formData).then(res => {
+                insertImage({ url: res.url, desc: file.name });
+                ElMessage.success("上传成功！");
+            });
         },
-        uploadError(err) {
-            console.log(err);
-            ElMessage.error("上传失败: " + err);
-        },
-        cancel: () => {
-            location.href = "/#/index";
+        cancel() {
+            this.$router.go(-1);
             ElMessage.info("已取消");
         },
     },

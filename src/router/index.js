@@ -39,13 +39,13 @@ const routes = [{
 },
 {
     path: "/user/repassword",
-    name: "password",
+    name: "repassword",
     component: () => import('@/views/PasswordView.vue')
 },
 {
     path: "/user/:id",
-    name: "userinfo",
-    component: () => import('@/views/UserInfoView.vue')
+    name: "user",
+    component: () => import('@/views/UserView.vue')
 },
 {
     path: "/user/register",
