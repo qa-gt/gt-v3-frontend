@@ -136,16 +136,17 @@ export default {
             next(processMarkdown(text));
         },
         doSubmit() {
-            ElMessage.success("贴子发布成功！");
-            this.$router.push({ name: "article" });
-            location.href = "/#/article/"; //在后面加上帖子id
+            this.$axios.post("/article/", this.atc).then(res => {
+                ElMessage.success("提交成功!");
+                this.$router.push(`/article/`);
+            });
         },
         uploadImage(event, insertImage, files) {
             const file = files[0];
             const formData = new FormData();
             formData.append("file", file);
             ElMessage.info("正在上传图片...");
-            this.$axios.post("/utils/upload", formData).then(res => {
+            this.$axios.post("/utils/upload_image", formData).then(res => {
                 insertImage({ url: res.url, desc: file.name });
                 ElMessage.success("上传成功！");
             });

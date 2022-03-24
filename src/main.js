@@ -6,6 +6,7 @@ import * as ElIcons from "@element-plus/icons";
 import App from "./App.vue";
 import router from "./router";
 import Axios from "@/plugins/axios";
+import Moment from "@/plugins/moment";
 
 //导入scss文件
 import "./assets/scss/style.scss";
@@ -20,4 +21,5 @@ app.use(ElementPlus)
     .use(router)
     .use(store)
     .use(Axios)
+    .use(Moment)
     .mount("#app");
