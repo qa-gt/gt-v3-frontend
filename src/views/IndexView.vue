@@ -62,7 +62,7 @@
                     </div>
                 </el-card>
             </el-row>
-            <el-empty description="这里空空如也~" :v-if="!isempty">
+            <el-empty description="这里空空如也~" :v-if="!article">
                 <el-button plain @click="refresh">&emsp;刷&ensp;新&emsp;</el-button>
             </el-empty>
             <el-card
