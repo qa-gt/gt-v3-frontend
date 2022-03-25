@@ -8,7 +8,7 @@
             :xl="4"
             style="margin-bottom: 20px"
         >
-            <gt-user username="ets"></gt-user>
+            <gt-user :user="user" :own="false"></gt-user>
         </el-col>
 
         <el-col :xs="24" :sm="18" :md="17" :lg="18" :xl="19">
@@ -19,9 +19,9 @@
                     style="padding: -10px"
                 >
                     <el-tabs
-                        v-model="value"
+                        v-model="cate"
                         class="demo-tabs hidden-sm-and-down"
-                        @tab-click="handleClick()"
+                        @tab-click="changeCate"
                         style="padding: -10px"
                     >
                         <el-tab-pane
@@ -32,10 +32,11 @@
                         ></el-tab-pane>
                     </el-tabs>
                     <el-select
-                        v-model="value"
+                        v-model="cate"
                         class="m-2 hidden-md-and-up"
-                        placeholder="Select"
+                        placeholder="选择一项"
                         style="width: 100%; margin-bottom: 5px"
+                        @change="changeCate"
                     >
                         <el-option
                             v-for="item in options"
@@ -49,13 +50,12 @@
                             v-model="searchInput"
                             placeholder="想找什么？"
                             class="input-with-select"
-                            @keydown.enter.self.stop="doSearch(searchInput)"
+                            @keydown.enter.self.stop="doSearch"
+                            clearable
+                            @clear="doSearch"
                         >
                             <template #append>
-                                <el-button
-                                    type="primary"
-                                    @click="doSearch(searchInput)"
-                                >
+                                <el-button type="primary" @click="doSearch">
                                     <el-icon style="vertical-align: middle">
                                         <search />
                                     </el-icon>
@@ -65,11 +65,16 @@
                     </div>
                 </el-card>
             </el-row>
-            <div v-if="value === '0'">
+            <el-empty description="这里空空如也~" v-show="empty">
+                <el-button plain @click="refresh">
+                    &emsp;刷&ensp;新&emsp;
+                </el-button>
+            </el-empty>
+            <div v-if="cate === '0'">
                 <el-card
                     shadow="hover"
                     class="content-card"
-                    v-for="item in my_article"
+                    v-for="item in myAtcs"
                     :key="item"
                 >
                     <template #header>
@@ -80,36 +85,31 @@
                                     color: black;
                                     font-width: 2500px;
                                     font-size: 18px;
+                                    font-weight: bold;
                                 "
-                                @click="route_to_article(id)"
+                                @click="$router.push(`/article/${item.id}`)"
                             >
                                 {{ item.title }}
                             </el-button>
-                            <el-button class="button" type="text"
-                                >删除帖子</el-button
-                            >
+                            <!-- <el-button class="button" type="text">
+                            预览
+                        </el-button> -->
                         </div>
                     </template>
-                    <el-button
-                        type="text"
-                        style="
-                            color: black;
-                            font-width: 2500px;
-                            font-size: 13px;
-                        "
-                        @click="route_to_article()"
-                    >
-                        <div class="text item">
-                            {{ item.info }}
-                        </div>
-                    </el-button>
+                    <div class="article-preview">
+                        {{ item.author.username }} &emsp; 更新于{{
+                            $moment(item.update_time).fromNow()
+                        }}
+                        &emsp;
+                        {{ item.read_count }}阅读
+                    </div>
                 </el-card>
             </div>
-            <div v-if="value === '1'">
+            <div v-if="cate === '1'">
                 <el-card
                     shadow="hover"
                     class="content-card"
-                    v-for="item in my_collection"
+                    v-for="item in myClts"
                     :key="item"
                 >
                     <template #header>
@@ -145,7 +145,7 @@
                     </el-button>
                 </el-card>
             </div>
-            <div v-if="value === '2'">
+            <div v-if="cate === '2'">
                 <el-card
                     shadow="hover"
                     class="content-card"
@@ -173,7 +173,7 @@
                     </div>
                 </el-card>
             </div>
-            <div v-if="value === '3'">
+            <div v-if="cate === '3'">
                 <el-card
                     shadow="hover"
                     class="content-card"
@@ -204,18 +204,22 @@
             <el-pagination
                 background
                 layout="prev, pager, next, jumper, ->, total"
-                :total="200"
-                :page-size="5"
+                v-model:current-page="pageInfo.num"
+                :total="pageInfo.total"
+                :page-size="pageInfo.size"
                 :pager-count="7"
                 :hide-on-single-page="true"
+                @current-change="getAtcs"
                 class="hidden-sm-and-down"
             />
             <el-pagination
                 layout="prev, pager, next"
-                :total="50"
-                :page-size="5"
+                v-model="pageInfo.num"
+                :total="pageInfo.total"
+                :page-size="pageInfo.size"
                 :pager-count="5"
                 :hide-on-single-page="true"
+                @current-change="getAtcs"
                 class="hidden-md-and-up"
             />
         </el-col>
@@ -226,48 +230,30 @@
 <style lang="scss" scoped>
 @import url("@/assets/scss/style.scss");
 @import url("@/assets/scss/Index.scss");
-// @import url("@/assets/scss/config-dark.scss");
 </style>
 
 <script>
-import { ref } from "vue";
 import { mapState } from "vuex";
+import { ElLoading } from "element-plus";
 
-import { ElMessageBox } from "element-plus";
-import { ElMessage } from "element-plus";
 import gtUser from "@/components/gtUser.vue";
 
 export default {
     computed: {
-        ...mapState(["user", "theme", "isMobile"]),
+        ...mapState(["theme", "isMobile"]),
     },
     data() {
         return {
-            theme: "light",
-            username: "test",
-            id: "1",
-            grade: "九年级",
-            sex: "♂",
-            //tags: "创始人",
-            activeName: ref("first"),
+            user: {},
+            empty: true,
             searchInput: "",
-            value: "0",
-            real_info: "王**（210819**）",
-            tags: ref([
-                { text: "创始人", type: "" },
-                { text: "超级管理员", type: "" },
-                { text: "实名信息：王**(210819**)", type: "info" },
-            ]),
-            message: "message here",
-            information: "information",
-            article_id: "1",
-            SHOWIT: false,
-            avatar_url:
-                "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
+            searchText: "",
+            cate: "0",
+            pageInfo: { total: 0, num: 1, size: 20 },
             options: [
                 {
                     value: "0",
-                    label: "我的帖子",
+                    label: "我的贴子",
                 },
                 {
                     value: "1",
@@ -282,22 +268,8 @@ export default {
                     label: "我的粉丝",
                 },
             ],
-            my_article: [
-                { title: "This is title", info: "This is article info" },
-                { title: "This is title", info: "This is article info" },
-                { title: "This is title", info: "This is article info" },
-                { title: "This is title", info: "This is article info" },
-                { title: "This is title", info: "This is article info" },
-                { title: "This is title", info: "This is article info" },
-            ],
-            my_collection: [
-                { title: "This is title", info: "This is article info" },
-                { title: "This is title", info: "This is article info" },
-                { title: "This is title", info: "This is article info" },
-                { title: "This is title", info: "This is article info" },
-                { title: "This is title", info: "This is article info" },
-                { title: "This is title", info: "This is article info" },
-            ],
+            myAtcs: [],
+            myClts: [],
             my_followed: [
                 {
                     avatar_url:
@@ -328,18 +300,68 @@ export default {
         gtUser,
     },
     methods: {
-        handleClick(tab, event) {
-            console.log(tab, event);
+        getFunc() {
+            switch (this.cate) {
+                case "0":
+                    return this.getMyAtcs;
+                case "1":
+                    return this.getMyClts;
+                case "2":
+                    return this.getFollowed;
+                case "3":
+                    return this.getFans;
+            }
         },
-        doSearch: text => {
-            if (!text) return;
-            ElMessageBox.alert("搜索：" + text);
+        changeCate() {
+            console.log(this.cate);
+            this.searchText = this.searchInput = "";
+            this.getFunc()();
+            this.pageInfo.num = 1;
         },
-        router: article_id => {
-            console.log(article_id);
-            ElMessage.info("clicked!");
+        doSearch() {
+            if (this.searchText === this.searchInput) return;
+            this.searchText = encodeURIComponent(this.searchInput);
+            this.getFunc()();
+            this.pageInfo.num = 1;
         },
-        tabs() {},
+        getMyAtcs() {
+            const loading = ElLoading.service({ fullscreen: true });
+            this.$axios
+                .get(
+                    `/article/?author=${this.$route.params.id}&min_state=-2&page=${this.pageInfo.num}&search=${this.searchText}`
+                )
+                .then(data => {
+                    this.pageInfo.total = data.count;
+                    this.myAtcs = data.results;
+                    this.empty = this.myAtcs.length === 0;
+                    setTimeout(loading.close, 100);
+                });
+        },
+        getMyClts() {
+            const loading = ElLoading.service({ fullscreen: true });
+            this.$axios
+                .get(
+                    `/collect/?user=${this.$route.params.id}&page=${this.pageInfo.num}&search=${this.searchText}`
+                )
+                .then(data => {
+                    this.pageInfo.total = data.count;
+                    data = data.results;
+                    for (let i in data) {
+                        data[i] = data[i].article;
+                    }
+                    this.myClts = data;
+                    console.log(this.myClts);
+                    this.empty = this.myClts.length === 0;
+                    setTimeout(loading.close, 100);
+                });
+        },
+    },
+    created() {
+        this.$axios.get(`/user/${this.$route.params.id}/`).then(res => {
+            this.user = res;
+            console.log(res);
+        });
+        this.getMyAtcs();
     },
     name: "UserInfoView",
 };

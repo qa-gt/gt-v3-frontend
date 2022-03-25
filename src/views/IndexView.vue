@@ -84,18 +84,23 @@
                                 color: black;
                                 font-width: 2500px;
                                 font-size: 18px;
+                                font-weight: bold;
                             "
                             @click="$router.push(`/article/${item.id}`)"
                         >
                             {{ item.title }}
                         </el-button>
-                        <el-button class="button" type="text"
-                            >Operation button</el-button
-                        >
+                        <!-- <el-button class="button" type="text">
+                            预览
+                        </el-button> -->
                     </div>
                 </template>
                 <div class="article-preview">
-                    {{ item.content }}
+                    {{ item.author.username }} &emsp; 更新于{{
+                        $moment(item.update_time).fromNow()
+                    }}
+                    &emsp;
+                    {{ item.read_count }}阅读
                 </div>
             </el-card>
             <el-pagination
@@ -166,6 +171,7 @@ export default {
             this.pageInfo.num = 1;
         },
         doSearch() {
+            if (this.searchText === this.searchInput) return;
             this.searchText = encodeURIComponent(this.searchInput);
             this.getAtcs();
             this.pageInfo.num = 1;
@@ -178,8 +184,8 @@ export default {
                     `/article/?min_state=0&page=${this.pageInfo.num}&topic=${topic}&search=${this.searchText}`
                 )
                 .then(data => {
-                    this.atcs = data.results;
                     this.pageInfo.total = data.count;
+                    this.atcs = data.results;
                     setTimeout(loading.close, 100);
                 });
         },
