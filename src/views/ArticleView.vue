@@ -59,9 +59,9 @@
             <br /><br />
             <el-card shadow="hover" class="comments-card">
                 <transition
-                    v-on:before-enter="beforeEnter"
-                    v-on:enter="enter"
-                    v-on:leave="leave"
+                    v-on:before-enter="commentAnimation1"
+                    v-on:enter="commentAnimation2"
+                    v-on:leave="commentAnimation3"
                 >
                     <el-row gutter="3" v-if="showComment">
                         <el-col :span="24">
@@ -96,10 +96,15 @@
                         <template v-slot:dropdown>
                             <el-dropdown-menu>
                                 <span>
-                                    <el-dropdown-item @click="like"
-                                        ><el-icon><watermelon /></el-icon
-                                        >&ensp;吃&ensp;瓜&ensp;</el-dropdown-item
-                                    >
+                                    <el-dropdown-item @click="like">
+                                        <el-icon><watermelon /></el-icon>
+                                        <span v-if="!liked"
+                                            >&ensp;吃&ensp;瓜&ensp;</span
+                                        >
+                                        <span v-else
+                                            >&ensp;取&ensp;消&ensp;</span
+                                        >
+                                    </el-dropdown-item>
                                     <el-dropdown-item @click="writeComment"
                                         ><el-icon><comment /></el-icon
                                         >&ensp;评&ensp;论&ensp;</el-dropdown-item
@@ -116,17 +121,25 @@
                 <el-divider style="margin-top: 60px" />
                 <p style="font-weight: bold; font-size: 1.1rem">吃瓜</p>
                 <el-row justify="left">
-                    <div class="info-2">{{ users }}</div>
+                    <div class="info-2">
+                        <span v-for="item in atc.like" :key="item.user"
+                            >{{ item.user }},
+                        </span>
+                    </div>
                 </el-row>
                 <el-divider />
                 <p style="font-weight: bold; font-size: 1.1rem">评论</p>
-                <el-row class="comment-item" v-for="i in [1, 2]" :key="i">
+                <el-row
+                    class="comment-item"
+                    v-for="item in atc.comment"
+                    :key="item.id"
+                >
                     <el-col
                         :xs="4"
                         :sm="3"
                         :md="2"
-                        :lg="2"
-                        :xl="2"
+                        :lg="1"
+                        :xl="1"
                         style="padding: 5px"
                     >
                         <img
@@ -134,7 +147,7 @@
                             style="width: 100%"
                         />
                     </el-col>
-                    <el-col :xs="20" :sm="21" :md="22" :lg="22" :xl="22">
+                    <el-col :xs="20" :sm="21" :md="22" :lg="23" :xl="23">
                         <div
                             class="comment-content"
                             :style="{
@@ -143,11 +156,18 @@
                         >
                             <div class="comment-title">
                                 <span>
-                                    <span class="comment comment-user"
-                                        >abcdefghigklmnopqrstuvwxyz</span
+                                    <span class="comment comment-user">
+                                        {{ item.author.username }}
+                                    </span>
+                                    <span
+                                        class="comment comment-user"
+                                        v-if="item.reply"
                                     >
+                                        &ensp;回复&ensp;
+                                        {{ item.reply.author.username }}
+                                    </span>
                                     <span class="comment comment-time">
-                                        {{ time }}
+                                        {{ $moment(item.time).fromNow() }}
                                         <el-dropdown trigger="hover">
                                             <el-icon
                                                 style="
@@ -190,7 +210,7 @@
                                 </span>
                             </div>
                             <div class="comment comment-text">
-                                commentTextcommentTextcommentTextcommentTextcommentTextcommentTextcommentText
+                                {{ item.content }}
                             </div>
                         </div>
                     </el-col>
@@ -269,60 +289,77 @@ export default {
     },
     data() {
         return {
-            atc: { topic: {}, author: {} },
+            atc: { topic: {}, author: {}, like: [], comment: [] },
             showComment: false,
-            username: "test",
-            id: "1",
-            grade: "九年级",
-            sex: "♂",
-            //tags: "创始人",
-            users: "aaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,dddaaa,bbb,ccc,ddd",
+            liked: false,
+            reply: 0,
             comment: "",
-            who: "test",
-            comments: "zbczbczbczbczbc",
-            real_info: "王**（210819**）",
-            tags: ref([
-                { text: "创始人", type: "" },
-                { text: "超级管理员", type: "" },
-                { text: "实名信息：王**(210819**)", type: "info" },
-            ]),
         };
     },
     computed: {
-        ...mapState(["user", "theme", "isMobile"]),
+        ...mapState(["user", "theme", "isMobile", "loggedIn"]),
     },
     methods: {
         report() {
-            ElMessage.warning("已举报");
+            ElMessage.warning("举报功能暂未开通");
         },
         commentSubmit() {
-            if (this.comment == "") {
-                ElMessage.error("你还没有写下你的评论！");
-            } else if (this.comment != "") {
-                ElMessage.success("评论成功！");
+            if (this.comment.trim() === "") {
+                ElMessage.error("评论不能为空!");
+                return;
             }
-            setTimeout(() => {
-                this.comment = "";
-                this.showComment = false;
-            }, 100);
+            this.$axios
+                .post(`/article/${this.atc.id}/add_comment/`, {
+                    content: this.comment,
+                    reply: this.reply || "",
+                })
+                .then(res => {
+                    console.log(res);
+                    ElMessage.success("评论成功！");
+                    setTimeout(() => {
+                        this.showComment = false;
+                        this.comment = "";
+                    }, 100);
+                });
         },
         writeComment() {
             this.showComment = !this.showComment;
         },
         like() {
-            ElMessage.success("吃瓜成功！");
+            this.$axios
+                .post(
+                    `/article/${this.atc.id}/like/`,
+                    {},
+                    {
+                        headers: {
+                            Authorization: `${this.$store.state.jwt}`,
+                        },
+                    }
+                )
+                .then(res => {
+                    if (res.opt === "add") {
+                        this.liked = true;
+                        this.atc.like.push({ user: this.user.username });
+                    } else if (res.opt === "cancel") {
+                        this.liked = false;
+                        this.atc.like = this.atc.like.filter(
+                            item => item.user !== this.user.username
+                        );
+                    }
+                    ElMessage.success(res.detail);
+                });
         },
         // 动画
-        beforeEnter(el) {
+        commentAnimation1(el) {
             el.style.opacity = 0;
             el.style.height = 0;
             // console.log(el);
         },
-        enter(el, done) {
+        commentAnimation2(el, done) {
             Velocity(el, { opacity: 1, height: "80px" }, { duration: 300 });
             done();
         },
-        leave(el, done) {
+        commentAnimation3(el, done) {
             console.log(el);
             Velocity(
                 el,
@@ -344,6 +381,12 @@ export default {
             res.update_time = this.$moment(res.update_time).fromNow();
             this.atc = res;
             loading.close();
+            for (let i in res.like) {
+                if (res.like[i].user === this.user.username) {
+                    this.liked = true;
+                    break;
+                }
+            }
         });
     },
 };

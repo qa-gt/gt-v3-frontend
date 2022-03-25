@@ -41,14 +41,17 @@ Axios.interceptors.response.use(
         // ) {
         //     error.response.data = await DecodeBlob(error.response.data);
         // }
-        if (
-            error.response.status === 403 &&
-            error.response.data.action === "relogin"
-        ) {
-            router.push("/login");
-            ElMessage.error("登录已过期，请重新登录");
-            return Promise.reject("登录信息已过期");
-        }else if(error.response.status === 400){
+        if (error.response.status === 403) {
+            if (error.response.data.action === "relogin") {
+                router.push("/login");
+                ElMessage.error("登录已过期，请重新登录");
+                return Promise.reject("登录信息已过期");
+            } else if (!store.state.loggedIn) {
+                ElMessage.error("请先登录");
+                return Promise.reject("用户未登录");
+            }
+            return Promise.reject("身份校验失败");
+        } else if (error.response.status === 400) {
             ElMessage.error(error.response.data.detail);
             return Promise.reject(error.response.data.detail);
         } else if (error.response.status === 500) {
