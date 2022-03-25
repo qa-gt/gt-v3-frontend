@@ -17,10 +17,11 @@ export default {};
 <style>
 .oops {
   color: #a5a5a5;
-  font-size: 55px;
+  font-size: 80px;
   font-weight: 70px;
 }
 .pagenf {
   color: #c5c5c5;
+  font-size: 25px;
 }
 </style>
