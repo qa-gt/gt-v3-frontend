@@ -172,7 +172,6 @@ export default {
           value: "3",
           label: "我的粉丝",
         },
-        
       ],
     };
   },

@@ -135,14 +135,10 @@ export default {
     methods: {
         confirm() {
             console.log(this.form);
-            axios
-                .patch(`user/${this.$store.state.user.id}/`, this.form, {
-                    headers: {
-                        Authorization: `${this.$store.state.jwt}`,
-                    },
-                })
+            this.$axios
+                .patch(`user/${this.$store.state.user.id}/`, this.form)
                 .then(res => {
-                    this.$store.commit("setUser", res.data);
+                    this.$store.commit("setUser", res);
                     this.form = { ...this.$store.state.user };
                     ElMessage.success("保存成功");
                 })

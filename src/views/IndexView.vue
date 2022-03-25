@@ -62,13 +62,15 @@
                     </div>
                 </el-card>
             </el-row>
-            <el-empty description="这里空空如也~" :v-if="!article">
-                <el-button plain @click="refresh">&emsp;刷&ensp;新&emsp;</el-button>
+            <el-empty description="这里空空如也~" v-show="!atcs">
+                <el-button plain @click="refresh"
+                    >&emsp;刷&ensp;新&emsp;</el-button
+                >
             </el-empty>
             <el-card
                 shadow="hover"
                 class="content-card"
-                v-for="item in atcs.results"
+                v-for="item in atcs"
                 :key="item.id"
             >
                 <template #header>
@@ -99,7 +101,7 @@
           </div>
         </el-button> -->
                 <div class="article-preview">
-                    {{ item.content }}{{ item.content }}{{ item.content }}
+                    {{ item.content }}
                 </div>
             </el-card>
             <el-pagination
@@ -124,8 +126,7 @@
     <el-backtop />
 </template>
 
-<style lang="scss" scoped>
-@import url("@/assets/scss/style.scss");
+<style lang="scss">
 @import url("@/assets/scss/Index.scss");
 .article-preview {
     word-break: break-all;
@@ -165,7 +166,6 @@ export default {
             value: 0,
             atcs: {},
             description: "这里空空如也~",
-            isempty: true,
         };
     },
     components: {
@@ -187,19 +187,14 @@ export default {
             this.$router.push(`/article/${atc_id}`);
         },
         refresh() {
-            this.$router.go(0)
-        }
+            this.$router.go(0);
+        },
     },
     name: "IndexView",
     created() {
         this.$axios.get("/article/").then(data => {
             console.log(data);
-            this.atcs = data;
-            if (data === "") {
-                this.isempty = true;
-            } else if (data != "") {
-                this.isempty = false;
-            }
+            this.atcs = data.results;
         });
         this.$axios.get("/topic/").then(data => {
             this.topics = data.results;
