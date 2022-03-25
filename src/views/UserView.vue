@@ -286,10 +286,10 @@ export default {
       ElMessage.info("clicked!");
     },
     route_to_article() {
-      this.$router.push("/#/article/:id"); //要加上文章的id
+      this.$router.push("/article/:id"); //要加上文章的id
     },
-    route_to_user() {
-      this.$router.push("/#/user/:id");
+    route_to_user(id) {
+      this.$router.push(`/user/`+id);
     },
     tabs() {},
   },
