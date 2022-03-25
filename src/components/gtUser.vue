@@ -52,6 +52,14 @@
           {{ tag }}
         </el-tag>
       </div>
+      
+      <div style="margin: 2px 2px !important">
+        <b>实名: &ensp;</b>
+        <el-tag type="info" style="margin: 3px 0px !important">{{
+          real_name
+        }}</el-tag>
+      </div>
+
       <br />
       <br />
     </div>
@@ -103,16 +111,16 @@ export default {
         "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
 
       data: "",
-      tags: []
+      tags: [],
+      real_name: "王子涵（210409**）",
     };
   },
   mounted() {
-    this.data = "创始人 超级管理 王子涵（210409**）";
+    this.data = "创始人 超级管理";
     var data1 = this.data;
-    var info = data1.split(' ');
+    var info = data1.split(" ");
     //console.log(info);
     this.tags = info;
   },
 };
-  
 </script>
