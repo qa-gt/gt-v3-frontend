@@ -62,7 +62,9 @@
                     </div>
                 </el-card>
             </el-row>
-
+            <el-empty description="这里空空如也~" :v-if="!article">
+                <el-button plain @click="refresh">&emsp;刷&ensp;新&emsp;</el-button>
+            </el-empty>
             <el-card
                 shadow="hover"
                 class="content-card"
@@ -162,6 +164,8 @@ export default {
             topics: [],
             value: 0,
             atcs: {},
+            description: "这里空空如也~",
+            isempty: true,
         };
     },
     components: {
@@ -182,12 +186,20 @@ export default {
         to_article(atc_id) {
             this.$router.push(`/article/${atc_id}`);
         },
+        refresh() {
+            this.$router.go(0)
+        }
     },
     name: "IndexView",
     created() {
         this.$axios.get("/article/").then(data => {
             console.log(data);
             this.atcs = data;
+            if (data === "") {
+                this.isempty = true;
+            } else if (data != "") {
+                this.isempty = false;
+            }
         });
         this.$axios.get("/topic/").then(data => {
             this.topics = data.results;
