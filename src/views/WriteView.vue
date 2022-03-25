@@ -55,9 +55,10 @@
                                 placeholder="请选择话题"
                             >
                                 <el-option
-                                    key="item.value"
-                                    label="item.lable"
-                                    value="item.value"
+                                    v-for="item in topics"
+                                    :key="item.id"
+                                    :label="item.name"
+                                    :value="item.id"
                                 />
                             </el-select>
                         </el-col>
@@ -65,9 +66,9 @@
                     <br /><br />
                     <el-form-item>
                         <el-button type="primary" @click="doSubmit">
-                            <el-icon><promotion /></el-icon> &emsp;提&ensp;交
-                            &ensp;</el-button
-                        >
+                            <el-icon><promotion /></el-icon>
+                            &emsp;提&ensp;交&ensp;
+                        </el-button>
                         <el-popconfirm
                             title="确认要取消吗？本次编辑内容将不会保存。"
                             confirm-button-text="确定取消"
@@ -100,7 +101,6 @@
 </style>
 
 <script>
-import { ref } from "vue";
 import { mapState } from "vuex";
 import gtUser from "@/components/gtUser.vue";
 
@@ -117,36 +117,45 @@ export default {
     },
     data() {
         return {
-            activeName: ref("first"),
             atc: {
+                exist: false,
                 id: "",
                 title: "",
                 content: "",
                 topic: "",
             },
-            tags: ref([
-                { text: "创始人", type: "" },
-                { text: "超级管理员", type: "" },
-                { text: "实名信息：王**(210819**)", type: "info" },
-            ]),
-        };
-    },
-    change(e) {
-        this.$forceUpdate(); // 更新视图
-        return {
-            e: e, //返回值
+            topics: [],
         };
     },
     methods: {
         beforePreviewChange(text, next) {
-            console.log(text);
             next(processMarkdown(text));
         },
         doSubmit() {
-            this.$axios.post("/article/", this.atc).then(res => {
-                ElMessage.success("提交成功!");
-                this.$router.push(`/article/`);
-            });
+            if (
+                this.atc.title.trim() === "" ||
+                this.atc.content.trim() === ""
+            ) {
+                ElMessage.error("标题或正文不能为空");
+                return;
+            }
+            if (this.atc.exist) {
+                let atc = this.atc;
+                atc._topic = atc.topic;
+                delete atc.topic;
+                this.$axios.patch(`/article/${atc.id}/`, atc).then(res => {
+                    ElMessage.success("修改成功!");
+                    this.$router.push(`/article/${res.id}`);
+                });
+            } else {
+                let atc = this.atc;
+                atc._topic = atc.topic;
+                delete atc.topic;
+                this.$axios.post("/article/", atc).then(res => {
+                    ElMessage.success("提交成功!");
+                    this.$router.push(`/article/${res.id}`);
+                });
+            }
         },
         uploadImage(event, insertImage, files) {
             const file = files[0];
@@ -162,6 +171,20 @@ export default {
             this.$router.go(-1);
             ElMessage.info("已取消");
         },
+    },
+    created() {
+        if (this.$route.query.id) {
+            this.atc.id = this.$route.query.id;
+            this.$axios.get(`/article/${this.atc.id}/`).then(res => {
+                this.atc.topic = res.topic.id;
+                this.atc.title = res.title;
+                this.atc.content = res.content;
+                this.atc.exist = true;
+            });
+        }
+        this.$axios.get("/topic/?min_state=0").then(data => {
+            this.topics = data.results;
+        });
     },
 };
 </script>

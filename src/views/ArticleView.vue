@@ -8,7 +8,7 @@
             :xl="4"
             style="margin-bottom: 20px"
         >
-            <gt-user username="ets"></gt-user>
+            <gt-user :user="atc.author"></gt-user>
         </el-col>
 
         <el-col :xs="24" :sm="18" :md="17" :lg="18" :xl="19">
@@ -68,7 +68,11 @@
                             <el-input
                                 v-model="comment"
                                 maxlength="400"
-                                placeholder="说点什么……"
+                                :placeholder="
+                                    reply.status
+                                        ? '回复 ' + reply.username
+                                        : '说点什么...'
+                                "
                                 show-word-limit
                                 :rows="3"
                                 type="textarea"
@@ -84,7 +88,8 @@
                         v-show="showComment"
                         @click="commentSubmit"
                     >
-                        发表评论
+                        发表<span v-if="!reply.status">评论</span>
+                        <span v-else>回复</span>
                     </el-button>
 
                     <el-dropdown trigger="hover">
@@ -98,21 +103,21 @@
                                 <span>
                                     <el-dropdown-item @click="like">
                                         <el-icon><watermelon /></el-icon>
-                                        <span v-if="!liked"
-                                            >&ensp;吃&ensp;瓜&ensp;</span
-                                        >
-                                        <span v-else
-                                            >&ensp;取&ensp;消&ensp;</span
-                                        >
+                                        <span v-if="!liked">
+                                            &ensp;吃&ensp;瓜&ensp;
+                                        </span>
+                                        <span v-else>
+                                            &ensp;取&ensp;消&ensp;
+                                        </span>
                                     </el-dropdown-item>
-                                    <el-dropdown-item @click="writeComment"
-                                        ><el-icon><comment /></el-icon
-                                        >&ensp;评&ensp;论&ensp;</el-dropdown-item
-                                    >
-                                    <el-dropdown-item @click="fav"
-                                        ><el-icon><star /></el-icon
-                                        >&ensp;收&ensp;藏&ensp;</el-dropdown-item
-                                    >
+                                    <el-dropdown-item @click="writeComment">
+                                        <el-icon><comment /></el-icon>
+                                        &ensp;评&ensp;论&ensp;
+                                    </el-dropdown-item>
+                                    <el-dropdown-item @click="fav">
+                                        <el-icon><star /></el-icon>
+                                        &ensp;收&ensp;藏&ensp;
+                                    </el-dropdown-item>
                                 </span>
                             </el-dropdown-menu>
                         </template>
@@ -142,10 +147,7 @@
                         :xl="1"
                         style="padding: 5px"
                     >
-                        <img
-                            src="https://start.yixiangzhilv.com/static/background.jpg"
-                            style="width: 100%"
-                        />
+                        <img :src="item.author.portrait" style="width: 100%" />
                     </el-col>
                     <el-col :xs="20" :sm="21" :md="22" :lg="23" :xl="23">
                         <div
@@ -192,14 +194,24 @@
                                                         <el-dropdown-item
                                                             disabled
                                                         >
-                                                            ID: 123
+                                                            ID: {{ item.id }}
                                                         </el-dropdown-item>
                                                         <el-dropdown-item
-                                                            @click="like"
+                                                            @click="
+                                                                replyCmt(item)
+                                                            "
                                                         >
                                                             <el-icon
-                                                                ><warning
+                                                                ><comment
                                                             /></el-icon>
+                                                            &ensp;回&ensp;复&ensp;
+                                                        </el-dropdown-item>
+                                                        <el-dropdown-item
+                                                            @click="report"
+                                                        >
+                                                            <el-icon>
+                                                                <warning />
+                                                            </el-icon>
                                                             &ensp;举&ensp;报&ensp;
                                                         </el-dropdown-item>
                                                     </span>
@@ -220,58 +232,6 @@
         </el-col>
     </el-row>
 </template>
-
-<style>
-.comment-item {
-    margin-top: -5px;
-    padding: 5px 15px;
-    flex-wrap: wrap;
-}
-
-.comment {
-    word-break: break-all;
-}
-
-.comment-user {
-    font-weight: bold;
-}
-
-.comment-title {
-    margin-bottom: 5px;
-}
-
-.comment-time {
-    float: right;
-    color: rgb(185, 185, 185);
-}
-
-.comment-divider {
-    margin: 10px;
-    /* margin-left: 5%; */
-    /* width: 90%; */
-}
-
-.el-collapse-item__header,
-.el-collapse-item__wrap {
-    border-bottom: 0px solid rgba(255, 255, 255, 0) !important;
-}
-
-.overflow {
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    -o-text-overflow: ellipsis;
-}
-
-.articleInfo,
-.el-collapse-item__content {
-    border: 0;
-    margin-bottom: 0 !important;
-}
-.articleInfo p {
-    margin: 0 5px !important;
-}
-</style>
 
 <script>
 import { ElMessage } from "element-plus";
@@ -294,8 +254,8 @@ export default {
             atcComment: [],
             showComment: false,
             liked: false,
-            reply: 0,
             comment: "",
+            reply: { status: false, id: 0, username: "" },
         };
     },
     computed: {
@@ -303,10 +263,22 @@ export default {
     },
     methods: {
         refresh() {
-            this.$axios.get(`/article/${this.$route.params.id}/`).then(res => {
-                this.atc.like = res.like;
-                this.atc.comment = res.comment;
-            });
+            this.$axios
+                .get(`/like/?article=${this.$route.params.id}`)
+                .then(res => {
+                    this.atcLike = res.results;
+                });
+            this.$axios
+                .get(`/comment/?article=${this.$route.params.id}&min_state=0`)
+                .then(res => {
+                    this.atcComment = res.results;
+                });
+        },
+        replyCmt(cmt) {
+            this.reply.status = true;
+            this.reply.id = cmt.id;
+            this.reply.username = cmt.author.username;
+            this.showComment = true;
         },
         report() {
             ElMessage.warning("举报功能暂未开通");
@@ -317,36 +289,37 @@ export default {
                 return;
             }
             this.$axios
-                .post(`/article/${this.atc.id}/add_comment/`, {
+                .post(`/comment/`, {
+                    article: this.$route.params.id,
                     content: this.comment,
-                    reply: this.reply || "",
+                    reply: this.reply.id || "",
                 })
                 .then(res => {
                     console.log(res);
                     ElMessage.success("评论成功！");
                     this.refresh();
+                    this.comment = "";
                     setTimeout(() => {
-                        this.showComment = false;
-                        this.comment = "";
+                        this.writeComment();
                     }, 100);
                 });
         },
         writeComment() {
             this.showComment = !this.showComment;
+            if (!this.showComment) {
+                this.reply.status = false;
+            }
         },
         like() {
             this.$axios
-                .post("/like/", { article: this.article.id })
+                .post("/like/", { article: this.$route.params.id })
                 .then(res => {
                     if (res.opt === "add") {
                         this.liked = true;
-                        this.atc.like.push({ user: this.user.username });
                     } else if (res.opt === "cancel") {
                         this.liked = false;
-                        this.atc.like = this.atc.like.filter(
-                            item => item.user !== this.user.username
-                        );
                     }
+                    this.refresh();
                     ElMessage.success(res.detail);
                 });
         },
@@ -382,6 +355,11 @@ export default {
             res.update_time = this.$moment(res.update_time).fromNow();
             this.atc = res;
             loading.close();
+            this.$axios
+                .patch(`/article/${this.$route.params.id}/read/`)
+                .then(res => {
+                    this.atc.read_count += 1;
+                });
         });
         this.$axios
             .get(`/like/?article=${this.$route.params.id}`)
@@ -440,5 +418,57 @@ export default {
 .oncomment-button {
     width: 100%;
     height: 100%;
+}
+</style>
+
+<style>
+.comment-item {
+    margin-top: -5px;
+    padding: 5px 15px;
+    flex-wrap: wrap;
+}
+
+.comment {
+    word-break: break-all;
+}
+
+.comment-user {
+    font-weight: bold;
+}
+
+.comment-title {
+    margin-bottom: 5px;
+}
+
+.comment-time {
+    float: right;
+    color: rgb(185, 185, 185);
+}
+
+.comment-divider {
+    margin: 10px;
+    /* margin-left: 5%; */
+    /* width: 90%; */
+}
+
+.el-collapse-item__header,
+.el-collapse-item__wrap {
+    border-bottom: 0px solid rgba(255, 255, 255, 0) !important;
+}
+
+.overflow {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+}
+
+.articleInfo,
+.el-collapse-item__content {
+    border: 0;
+    margin-bottom: 0 !important;
+}
+.articleInfo p {
+    margin: 0 5px !important;
 }
 </style>
