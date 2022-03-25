@@ -17,7 +17,7 @@
           <el-tabs
             v-model="value"
             class="demo-tabs hidden-sm-and-down"
-            @tab-click="handleClick"
+            @tab-click="handleClick()"
             style="padding: -10px"
           >
             <el-tab-pane
@@ -25,8 +25,6 @@
               :key="item.value"
               v-bind:label="item.label"
               v-bind:name="item.value"
-              v-model="which"
-              @click="tabs()"
             ></el-tab-pane>
           </el-tabs>
           <el-select
@@ -60,39 +58,111 @@
           </div>
         </el-card>
       </el-row>
-
-      <el-card
-        shadow="hover"
-        class="content-card"
-        v-for="item in 20"
-        :key="item"
-      >
-        <template #header>
-          <div class="content-card-header">
-            <el-button
-              type="text"
-              style="color: black; font-width: 2500px; font-size: 18px"
-              @click="route_to_article()"
-            >
-            <el-avatar :style="{display: SHOWIT?'block':'none'}" src='https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'>
-            </el-avatar>
-            &emsp;
-
-              {{ message }}
-            </el-button>
-            <el-button class="button" type="text">Operation button</el-button>
-          </div>
-        </template>
-        <el-button
-          type="text"
-          style="color: black; font-width: 2500px; font-size: 13px"
-          @click="route_to_article()"
+      <div v-if="value === '0'">
+        <el-card
+          shadow="hover"
+          class="content-card"
+          v-for="item in my_article"
+          :key="item"
         >
-          <div class="text item">
-            {{ information }} 
-          </div>
-        </el-button>
-      </el-card>
+          <template #header>
+            <div class="content-card-header">
+              <el-button
+                type="text"
+                style="color: black; font-width: 2500px; font-size: 18px"
+                @click="route_to_article(id)"
+              >
+                {{ item.title }}
+              </el-button>
+              <el-button class="button" type="text">删除帖子</el-button>
+            </div>
+          </template>
+          <el-button
+            type="text"
+            style="color: black; font-width: 2500px; font-size: 13px"
+            @click="route_to_article()"
+          >
+            <div class="text item">
+              {{ item.info }}
+            </div>
+          </el-button>
+        </el-card>
+      </div>
+      <div v-if="value === '1'">
+        <el-card
+          shadow="hover"
+          class="content-card"
+          v-for="item in my_collection"
+          :key="item"
+        >
+          <template #header>
+            <div class="content-card-header">
+              <el-button
+                type="text"
+                style="color: black; font-width: 2500px; font-size: 18px"
+                @click="route_to_article(id)"
+              >
+                {{ item.title }}
+              </el-button>
+              <el-button class="button" type="text">取消收藏</el-button>
+            </div>
+          </template>
+          <el-button
+            type="text"
+            style="color: black; font-width: 2500px; font-size: 13px"
+            @click="route_to_article()"
+          >
+            <div class="text item">
+              {{ item.info }}
+            </div>
+          </el-button>
+        </el-card>
+      </div>
+      <div v-if="value === '2'">
+        <el-card
+          shadow="hover"
+          class="content-card"
+          v-for="item in my_followed"
+          :key="item"
+        >
+          
+            <div class="content-card-header">
+              <el-button
+                type="text"
+                style="color: black; font-width: 2500px; font-size: 18px"
+                @click="route_to_user(id)"
+              >
+                <el-avatar :src="item.avatar_url"> </el-avatar>&ensp;
+
+                {{ item.username }}
+              </el-button>
+              <el-button class="button" type="text">取消关注</el-button>
+            </div>
+        </el-card>
+      </div>
+      <div v-if="value === '3'">
+        <el-card
+          shadow="hover"
+          class="content-card"
+          v-for="item in my_fans"
+          :key="item"
+        >
+          
+            <div class="content-card-header">
+              <el-button
+                type="text"
+                style="color: black; font-width: 2500px; font-size: 18px"
+                @click="route_to_user(id)"
+              >
+                <el-avatar :src="item.avatar_url"> </el-avatar>&ensp;
+
+                {{ item.username }}
+              </el-button>
+              <el-button class="button" type="text">互相关注</el-button>
+            </div>
+          
+        </el-card>
+      </div>
       <el-pagination
         background
         layout="prev, pager, next, jumper, ->, total"
@@ -154,7 +224,8 @@ export default {
       information: "information",
       article_id: "1",
       SHOWIT: false,
-      which: "0",
+      avatar_url:
+        "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
       options: [
         {
           value: "0",
@@ -172,7 +243,30 @@ export default {
           value: "3",
           label: "我的粉丝",
         },
-        
+      ],
+      my_article: [
+        {"title": "This is title", "info": "This is article info"},
+        {"title": "This is title", "info": "This is article info"},
+        {"title": "This is title", "info": "This is article info"},
+        {"title": "This is title", "info": "This is article info"},
+        {"title": "This is title", "info": "This is article info"},
+        {"title": "This is title", "info": "This is article info"},
+      ],
+      my_collection: [
+        {"title": "This is title", "info": "This is article info"},
+        {"title": "This is title", "info": "This is article info"},
+        {"title": "This is title", "info": "This is article info"},
+        {"title": "This is title", "info": "This is article info"},
+        {"title": "This is title", "info": "This is article info"},
+        {"title": "This is title", "info": "This is article info"},
+      ],
+      my_followed: [
+        {"avatar_url": "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png", "username": "test"},
+        {"avatar_url": "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png", "username": "test"},
+      ],
+      my_fans: [
+        {"avatar_url": "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png", "username": "test"},
+        {"avatar_url": "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png", "username": "test"},
       ],
     };
   },
@@ -180,7 +274,7 @@ export default {
     gtUser,
   },
   methods: {
-    handleClick: (tab, event) => {
+    handleClick(tab, event) {
       console.log(tab, event);
     },
     doSearch: (text) => {
@@ -192,21 +286,13 @@ export default {
       ElMessage.info("clicked!");
     },
     route_to_article() {
-      location.href="/#/article/"; //要加上文章的id
+      this.$router.push("/#/article/:id"); //要加上文章的id
     },
-    tabs() {
-      ElMessage.info("clicked")
-      console.log(which)
-      if (which == '2' || which == '3') {
-        SHOWIT = true
-      } else {
-        SHOWIT = false
-      }
+    route_to_user() {
+      this.$router.push("/#/user/:id");
     },
+    tabs() {},
   },
-  name: 'UserInfoView',
-  
+  name: "UserInfoView",
 };
-
-
 </script>
