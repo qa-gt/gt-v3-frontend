@@ -85,10 +85,17 @@
     </el-row>
 </template>
 
-<style scoped>
+<style>
+.v-md-editor-preview img {
+    width: 80%;
+    margin: 10px 10%;
+    height: auto;
+    border-radius: 15px;
+}
+
 .v-md-editor {
-    box-shadow: 0 0px 0px rgba(0, 0, 0, 0);
-    border: 1px solid #dcdfe6;
+    box-shadow: 0 0px 0px rgba(0, 0, 0, 0) !important;
+    border: 1px solid #dcdfe6 !important;
 }
 </style>
 
