@@ -63,6 +63,7 @@
     <keep-alive>
         <router-view style="margin: 50px 25px" />
     </keep-alive>
+    <div style="height: 20px;"></div>
 </template>
 
 <style lang="scss" scoped>

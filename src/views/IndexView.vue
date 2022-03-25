@@ -19,29 +19,30 @@
                     style="padding: -10px"
                 >
                     <el-tabs
-                        v-model="value"
+                        v-model="currentTopic"
                         class="demo-tabs hidden-sm-and-down"
-                        @tab-click="handleClick"
+                        @tab-click="changeTopic"
                         style="padding: -10px"
                     >
                         <el-tab-pane
                             v-for="item in topics"
                             :key="item.id"
-                            v-bind:label="item.name"
-                            v-bind:name="item.id"
-                        ></el-tab-pane>
+                            :label="item.name"
+                            :name="String(item.id)"
+                        />
                     </el-tabs>
                     <el-select
-                        v-model="value"
+                        v-model="currentTopic"
                         class="m-2 hidden-md-and-up"
-                        placeholder="Select"
+                        placeholder="请选择展示的话题"
+                        @change="changeTopic"
                         style="width: 100%; margin-bottom: 5px"
                     >
                         <el-option
                             v-for="item in topics"
                             :key="item.id"
                             :label="item.name"
-                            :value="item.id"
+                            :value="String(item.id)"
                         />
                     </el-select>
                     <div class="mt-4">
@@ -49,10 +50,12 @@
                             v-model="searchInput"
                             placeholder="想找什么？"
                             class="input-with-select"
-                            @keydown.enter.self.stop="doSearch()"
+                            @keydown.enter.self.stop="doSearch"
+                            clearable
+                            @clear="doSearch"
                         >
                             <template #append>
-                                <el-button type="primary" @click="doSearch()">
+                                <el-button type="primary" @click="doSearch">
                                     <el-icon style="vertical-align: middle">
                                         <search />
                                     </el-icon>
@@ -82,7 +85,7 @@
                                 font-width: 2500px;
                                 font-size: 18px;
                             "
-                            @click="to_article(item.id)"
+                            @click="$router.push(`/article/${item.id}`)"
                         >
                             {{ item.title }}
                         </el-button>
@@ -91,15 +94,6 @@
                         >
                     </div>
                 </template>
-                <!-- <el-button
-          type="text"
-          style="color: black; font-width: 2500px; font-size: 13px"
-          @click="route_to_article()"
-        >
-          <div v-for="o in 4" :key="o" class="text item">
-            {{ "List item " + o }} <br /><br />
-          </div>
-        </el-button> -->
                 <div class="article-preview">
                     {{ item.content }}
                 </div>
@@ -107,18 +101,22 @@
             <el-pagination
                 background
                 layout="prev, pager, next, jumper, ->, total"
-                :total="200"
-                :page-size="5"
+                v-model:current-page="pageInfo.num"
+                :total="pageInfo.total"
+                :page-size="pageInfo.size"
                 :pager-count="7"
                 :hide-on-single-page="true"
+                @current-change="getAtcs"
                 class="hidden-sm-and-down"
             />
             <el-pagination
                 layout="prev, pager, next"
-                :total="50"
-                :page-size="5"
+                v-model="pageInfo.num"
+                :total="pageInfo.total"
+                :page-size="pageInfo.size"
                 :pager-count="5"
                 :hide-on-single-page="true"
+                @current-change="getAtcs"
                 class="hidden-md-and-up"
             />
         </el-col>
@@ -139,13 +137,10 @@
 </style>
 
 <script>
-import { ref } from "vue";
 import { mapState } from "vuex";
 
-import { ElMessageBox } from "element-plus";
-import { ElMessage } from "element-plus";
+import { ElLoading } from "element-plus";
 import gtUser from "@/components/gtUser.vue";
-// import axios from "axios";
 
 export default {
     computed: {
@@ -153,38 +148,40 @@ export default {
     },
     data() {
         return {
-            theme: "light",
-            username: "test",
-            id: "1",
-            grade: "九年级",
-            sex: "♂",
-            //tags: "创始人",
-            activeName: ref("first"),
             searchInput: "",
-            article_id: "1",
-            topics: [],
+            searchText: "",
+            topics: [{ id: -1, name: "全部" }],
             value: 0,
-            atcs: {},
-            description: "这里空空如也~",
+            atcs: [],
+            pageInfo: { total: 0, num: 1, size: 20 },
+            currentTopic: "-1",
         };
     },
     components: {
         gtUser,
     },
     methods: {
-        handleClick: (tab, event) => {
-            console.log(tab, event);
+        changeTopic() {
+            this.getAtcs();
+            this.pageInfo.num = 1;
         },
         doSearch() {
-            if (!this.searchInput) return;
-            ElMessageBox.alert("搜索：" + this.searchInput);
+            this.searchText = encodeURIComponent(this.searchInput);
+            this.getAtcs();
+            this.pageInfo.num = 1;
         },
-        router: article_id => {
-            console.log(article_id);
-            ElMessage.info("clicked!");
-        },
-        to_article(atc_id) {
-            this.$router.push(`/article/${atc_id}`);
+        getAtcs() {
+            let topic = this.currentTopic === "-1" ? "" : this.currentTopic;
+            const loading = ElLoading.service({ fullscreen: true });
+            this.$axios
+                .get(
+                    `/article/?min_state=0&page=${this.pageInfo.num}&topic=${topic}&search=${this.searchText}`
+                )
+                .then(data => {
+                    this.atcs = data.results;
+                    this.pageInfo.total = data.count;
+                    setTimeout(loading.close, 100);
+                });
         },
         refresh() {
             this.$router.go(0);
@@ -192,12 +189,10 @@ export default {
     },
     name: "IndexView",
     created() {
-        this.$axios.get("/article/?min_state=0").then(data => {
-            console.log(data);
-            this.atcs = data.results;
-        });
+        this.getAtcs();
         this.$axios.get("/topic/?min_state=0").then(data => {
-            this.topics = data.results;
+            console.log(data.results);
+            this.topics = this.topics.concat(data.results);
         });
     },
 };

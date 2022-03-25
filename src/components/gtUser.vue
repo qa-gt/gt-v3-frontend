@@ -54,12 +54,12 @@
                 </el-tag>
             </div>
 
-            <div style="margin: 2px 2px !important">
+            <!-- <div style="margin: 2px 2px !important">
                 <b>实名: &ensp;</b>
                 <el-tag type="info" style="margin: 3px 0px !important">{{
                     real_name
                 }}</el-tag>
-            </div>
+            </div> -->
 
             <br />
             <br />
@@ -67,11 +67,15 @@
     </el-card>
     <el-card shadow="hover" class="box-card" v-else>
         <template #header>
-            <h2 style="font-size: 25px; text-align: center">
-                欢迎回来，请<el-link :underline="false" style="font-size: 25px"
-                    >登录</el-link
+            <p style="font-size: 25px; text-align: center">
+                <el-link
+                    :underline="false"
+                    @click="$router.push('/user/login')"
+                    style="font-size: 25px"
                 >
-            </h2>
+                    欢迎回来，请登录
+                </el-link>
+            </p>
         </template>
     </el-card>
     <br />

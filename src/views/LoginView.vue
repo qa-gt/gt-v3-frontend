@@ -21,27 +21,34 @@
                         maxlength="30"
                         show-password
                     />
-                    <br /><br /><br />
-
-                    <el-button
-                        type="primary"
-                        native-type="submit"
-                        @click="login"
-                    >
-                        &emsp;&emsp;&emsp;&emsp;登&emsp;录&emsp;&emsp;&emsp;&emsp;
-                    </el-button>&ensp;
-                    <el-button
-                        plain
-                        type="primary"
-                        native-type="submit"
-                        @click="$router.push('/user/register')"
-                    >
-                        &emsp;&emsp;&emsp;&emsp;注&emsp;册&emsp;&emsp;&emsp;&emsp;
-                    </el-button>
-
                     <br /><br />
+                    <el-row justify="space-between">
+                        <el-col :xs="24" :sm="11" :md="11" :lg="11" :xl="11">
+                            <el-button
+                                type="primary"
+                                native-type="submit"
+                                @click="login"
+                                style="width: 100%; margin: 5px 0"
+                            >
+                                登&emsp;录
+                            </el-button>
+                        </el-col>
+                        <el-col :xs="24" :sm="11" :md="11" :lg="11" :xl="11">
+                            <el-button
+                                plain
+                                type="primary"
+                                native-type="submit"
+                                @click="$router.push('/user/register')"
+                                style="width: 100%; margin: 5px 0"
+                            >
+                                注&emsp;册
+                            </el-button>
+                        </el-col>
+                    </el-row>
+
+                    <br /><br /><br /><br />
                     <span style="font-size: 14px">
-                        &#8195;忘记密码？
+                        忘记密码？
                         <el-button
                             type="text"
                             @click="$router.push('/user/repassword')"
@@ -100,6 +107,6 @@ export default {
 
 <style>
 .login-card {
-    height: 400px;
+    height: 500px;
 }
 </style>

@@ -327,7 +327,6 @@ export default {
         commentAnimation1(el) {
             el.style.opacity = 0;
             el.style.height = 0;
-            // console.log(el);
         },
         commentAnimation2(el, done) {
             Velocity(el, { opacity: 1, height: "80px" }, { duration: 300 });
@@ -354,7 +353,7 @@ export default {
             res.create_time = this.$moment(res.create_time).fromNow();
             res.update_time = this.$moment(res.update_time).fromNow();
             this.atc = res;
-            loading.close();
+            setTimeout(loading.close, 100);
             this.$axios
                 .patch(`/article/${this.$route.params.id}/read/`)
                 .then(res => {
