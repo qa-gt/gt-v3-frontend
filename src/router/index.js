@@ -52,6 +52,11 @@ const routes = [{
     name: "register",
     component: () => import('@/views/RegisterView.vue')
 },
+{
+    path: "/pagenotfound",
+    name: "404",
+    component: () => import('@/views/PagenotfoundView.vue')
+}
 ]
 
 const router = createRouter({
