@@ -192,11 +192,11 @@ export default {
     },
     name: "IndexView",
     created() {
-        this.$axios.get("/article/").then(data => {
+        this.$axios.get("/article/?").then(data => {
             console.log(data);
             this.atcs = data.results;
         });
-        this.$axios.get("/topic/").then(data => {
+        this.$axios.get("/topic/?state").then(data => {
             this.topics = data.results;
         });
     },

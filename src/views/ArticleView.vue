@@ -122,8 +122,8 @@
                 <p style="font-weight: bold; font-size: 1.1rem">吃瓜</p>
                 <el-row justify="left">
                     <div class="info-2">
-                        <span v-for="item in atc.like" :key="item.user"
-                            >{{ item.user }},
+                        <span v-for="item in atcLike" :key="item.user"
+                            >{{ item.user.username }},
                         </span>
                     </div>
                 </el-row>
@@ -131,7 +131,7 @@
                 <p style="font-weight: bold; font-size: 1.1rem">评论</p>
                 <el-row
                     class="comment-item"
-                    v-for="item in atc.comment"
+                    v-for="item in atcComment"
                     :key="item.id"
                 >
                     <el-col
@@ -289,7 +289,9 @@ export default {
     },
     data() {
         return {
-            atc: { topic: {}, author: {}, like: [], comment: [] },
+            atc: { topic: {}, author: {} },
+            atcLike: [],
+            atcComment: [],
             showComment: false,
             liked: false,
             reply: 0,
@@ -300,6 +302,12 @@ export default {
         ...mapState(["user", "theme", "isMobile", "loggedIn"]),
     },
     methods: {
+        refresh() {
+            this.$axios.get(`/article/${this.$route.params.id}/`).then(res => {
+                this.atc.like = res.like;
+                this.atc.comment = res.comment;
+            });
+        },
         report() {
             ElMessage.warning("举报功能暂未开通");
         },
@@ -316,6 +324,7 @@ export default {
                 .then(res => {
                     console.log(res);
                     ElMessage.success("评论成功！");
+                    this.refresh();
                     setTimeout(() => {
                         this.showComment = false;
                         this.comment = "";
@@ -327,15 +336,7 @@ export default {
         },
         like() {
             this.$axios
-                .post(
-                    `/article/${this.atc.id}/like/`,
-                    {},
-                    {
-                        headers: {
-                            Authorization: `${this.$store.state.jwt}`,
-                        },
-                    }
-                )
+                .post("/like/", { article: this.article.id })
                 .then(res => {
                     if (res.opt === "add") {
                         this.liked = true;
@@ -381,13 +382,24 @@ export default {
             res.update_time = this.$moment(res.update_time).fromNow();
             this.atc = res;
             loading.close();
-            for (let i in res.like) {
-                if (res.like[i].user === this.user.username) {
-                    this.liked = true;
-                    break;
-                }
-            }
         });
+        this.$axios
+            .get(`/like/?article=${this.$route.params.id}`)
+            .then(res => res.results)
+            .then(res => {
+                this.atcLike = res;
+                for (let i in res) {
+                    if (res[i].user.id === this.user.id) {
+                        this.liked = true;
+                        break;
+                    }
+                }
+            });
+        this.$axios
+            .get(`/comment/?article=${this.$route.params.id}&min_state=0`)
+            .then(res => {
+                this.atcComment = res.results;
+            });
     },
 };
 </script>
