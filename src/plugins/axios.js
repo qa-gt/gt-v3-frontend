@@ -48,12 +48,12 @@ Axios.interceptors.response.use(
                 router.push({ name: "login" });
                 ElMessage.error("登录已过期，请重新登录");
                 return Promise.reject("登录信息已过期");
-            } else if (!store.state.loggedIn) {
-                ElMessage.error("请先登录");
-                return Promise.reject("用户未登录");
             } else if (error.response.data.detail) {
                 ElMessage.error(error.response.data.detail);
                 return Promise.reject(error.response.data.detail);
+            } else if (!store.state.loggedIn) {
+                ElMessage.error("请先登录");
+                return Promise.reject("用户未登录");
             }
             ElMessage.error("403错误: 身份校验失败");
             return Promise.reject("身份校验失败");
