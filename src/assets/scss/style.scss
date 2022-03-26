@@ -1,24 +1,22 @@
-@import 'element-plus/theme-chalk/display.css';
+@import "element-plus/theme-chalk/display.css";
 
-@import './config-light.scss';
-
+@import "./config-light.scss";
 
 html.light {
-    filter             : invert(0) hue-rotate(0);
+    filter: invert(0) hue-rotate(0);
     transition-property: all;
     transition-duration: 0.8s;
 }
 
 html.dark {
-    filter             : invert(1) hue-rotate(180deg);
+    filter: invert(1) hue-rotate(180deg);
     transition-property: all;
     transition-duration: 0.8s;
 }
 
-
 body {
-    margin          : 0;
-    padding         : 0;
+    margin: 0;
+    padding: 0;
     background-color: $bg;
 }
 
@@ -26,49 +24,45 @@ p {
     width: 99% !important;
 }
 
-
 .el-card {
-    border          : 1.5px solid $bd-card !important;
+    border: 1.5px solid $bd-card !important;
     background-color: $bg-card;
-    color           : $ft;
-    border-radius   : 9px;
-    background      : $bg-card;
-    box-shadow      : 5px 5px 10px $sd-1,
-        -5px -5px 10px $sd-2 !important;
+    color: $ft;
+    border-radius: 9px;
+    background: $bg-card;
+    box-shadow: 5px 5px 10px $sd-1, -5px -5px 10px $sd-2 !important;
 }
-
 
 .header {
-    color           : $ft;
-    padding         : 15px;
-    height          : 50px;
+    color: $ft;
+    padding: 15px;
+    height: 50px;
     background-color: $bg-card;
-    text-align      : left;
-    box-shadow      : 7px 7px 14px $sd-1,
-        -7px -7px 14px $sd-2;
+    text-align: left;
+    box-shadow: 7px 7px 14px $sd-1, -7px -7px 14px $sd-2;
 }
 
-.header>h3 {
-    margin : 0;
+.header > h3 {
+    margin: 0;
     padding: 0;
     display: inline;
 }
 
-.header>div.user {
-    display   : inline;
-    float     : right;
-    margin    : auto;
+.header > div.user {
+    display: inline;
+    float: right;
+    margin: auto;
     margin-top: -2px;
-    font-size : 1.4rem;
+    font-size: 1.4rem;
 }
 
 .svg {
     display: inline-block;
-    margin : 0 5px;
+    margin: 0 5px;
 }
 
 .el-tabs {
-    height    : 90%;
+    height: 90%;
     overflow-y: auto;
     overflow-x: hidden;
 }
@@ -82,4 +76,16 @@ p {
 
 .el-tabs__item {
     color: $ft !important;
+}
+
+/* .v-md-editor-preview img {
+    width: 80%;
+    margin: 10px 10%;
+    height: auto;
+    border-radius: 15px;
+} */
+
+.v-md-editor-preview audio {
+    width: 100%;
+    max-width: 400px;
 }

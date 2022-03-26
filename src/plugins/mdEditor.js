@@ -48,7 +48,7 @@ VMdEditor.use(createAlignPlugin());
 VMdPreview.use(createAlignPlugin());
 
 // 更多语法糖适配
-const processMarkdown = text => {
+const processMarkdown = (text, writing = false) => {
     // audio和video标签
     text = text.replace(/!!!AUDIO:(.*?)!!!/g, (match, p1) => {
         return `<audio src="${p1}" controls="controls" style="width: 100%;"></audio>`;
@@ -65,12 +65,21 @@ const processMarkdown = text => {
         return `<iframe src="//player.bilibili.com/player.html?bvid=${p1[0]}&page=${p1[1]}&high_quality=1" allowfullscreen="allowfullscreen" style="width: 100%; height: 16rem" scrolling="no" frameborder="0" sandbox="allow-top-navigation allow-same-origin allow-forms allow-scripts"></iframe>`;
     });
     // 网易云和QQ音乐
-    text = text.replaceAll(
-        /!!!MUSIC-(WYY|QQ)-(ID|NAME):(.*?)!!!/g,
-        (match, p1, p2, p3) => {
-            return `<audio controls="controls" src="http://127.0.0.1:8000/utils/get_music_url?site=${p1}&by=${p2}&value=${p3}" style="width: 100%;"></audio>`;
-        }
-    );
+    if (writing) {
+        text = text.replaceAll(
+            /!!!MUSIC-(WYY|QQ)-(ID|NAME):(.*?)!!!/g,
+            (match, p1, p2, p3) => {
+                return `!!!MUSIC-${p1}-${p2}:${p3}!!!&emsp;<small style="color: rgb(200, 200, 200)">为减小服务器压力，编辑时音乐不会渲染</small>`;
+            }
+        );
+    } else {
+        text = text.replaceAll(
+            /!!!MUSIC-(WYY|QQ)-(ID|NAME):(.*?)!!!/g,
+            (match, p1, p2, p3) => {
+                return `<audio controls="controls" src="/api/utils/get_music_url?site=${p1}&by=${p2}&value=${p3}"></audio>`;
+            }
+        );
+    }
     return text;
 };
 

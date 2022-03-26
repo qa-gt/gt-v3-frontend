@@ -197,8 +197,7 @@ export default {
     created() {
         this.getAtcs();
         this.$axios.get("/topic/?min_state=0").then(data => {
-            console.log(data.results);
-            this.topics = this.topics.concat(data.results);
+            this.topics = this.topics.concat(data);
         });
     },
 };

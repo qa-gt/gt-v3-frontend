@@ -5,7 +5,7 @@ import { ElMessage, ElLoading } from "element-plus";
 
 export const Axios = axios.create({
     // baseURL: process.env.NODE_ENV === 'production' ? 'http://ctfapi.hcc.io' : '/api',
-    baseURL: "http://192.168.31.50:8000/",
+    baseURL: "/api",
 });
 
 Axios.interceptors.request.use(
@@ -38,11 +38,10 @@ Axios.interceptors.response.use(
         //     error.response.data = await DecodeBlob(error.response.data);
         // }
         if (!error.response) {
-            // ElMessage.error(error.message);
+            ElMessage.error(error.message);
             return Promise.reject(error.message);
         } else if (error.response.status === 404) {
             router.push({ name: "404" });
-            ElLoading.service({ fullscreen: true }).close();
             return Promise.reject(error.response);
         } else if (error.response.status === 403) {
             if (error.response.data.action === "relogin") {

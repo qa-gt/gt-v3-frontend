@@ -65,10 +65,10 @@
                     </div>
                 </el-card>
             </el-row>
-            <el-empty description="这里空空如也~" v-show="empty">
-                <el-button plain @click="refresh">
+            <el-empty description="Empty" v-show="empty">
+                <!-- <el-button plain @click="refresh">
                     &emsp;刷&ensp;新&emsp;
-                </el-button>
+                </el-button> -->
             </el-empty>
             <div v-if="cate === '0'">
                 <el-card
@@ -149,7 +149,7 @@
                 <el-card
                     shadow="hover"
                     class="content-card"
-                    v-for="item in my_followed"
+                    v-for="item in myFollowing"
                     :key="item"
                 >
                     <div class="content-card-header">
@@ -160,16 +160,15 @@
                                 font-width: 2500px;
                                 font-size: 18px;
                             "
-                            @click="route_to_user(id)"
+                            @click="$router.push(`/user/${item.id}`)"
                         >
-                            <el-avatar :src="item.avatar_url"> </el-avatar
-                            >&ensp;
-
+                            <el-avatar :src="item.portrait" />
+                            &emsp;
                             {{ item.username }}
                         </el-button>
-                        <el-button class="button" type="text"
-                            >取消关注</el-button
-                        >
+                        <el-button class="button" type="text">
+                            取消关注
+                        </el-button>
                     </div>
                 </el-card>
             </div>
@@ -177,7 +176,7 @@
                 <el-card
                     shadow="hover"
                     class="content-card"
-                    v-for="item in my_fans"
+                    v-for="item in myFollower"
                     :key="item"
                 >
                     <div class="content-card-header">
@@ -188,16 +187,15 @@
                                 font-width: 2500px;
                                 font-size: 18px;
                             "
-                            @click="route_to_user(id)"
+                            @click="$router.push(`/user/${item.id}`)"
                         >
-                            <el-avatar :src="item.avatar_url"> </el-avatar
-                            >&ensp;
+                            <el-avatar :src="item.portrait"> </el-avatar>&ensp;
 
                             {{ item.username }}
                         </el-button>
-                        <el-button class="button" type="text"
-                            >互相关注</el-button
-                        >
+                        <el-button class="button" type="text">
+                            互相关注
+                        </el-button>
                     </div>
                 </el-card>
             </div>
@@ -270,30 +268,8 @@ export default {
             ],
             myAtcs: [],
             myClts: [],
-            my_followed: [
-                {
-                    avatar_url:
-                        "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
-                    username: "test",
-                },
-                {
-                    avatar_url:
-                        "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
-                    username: "test",
-                },
-            ],
-            my_fans: [
-                {
-                    avatar_url:
-                        "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
-                    username: "test",
-                },
-                {
-                    avatar_url:
-                        "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
-                    username: "test",
-                },
-            ],
+            myFollowing: [],
+            myFollower: [],
         };
     },
     components: {
@@ -307,9 +283,9 @@ export default {
                 case "1":
                     return this.getMyClts;
                 case "2":
-                    return this.getFollowed;
+                    return this.getMyFollowing;
                 case "3":
-                    return this.getFans;
+                    return this.getMyFollower;
             }
         },
         changeCate() {
@@ -334,8 +310,9 @@ export default {
                     this.pageInfo.total = data.count;
                     this.myAtcs = data.results;
                     this.empty = this.myAtcs.length === 0;
-                    setTimeout(loading.close, 100);
-                });
+                })
+                .catch(err => err)
+                .then(() => setTimeout(loading.close, 100));
         },
         getMyClts() {
             const loading = ElLoading.service({ fullscreen: true });
@@ -350,16 +327,59 @@ export default {
                         data[i] = data[i].article;
                     }
                     this.myClts = data;
-                    console.log(this.myClts);
                     this.empty = this.myClts.length === 0;
-                    setTimeout(loading.close, 100);
-                });
+                })
+                .catch(err => err)
+                .then(() => setTimeout(loading.close, 100));
+        },
+        getMyFollowing() {
+            const loading = ElLoading.service({ fullscreen: true });
+            this.$axios
+                .get(
+                    `/follow/?follower=${this.$route.params.id}&page=${this.pageInfo.num}&search=${this.searchText}`
+                )
+                .then(data => {
+                    this.pageInfo.total = data.count;
+                    data = data.results;
+                    for (let i in data) {
+                        data[i] = data[i].following;
+                    }
+                    this.myFollowing = data;
+                    this.empty = this.myFollowing.length === 0;
+                })
+                .catch(err => err)
+                .then(() => setTimeout(loading.close, 100));
+        },
+        getMyFollower() {
+            const loading = ElLoading.service({ fullscreen: true });
+            this.$axios
+                .get(
+                    `/follow/?following=${this.$route.params.id}&page=${this.pageInfo.num}&search=${this.searchText}`
+                )
+                .then(data => {
+                    this.pageInfo.total = data.count;
+                    data = data.results;
+                    for (let i in data) {
+                        data[i] = data[i].follower;
+                    }
+                    this.myFollower = data;
+                    this.empty = this.myFollower.length === 0;
+                })
+                .catch(err => err)
+                .then(() => setTimeout(loading.close, 100));
         },
     },
-    created() {
+    watch: {
+        $route() {
+            this.$axios.get(`/user/${this.$route.params.id}/`).then(res => {
+                this.user = res;
+            });
+            this.getFunc()();
+        },
+    },
+    mounted() {
         this.$axios.get(`/user/${this.$route.params.id}/`).then(res => {
             this.user = res;
-            console.log(res);
         });
         this.getMyAtcs();
     },

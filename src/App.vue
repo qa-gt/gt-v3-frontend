@@ -3,14 +3,14 @@
         <el-button
             type="text"
             style="font-size: 20px; color: #000000; font-weight: 600"
-            @click="$router.push('/index')"
+            @click="$router.push({ name: 'index' })"
         >
             {{ title }}
         </el-button>
         <div class="user">
             <el-icon
                 style="width: 1em; height: 1em; margin-right: 10px"
-                @click="$router.push('/index')"
+                @click="$router.push({ name: 'index' })"
             >
                 <home-filled />
             </el-icon>
@@ -63,7 +63,7 @@
     <keep-alive>
         <router-view style="margin: 50px 25px" />
     </keep-alive>
-    <div style="height: 20px;"></div>
+    <div style="height: 20px"></div>
 </template>
 
 <style lang="scss" scoped>

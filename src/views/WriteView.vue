@@ -44,6 +44,7 @@
                         :mode="isMobile ? 'edit' : 'editable'"
                         :before-preview-change="beforePreviewChange"
                         @upload-image="uploadImage"
+                        @save="save"
                     ></v-md-editor>
 
                     <br />
@@ -87,12 +88,7 @@
 </template>
 
 <style>
-.v-md-editor-preview img {
-    width: 80%;
-    margin: 10px 10%;
-    height: auto;
-    border-radius: 15px;
-}
+
 
 .v-md-editor {
     box-shadow: 0 0px 0px rgba(0, 0, 0, 0) !important;
@@ -129,7 +125,7 @@ export default {
     },
     methods: {
         beforePreviewChange(text, next) {
-            next(processMarkdown(text));
+            next(processMarkdown(text, true));
         },
         doSubmit() {
             if (
@@ -170,6 +166,9 @@ export default {
         cancel() {
             this.$router.go(-1);
             ElMessage.info("已取消");
+        },
+        save() {
+            ElMessage.info("草稿保存功能正在开发中, 敬请期待!");
         },
     },
     created() {

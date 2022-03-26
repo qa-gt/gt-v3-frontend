@@ -63,7 +63,7 @@
                     v-on:enter="commentAnimation2"
                     v-on:leave="commentAnimation3"
                 >
-                    <el-row gutter="3" v-if="showComment">
+                    <el-row gutter="3" v-if="showComment" id="commentArea">
                         <el-col :span="24">
                             <el-input
                                 v-model="comment"
@@ -76,6 +76,7 @@
                                 show-word-limit
                                 :rows="3"
                                 type="textarea"
+                                @keydown.ctrl.enter="commentSubmit"
                             >
                             </el-input>
                         </el-col>
@@ -87,6 +88,7 @@
                         style="padding: 10px; margin-right: 5px"
                         v-show="showComment"
                         @click="commentSubmit"
+                        id="commentButton"
                     >
                         发表<span v-if="!reply.status">评论</span>
                         <span v-else>回复</span>
@@ -114,7 +116,7 @@
                                         <el-icon><comment /></el-icon>
                                         &ensp;评&ensp;论&ensp;
                                     </el-dropdown-item>
-                                    <el-dropdown-item @click="fav">
+                                    <el-dropdown-item @click="collect">
                                         <el-icon><star /></el-icon>
                                         &ensp;收&ensp;藏&ensp;
                                     </el-dropdown-item>
@@ -237,7 +239,6 @@
 import { ElMessage } from "element-plus";
 import Velocity from "velocity-animate";
 import { mapState } from "vuex";
-import { ref } from "vue";
 import gtUser from "@/components/gtUser.vue";
 import { ElLoading } from "element-plus";
 import { VMdPreview, processMarkdown } from "@/plugins/mdEditor";
@@ -266,12 +267,12 @@ export default {
             this.$axios
                 .get(`/like/?article=${this.$route.params.id}`)
                 .then(res => {
-                    this.atcLike = res.results;
+                    this.atcLike = res;
                 });
             this.$axios
                 .get(`/comment/?article=${this.$route.params.id}&min_state=0`)
                 .then(res => {
-                    this.atcComment = res.results;
+                    this.atcComment = res;
                 });
         },
         replyCmt(cmt) {
@@ -279,6 +280,11 @@ export default {
             this.reply.id = cmt.id;
             this.reply.username = cmt.author.username;
             this.showComment = true;
+            console.log(1);
+            setTimeout(function () {
+                console.log(2);
+                document.getElementById("commentButton").scrollIntoView();
+            }, 100);
         },
         report() {
             ElMessage.warning("举报功能暂未开通");
@@ -292,7 +298,7 @@ export default {
                 .post(`/comment/`, {
                     article: this.$route.params.id,
                     content: this.comment,
-                    reply: this.reply.id || "",
+                    reply: (this.reply.status && this.reply.id) || "",
                 })
                 .then(res => {
                     console.log(res);
@@ -305,10 +311,8 @@ export default {
                 });
         },
         writeComment() {
-            this.showComment = !this.showComment;
-            if (!this.showComment) {
-                this.reply.status = false;
-            }
+            this.showComment = true;
+            this.reply.status = false;
         },
         like() {
             this.$axios
@@ -340,8 +344,14 @@ export default {
                 { duration: 300, complete: done }
             );
         },
-        fav() {
-            ElMessage.success("收藏成功");
+        collect() {
+            this.$axios
+                .post(`/collect/`, {
+                    article: this.$route.params.id,
+                })
+                .then(res => {
+                    ElMessage.success(res.detail);
+                });
         },
         follow() {
             ElMessage.success(`已关注 ${this.username}!`);
@@ -352,6 +362,7 @@ export default {
         this.$axios.get(`/article/${this.$route.params.id}/`).then(res => {
             res.create_time = this.$moment(res.create_time).fromNow();
             res.update_time = this.$moment(res.update_time).fromNow();
+            res.content = processMarkdown(res.content);
             this.atc = res;
             setTimeout(loading.close, 100);
             this.$axios
@@ -360,22 +371,19 @@ export default {
                     this.atc.read_count += 1;
                 });
         });
-        this.$axios
-            .get(`/like/?article=${this.$route.params.id}`)
-            .then(res => res.results)
-            .then(res => {
-                this.atcLike = res;
-                for (let i in res) {
-                    if (res[i].user.id === this.user.id) {
-                        this.liked = true;
-                        break;
-                    }
+        this.$axios.get(`/like/?article=${this.$route.params.id}`).then(res => {
+            this.atcLike = res;
+            for (let i in res) {
+                if (res[i].user.id === this.user.id) {
+                    this.liked = true;
+                    break;
                 }
-            });
+            }
+        });
         this.$axios
             .get(`/comment/?article=${this.$route.params.id}&min_state=0`)
             .then(res => {
-                this.atcComment = res.results;
+                this.atcComment = res;
             });
     },
 };
