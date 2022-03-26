@@ -66,7 +66,7 @@ export default {
     contrast() {
       if (this.password == this.password2 && this.password != "") {
         ElMessage.success("更改成功！");
-        location.href = "/#/user";
+        this.$router.push("/user/edit");
       } else if (this.password != this.password2) {
         ElMessage.error("两次密码不匹配，请确认重新输入！");
       } else if (this.password == "") {

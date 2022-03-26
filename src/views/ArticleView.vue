@@ -46,7 +46,7 @@
                                 <el-popconfirm
                                     confirm-button-text="确定删除"
                                     cancel-button-text="我再想想"
-                                    :icon="InfoFilled"
+                                    icon="InfoFilled"
                                     icon-color="red"
                                     title="确定要删除文章吗？"
                                     @confirm="deleteArticle"
@@ -115,6 +115,7 @@
                     <el-row gutter="3" v-if="showComment">
                         <el-col :span="24">
                             <el-input
+                                id="comment"
                                 v-model="comment"
                                 maxlength="400"
                                 :placeholder="
@@ -176,9 +177,7 @@
                 <p style="font-weight: bold; font-size: 1.1rem">吃瓜</p>
                 <el-row justify="left">
                     <div class="info-2">
-                        <span v-for="item in atcLike" :key="item.user"
-                            >{{ item.user.username }},
-                        </span>
+                        {{ atcLike.map(item => item.user.username).join(",") }}
                     </div>
                 </el-row>
                 <el-divider />
@@ -246,7 +245,7 @@
                                                             ID: {{ item.id }}
                                                         </el-dropdown-item>
                                                         <el-dropdown-item
-                                                            @click="
+                                                            @click.prevent="
                                                                 replyCmt(item)
                                                             "
                                                         >
@@ -312,12 +311,12 @@ export default {
     methods: {
         refresh() {
             this.$axios
-                .get(`/like/?article=${this.$route.params.id}`)
+                .get("/like/", { article: this.$route.params.id })
                 .then(res => {
                     this.atcLike = res;
                 });
             this.$axios
-                .get(`/comment/?article=${this.$route.params.id}&min_state=0`)
+                .get("/comment/", { article: this.$route.params.id, min_state: 0 })
                 .then(res => {
                     this.atcComment = res;
                 });
@@ -327,11 +326,7 @@ export default {
             this.reply.id = cmt.id;
             this.reply.username = cmt.author.username;
             this.showComment = true;
-            console.log(1);
-            setTimeout(function () {
-                console.log(2);
-                document.getElementById("commentButton").scrollIntoView();
-            }, 100);
+            document.querySelector("#comment").scrollIntoView({ behavior: "smooth" });
         },
         report() {
             ElMessage.warning("举报功能暂未开通");
@@ -342,13 +337,12 @@ export default {
                 return;
             }
             this.$axios
-                .post(`/comment/`, {
+                .post("/comment/", {
                     article: this.$route.params.id,
                     content: this.comment,
                     reply: (this.reply.status && this.reply.id) || "",
                 })
-                .then(res => {
-                    console.log(res);
+                .then(() => {
                     ElMessage.success("评论成功！");
                     this.refresh();
                     this.comment = "";
@@ -374,7 +368,6 @@ export default {
                     ElMessage.success(res.detail);
                 });
         },
-        // 动画
         commentAnimation1(el) {
             el.style.opacity = 0;
             el.style.height = 0;
@@ -393,7 +386,7 @@ export default {
         },
         collect() {
             this.$axios
-                .post(`/collect/`, {
+                .post("/collect/", {
                     article: this.$route.params.id,
                 })
                 .then(res => {
@@ -401,20 +394,20 @@ export default {
                 });
         },
     },
-    created() {
+    async created() {
         const loading = ElLoading.service({ fullscreen: true });
-        this.$axios.get(`/article/${this.$route.params.id}/`).then(res => {
+        await this.$axios.get(`/article/${this.$route.params.id}/`).then(res => {
             res.create_time = this.$moment(res.create_time).fromNow();
             res.update_time = this.$moment(res.update_time).fromNow();
             this.atc = res;
-            setTimeout(loading.close, 100);
-            this.$axios
-                .patch(`/article/${this.$route.params.id}/read/`)
-                .then(res => {
-                    this.atc.read_count += 1;
-                });
         });
-        this.$axios.get(`/like/?article=${this.$route.params.id}`).then(res => {
+        setTimeout(loading.close, 100);
+        await this.$axios
+            .patch(`/article/${this.$route.params.id}/read/`)
+            .then(() => {
+                this.atc.read_count += 1;
+            });
+        this.$axios.get("/like/", { article: this.$route.params.id }).then(res => {
             this.atcLike = res;
             for (let i in res) {
                 if (res[i].user.id === this.user.id) {
@@ -424,11 +417,11 @@ export default {
             }
         });
         this.$axios
-            .get(`/comment/?article=${this.$route.params.id}&min_state=0`)
+            .get("/comment/", {article: this.$route.params.id, min_state: 0 })
             .then(res => {
                 this.atcComment = res;
             });
-    },
+    }
 };
 </script>
 

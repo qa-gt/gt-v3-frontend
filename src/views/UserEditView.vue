@@ -17,7 +17,7 @@
                 <el-divider />
                 <el-form :model="form" label-position="top" label-width="120px">
                     <el-form-item>
-                        <el-button type="primary" @click="turn_to_password"
+                        <el-button type="primary" @click="this.$router.push('/user/repassword')"
                             >修改密码</el-button
                         >
                     </el-form-item>
@@ -133,7 +133,6 @@ export default {
     },
     methods: {
         confirm() {
-            console.log(this.form);
             this.$axios
                 .patch(`user/${this.$store.state.user.id}/`, this.form)
                 .then(res => {
@@ -142,15 +141,11 @@ export default {
                     ElMessage.success("保存成功");
                 })
                 .catch(err => {
-                    console.log(err.response.data);
-                    ElMessage.error(err.response.data.detail);
+                    ElMessage.error(err);
                 });
         },
         handleChange(value) {
             console.log(value);
-        },
-        turn_to_password() {
-            this.$router.push("/user/repassword");
         },
         cancel() {
             ElMessage.info("已取消");

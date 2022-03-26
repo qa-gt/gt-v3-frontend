@@ -49,7 +49,7 @@
 
                     <br />
 
-                    <el-row gutter="20" justify="space-between">
+                    <el-row :gutter="20" justify="space-between">
                         <el-col>
                             <el-select
                                 v-model="atc.topic"
@@ -181,7 +181,7 @@ export default {
                 this.atc.exist = true;
             });
         }
-        this.$axios.get("/topic/?min_state=0").then(data => {
+        this.$axios.get("/topic/", { min_state: 0 }).then(data => {
             this.topics = data.results;
         });
     },

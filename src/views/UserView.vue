@@ -303,9 +303,12 @@ export default {
         getMyAtcs() {
             const loading = ElLoading.service({ fullscreen: true });
             this.$axios
-                .get(
-                    `/article/?author=${this.$route.params.id}&min_state=-2&page=${this.pageInfo.num}&search=${this.searchText}`
-                )
+                .get("/article/", {
+                    author: this.$route.params.id,
+                    min_state: -2, 
+                    page: this.pageInfo.num,
+                    search: this.searchText
+                })
                 .then(data => {
                     this.pageInfo.total = data.count;
                     this.myAtcs = data.results;
@@ -317,15 +320,15 @@ export default {
         getMyClts() {
             const loading = ElLoading.service({ fullscreen: true });
             this.$axios
-                .get(
-                    `/collect/?user=${this.$route.params.id}&page=${this.pageInfo.num}&search=${this.searchText}`
-                )
+                .get("/collect/", {
+                    user: this.$route.params.id,
+                    page: this.pageInfo.num,
+                    search: this.searchText
+                })
                 .then(data => {
                     this.pageInfo.total = data.count;
                     data = data.results;
-                    for (let i in data) {
-                        data[i] = data[i].article;
-                    }
+                    data.map(e => e.article);
                     this.myClts = data;
                     this.empty = this.myClts.length === 0;
                 })
@@ -335,15 +338,15 @@ export default {
         getMyFollowing() {
             const loading = ElLoading.service({ fullscreen: true });
             this.$axios
-                .get(
-                    `/follow/?follower=${this.$route.params.id}&page=${this.pageInfo.num}&search=${this.searchText}`
-                )
+                .get("/follow/", {
+                    follower: this.$route.params.id,
+                    page: this.pageInfo.num,
+                    search: this.searchText
+                })
                 .then(data => {
                     this.pageInfo.total = data.count;
                     data = data.results;
-                    for (let i in data) {
-                        data[i] = data[i].following;
-                    }
+                    data.map(e => e.following);
                     this.myFollowing = data;
                     this.empty = this.myFollowing.length === 0;
                 })
@@ -353,15 +356,15 @@ export default {
         getMyFollower() {
             const loading = ElLoading.service({ fullscreen: true });
             this.$axios
-                .get(
-                    `/follow/?following=${this.$route.params.id}&page=${this.pageInfo.num}&search=${this.searchText}`
-                )
+                .get("/follow/", {
+                    following: this.$route.params.id,
+                    page: this.pageInfo.num,
+                    search: this.searchText
+                })
                 .then(data => {
                     this.pageInfo.total = data.count;
                     data = data.results;
-                    for (let i in data) {
-                        data[i] = data[i].follower;
-                    }
+                    data.map(e => e.follower);
                     this.myFollower = data;
                     this.empty = this.myFollower.length === 0;
                 })

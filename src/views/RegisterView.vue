@@ -53,9 +53,6 @@
 import { ElMessage, ElLoading } from "element-plus";
 // import { ref } from "vue";
 import { mapState } from "vuex";
-import axios from "axios";
-import "@/plugins/vaptcha";
-import loadJs from "@/plugins/loadJs";
 
 export default {
     computed: {
@@ -69,7 +66,7 @@ export default {
         };
     },
     methods: {
-        register() {
+        async register() {
             if (this.username === "" || this.password === "") {
                 ElMessage.error("用户名或密码不能为空！");
                 return;
@@ -81,42 +78,33 @@ export default {
                 fullscreen: true,
                 text: "注册中...",
             });
-            grecaptcha
-                .execute("6LdU6xAfAAAAAIY7YrFlAByuqIhOHO1stDNGWgnx", {
-                    action: "register",
+            await this.$recaptchaLoaded();
+            const token = await this.$recaptcha("login");
+
+            this.$axios
+                .post("/user/register", {
+                    username: this.username,
+                    password: this.password,
+                    recaptcha: token,
                 })
-                .then(token => {
-                    console.log(token);
-                    this.$axios
-                        .post("/user/register", {
-                            username: this.username,
-                            password: this.password,
-                            recaptcha: token,
-                        })
-                        .then(res => {
-                            this.$store.commit("setJwt", res.token);
-                            this.$store.commit("setUser", res.user);
-                            if (this.$route.query.next) {
-                                this.$router.push(this.$route.query.next);
-                            } else {
-                                this.$router.go(-1);
-                            }
-                            ElMessage.success("注册成功！");
-                        })
-                        .catch(err => err)
-                        .then(() => {
-                            loading.close();
-                        });
+                .then(res => {
+                    this.$store.commit("setJwt", res.token);
+                    this.$store.commit("setUser", res.user);
+                    if (this.$route.query.next) {
+                        this.$router.push(this.$route.query.next);
+                    } else {
+                        this.$router.go(-1);
+                    }
+                    ElMessage.success("注册成功！");
+                })
+                .catch(err => err)
+                .finally(() => {
+                    loading.close();
                 });
         },
         cancel() {
             this.$router.go(-1);
         },
-    },
-    mounted() {
-        loadJs(
-            "https://www.recaptcha.net/recaptcha/api.js?render=6LdU6xAfAAAAAIY7YrFlAByuqIhOHO1stDNGWgnx"
-        );
     },
 };
 </script>

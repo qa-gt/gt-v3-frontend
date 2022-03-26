@@ -34,13 +34,13 @@
                 title="消息列表"
                 direction="rtl"
                 :size="this.isMobile ? '75%' : '30%'"
-                lock-scroll="false"
+                :lock-scroll="false"
             >
                 <el-scrollbar full>
                     <p
                         v-for="item in 20"
                         :key="item"
-                        class="scrollbar-demo-item"
+                        class="scrollbar-item"
                     >
                         {{ item }}{{ isMobile }}
                     </p>
@@ -60,9 +60,13 @@
             {{ user.username }}
         </div>
     </el-header>
-    <keep-alive>
-        <router-view style="margin: 50px 25px" />
-    </keep-alive>
+    <div style="margin: 50px 25px">
+        <router-view v-slot="{ Component }">
+            <keep-alive>
+                <component :is="Component" />
+            </keep-alive>
+        </router-view>
+    </div>
     <div style="height: 20px"></div>
 </template>
 
@@ -88,7 +92,7 @@ nav a.router-link-exact-active {
     color: #3287d6;
 }
 
-.scrollbar-demo-item {
+.scrollbar-item {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -99,6 +103,12 @@ nav a.router-link-exact-active {
     font-size: 16px;
     background: var(--el-color-primary-light-9);
     color: var(--el-color-primary);
+}
+</style>
+
+<style lang="scss">
+.grecaptcha-badge { 
+    visibility: hidden;
 }
 </style>
 
@@ -123,7 +133,7 @@ export default {
     methods: {
         changeTheme() {
             this.$store.commit("changeTheme");
-            document.getElementsByTagName("html")[0].className = this.theme;
+            document.querySelector("html").className = this.theme;
         },
         messages() {
             this.drawer = !this.drawer;
@@ -131,8 +141,7 @@ export default {
         },
     },
     created() {
-        console.log(this.theme);
-        document.getElementsByTagName("html")[0].className = this.theme;
+        document.querySelector("html").className = this.theme;
     },
 };
 </script>

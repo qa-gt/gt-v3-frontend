@@ -12,7 +12,7 @@
         </el-col>
 
         <el-col :xs="24" :sm="18" :md="17" :lg="18" :xl="19">
-            <el-row justify="left">
+            <el-row justify="start">
                 <el-card
                     shadow="hover"
                     class="content-card"
@@ -180,9 +180,12 @@ export default {
             let topic = this.currentTopic === "-1" ? "" : this.currentTopic;
             const loading = ElLoading.service({ fullscreen: true });
             this.$axios
-                .get(
-                    `/article/?min_state=0&page=${this.pageInfo.num}&topic=${topic}&search=${this.searchText}`
-                )
+                .get("/article/", {
+                    min_state: 0,
+                    page: this.pageInfo.num,
+                    topic: topic,
+                    search: this.searchText
+                })
                 .then(data => {
                     this.pageInfo.total = data.count;
                     this.atcs = data.results;
@@ -196,7 +199,7 @@ export default {
     name: "IndexView",
     created() {
         this.getAtcs();
-        this.$axios.get("/topic/?min_state=0").then(data => {
+        this.$axios.get("/topic/", { min_state: 0 }).then(data => {
             this.topics = this.topics.concat(data);
         });
     },

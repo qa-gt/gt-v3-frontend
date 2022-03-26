@@ -41,16 +41,14 @@
             </div>
         </template>
         <div>
-            <div>
+            <p>
                 ID:{{ user.id }} | {{ user.grade }} |
                 {{ { 0: "性别保密", 1: "♂", 2: "♀" }[user.gender] }}
-            </div>
-            <br />
-            <div>
+            </p>
+            <p>
                 {{ user.introduction }}
-            </div>
-            <br />
-            <div style="display: inline">
+            </p>
+            <p>
                 <b>认证: &ensp;</b>
                 <el-tag
                     v-for="tag in tags"
@@ -60,18 +58,15 @@
                 >
                     {{ tag }}
                 </el-tag>
-            </div>
-
-            <!-- <div style="margin: 2px 2px !important">
-                <b>实名: &ensp;</b>
-                <el-tag type="info" style="margin: 3px 0px !important">{{
-                    real_name
-                }}</el-tag>
-            </div> -->
-
-            <br />
-            <br />
+            </p>
         </div>
+
+        <!-- <div style="margin: 2px 2px !important">
+            <b>实名: &ensp;</b>
+            <el-tag type="info" style="margin: 3px 0px !important">{{
+                real_name
+            }}</el-tag>
+        </div> -->
     </el-card>
     <el-card shadow="hover" class="box-card" v-else @click="follow">
         <template #header>
@@ -86,7 +81,6 @@
             </p>
         </template>
     </el-card>
-    <br />
 </template>
 
 <script>

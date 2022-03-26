@@ -9,7 +9,6 @@
         "
     >
         <div class="oops">Oops!</div>
-        <br /><br />
         <embed
             src="/src/assets/404.svg"
             type="image/svg+xml"
@@ -28,6 +27,7 @@ export default {};
     color: #a5a5a5;
     font-size: 60px;
     font-weight: 70px;
+    padding-bottom: 10px;
 }
 .pagenf {
     color: #c5c5c5;
