@@ -103,12 +103,6 @@ nav a.router-link-exact-active {
 }
 </style>
 
-<style lang="scss">
-.grecaptcha-badge { 
-    visibility: hidden;
-}
-</style>
-
 <script>
 import { mapState, mapGetters } from "vuex";
 

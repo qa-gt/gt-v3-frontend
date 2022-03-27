@@ -22,5 +22,11 @@ app
     .use(store)
     .use(Axios)
     .use(Moment)
-    .use(VueReCaptcha, { siteKey: "6LdU6xAfAAAAAIY7YrFlAByuqIhOHO1stDNGWgnx" })
+    .use(VueReCaptcha, { 
+        siteKey: "6LdU6xAfAAAAAIY7YrFlAByuqIhOHO1stDNGWgnx",
+        loaderOptions: {
+            useRecaptchaNet: true,
+            autoHideBadge: true
+        }
+    })
     .mount("#app");
