@@ -105,7 +105,10 @@ import { ElMessage } from "element-plus";
 
 export default {
     computed: {
-        ...mapState(["user", "isMobile"]),
+        ...mapState(["user"]),
+        isMobile() {
+            return this.$root.isMobile
+        }
     },
     components: {
         gtUser,

@@ -21,9 +21,9 @@
                                     {{ atc.title }}
                                 </h2>
                             </template>
-                            <p>标题&emsp;{{ atc.title }}</p>
+                            <p>标&emsp;&emsp;题&emsp;{{ atc.title }}</p>
                             <p>
-                                话题&emsp;{{ atc.topic.name }}
+                                话&emsp;&emsp;题&emsp;{{ atc.topic.name }}
                                 <el-button
                                     type="primary"
                                     size="small"
@@ -40,7 +40,7 @@
                                     <div>&ensp;修改文章</div>
                                 </el-button>
                             </p>
-                            <p>作者&emsp;{{ atc.author.username }}</p>
+                            <p>作&emsp;&emsp;者&emsp;{{ atc.author.username }}</p>
                             <p>
                                 发布时间&emsp;{{ atc.create_time }}
                                 <el-popconfirm
@@ -74,9 +74,9 @@
                             </p>
 
                             <p>更新时间&emsp;{{ atc.update_time }}</p>
-                            <p>阅读量&emsp;{{ atc.read_count }}</p>
+                            <p>阅读人数&emsp;{{ atc.read_count }}</p>
                             <p>
-                                ID&emsp;{{ atc.id }}
+                                文章&ensp;ID&ensp;&emsp;{{ atc.id }}
                                 <el-button
                                     type="danger"
                                     size="small"
@@ -201,7 +201,7 @@
                         <div
                             class="comment-content"
                             :style="{
-                                'padding-left': isMobile ? '5px' : '20px',
+                                'padding-left': $root.isMobile ? '5px' : '20px',
                             }"
                         >
                             <div class="comment-title">
@@ -284,7 +284,7 @@
 <script>
 import { ElMessage } from "element-plus";
 import Velocity from "velocity-animate";
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 import gtUser from "@/components/gtUser.vue";
 import { ElLoading } from "element-plus";
 import { VMdPreview } from "@/plugins/mdEditor";
@@ -306,7 +306,8 @@ export default {
         };
     },
     computed: {
-        ...mapState(["user", "theme", "isMobile", "loggedIn"]),
+        ...mapState(["user", "theme"]),
+        ...mapGetters(["loggedIn"])
     },
     methods: {
         refresh() {

@@ -1,10 +1,9 @@
 import axios from "axios";
 import router from "@/router";
 import { store } from "@/store";
-import { ElMessage, ElLoading } from "element-plus";
+import { ElMessage } from "element-plus";
 
 export const Axios = axios.create({
-    // baseURL: process.env.NODE_ENV === 'production' ? 'http://ctfapi.hcc.io' : '/api',
     baseURL: "/api",
 });
 
@@ -51,7 +50,7 @@ Axios.interceptors.response.use(
             } else if (error.response.data.detail) {
                 ElMessage.error(error.response.data.detail);
                 return Promise.reject(error.response.data.detail);
-            } else if (!store.state.loggedIn) {
+            } else if (!store.getters.loggedIn) {
                 ElMessage.error("请先登录");
                 return Promise.reject("用户未登录");
             }

@@ -1,5 +1,6 @@
-import { createRouter, createWebHashHistory } from "vue-router";
-//import HomeView from '../views/HomeView.vue'
+import { createRouter, createWebHistory } from "vue-router";
+import NProgress from 'nprogress';
+import 'nprogress/nprogress.css';
 
 const routes = [
     {
@@ -66,8 +67,20 @@ const routes = [
 ];
 
 const router = createRouter({
-    history: createWebHashHistory(),
+    history: createWebHistory(),
     routes,
+});
+
+NProgress.configure({
+    showSpinner: false
+});
+
+router.beforeEach(() => {
+    NProgress.start();
+});
+
+router.afterEach(() => {
+    NProgress.done();
 });
 
 export default router;

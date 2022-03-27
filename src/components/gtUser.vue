@@ -68,7 +68,7 @@
             }}</el-tag>
         </div> -->
     </el-card>
-    <el-card shadow="hover" class="box-card" v-else @click="follow">
+    <el-card shadow="hover" class="box-card" v-else>
         <template #header>
             <p style="font-size: 25px; text-align: center">
                 <el-link

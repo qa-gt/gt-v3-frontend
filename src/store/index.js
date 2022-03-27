@@ -1,21 +1,21 @@
-import { createStore } from 'vuex';
-import createPersistedState from "vuex-persistedstate";
+import { createStore } from "vuex";
+import VuexPersistence from "vuex-persist";
+
+const vuexPersistState = new VuexPersistence({
+    storage: window.localStorage,
+    reducer: state => ({ theme: state.theme, user: state.user, jwt: state.jwt })
+})
 
 const store = createStore({
     state() {
         return {
-            loggedIn: false,
             jwt: null,
             user: {},
             theme: "light",
-            isMobile: (navigator.userAgent.match(
-                /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i
-            ) && true) || false,
         }
     },
     mutations: {
         setJwt(state, data) {
-            state.loggedIn = true;
             state.jwt = data;
         },
         setUser(state, data) {
@@ -26,10 +26,10 @@ const store = createStore({
             state.theme = state.theme === 'light' ? 'dark' : 'light';
         },
     },
-    plugins: [createPersistedState({
-        storage: window.sessionStorage,
-        paths: ['theme', 'user', 'loggedIn', 'jwt'],
-    })],
+    getters: {
+        loggedIn: state => state.jwt !== null
+    },
+    plugins: [vuexPersistState.plugin]
 })
 
 export { store };

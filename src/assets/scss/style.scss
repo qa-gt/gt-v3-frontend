@@ -35,25 +35,33 @@ p {
 
 .header {
     color: $ft;
-    padding: 15px;
     height: 50px;
     background-color: $bg-card;
     text-align: left;
     box-shadow: 7px 7px 14px $sd-1, -7px -7px 14px $sd-2;
-}
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 
-.header > h3 {
-    margin: 0;
-    padding: 0;
-    display: inline;
-}
+    h3 {
+        margin: 0;
+        padding: 0;
+        display: inline;
+    }
 
-.header > div.user {
-    display: inline;
-    float: right;
-    margin: auto;
-    margin-top: -2px;
-    font-size: 1.4rem;
+    .user {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        flex-grow: 1;
+        
+        .el-icon{
+            margin-top: 2px;
+            margin-right: 8px;
+            font-size: 1.4rem;
+        }
+    }
+
 }
 
 .svg {

@@ -238,7 +238,7 @@ import gtUser from "@/components/gtUser.vue";
 
 export default {
     computed: {
-        ...mapState(["theme", "isMobile"]),
+        ...mapState(["theme"]),
     },
     data() {
         return {

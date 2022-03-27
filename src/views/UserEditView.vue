@@ -90,13 +90,14 @@
 
 <script>
 import { ref } from "vue";
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 import { ElMessage } from "element-plus";
 import gtUser from "@/components/gtUser.vue";
 
 export default {
     computed: {
-        ...mapState(["user", "loggedIn"]),
+        ...mapState(["user"]),
+        ...mapGetters(["loggedIn"])
     },
     data() {
         return {

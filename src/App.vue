@@ -1,34 +1,32 @@
 <template>
-    <el-header class="header" style="::shadow ">
-        <el-button
-            type="text"
-            style="font-size: 20px; color: #000000; font-weight: 600"
+    <el-header class="header">
+        <h3
+            style="color: #000000"
             @click="$router.push({ name: 'index' })"
         >
             {{ title }}
-        </el-button>
+        </h3>
         <div class="user">
             <el-icon
-                style="width: 1em; height: 1em; margin-right: 10px"
                 @click="$router.push({ name: 'index' })"
             >
                 <home-filled />
             </el-icon>
-            <el-icon style="margin-right: 10px" @click="changeTheme()">
+            <el-icon @click="changeTheme()">
                 <sunny v-if="theme === 'light'" />
                 <moon v-else />
             </el-icon>
-            <el-badge
-                :hidden="have_dot"
-                v-if="loggedIn"
-                is-dot
-                style="margin-right: 10px !important"
-            >
-                <bell
-                    style="width: 1em; height: 1em; margin-bottom: 4px"
-                    v-if="loggedIn"
-                    @click="messages()"
-            /></el-badge>
+            <el-icon v-if="loggedIn" style="margin-top: 5px">
+                <el-badge
+                    :hidden="!haveDot"
+                    is-dot
+                >
+                    <bell
+                        v-if="loggedIn"
+                        @click="messages()"
+                    />
+                </el-badge>
+             </el-icon>
             <el-drawer
                 v-model="drawer"
                 title="消息列表"
@@ -47,7 +45,6 @@
                 </el-scrollbar>
             </el-drawer>
             <el-icon
-                style="width: 1em; height: 1em; margin-right: 10px"
                 @click="$router.push('/write')"
             >
                 <edit />
@@ -57,10 +54,10 @@
             >
                 <user style="width: 1em; height: 1em" />
             </el-icon>
-            {{ user.username }}
+            <span>{{ user.username }}</span>
         </div>
     </el-header>
-    <div style="margin: 50px 25px">
+    <div style="margin: 45px 25px">
         <router-view v-slot="{ Component }">
             <keep-alive>
                 <component :is="Component" />
@@ -113,35 +110,38 @@ nav a.router-link-exact-active {
 </style>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 
 export default {
     mode: "history",
-    computed: {
-        ...mapState(["user", "theme", "isMobile", "loggedIn"]),
-    },
     data() {
         return {
             title: "QA瓜田",
             username: "test",
             viewTransition: "slide-right-leave-active",
             drawer: false,
-            have_dot: false,
-            drawerSize: this.isMobile ? "70%" : "50%",
+            haveDot: true,
         };
+    },
+    computed: {
+        ...mapState(["user", "theme"]),
+        ...mapGetters(["loggedIn"]),
+        isMobile() {
+            return window.innerWidth < 960;
+        }
     },
     methods: {
         changeTheme() {
             this.$store.commit("changeTheme");
-            document.querySelector("html").className = this.theme;
+            document.firstElementChild.className = this.theme;
         },
         messages() {
             this.drawer = !this.drawer;
-            this.have_dot = true;
+            this.haveDot = false;
         },
     },
     created() {
-        document.querySelector("html").className = this.theme;
+        document.firstElementChild.className = this.theme;
     },
 };
 </script>
