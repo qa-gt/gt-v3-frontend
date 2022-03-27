@@ -288,25 +288,20 @@ export default {
         };
     },
     computed: {
-        ...mapState(["user", "theme"]),
+        ...mapState(["user", "theme", "readedAtc"]),
         ...mapGetters(["loggedIn"]),
     },
     methods: {
         init() {
             const loading = ElLoading.service({ fullscreen: true });
-            this.$axios.get(`/article/${this.$route.params.id}/`).then(res => {
+            this.$axios.get(`/article/${this.$route.params.aid}/`).then(res => {
                 res.create_time = this.$moment(res.create_time).fromNow();
                 res.update_time = this.$moment(res.update_time).fromNow();
                 this.atc = res;
                 setTimeout(loading.close, 100);
             });
             this.$axios
-                .patch(`/article/${this.$route.params.id}/read/`)
-                .then(() => {
-                    this.atc.read_count += 1;
-                });
-            this.$axios
-                .get("/like/", { params: { article: this.$route.params.id } })
+                .get("/like/", { params: { article: this.$route.params.aid } })
                 .then(res => {
                     this.atcLike = res;
                     this.liked = this.atcLike.some(
@@ -315,22 +310,30 @@ export default {
                 });
             this.$axios
                 .get("/comment/", {
-                    params: { article: this.$route.params.id, min_state: 0 },
+                    params: { article: this.$route.params.aid, min_state: 0 },
                 })
                 .then(res => {
                     this.atcComment = res;
                 });
+            if (this.readedAtc.includes(this.$route.params.aid)) {
+                this.$axios
+                    .patch(`/article/${this.$route.params.aid}/read/`)
+                    .then(() => {
+                        this.atc.read_count += 1;
+                    });
+                this.$store.commit("addReadedAtc", this.$route.params.aid);
+            }
         },
         refresh() {
             this.$axios
-                .get("/like/", { params: { article: this.$route.params.id } })
+                .get("/like/", { params: { article: this.$route.params.aid } })
                 .then(res => {
                     this.atcLike = res;
                 });
             this.$axios
                 .get("/comment/", {
                     params: {
-                        article: this.$route.params.id,
+                        article: this.$route.params.aid,
                         min_state: 0,
                     },
                 })
@@ -351,18 +354,22 @@ export default {
             ElMessage.warning("举报功能暂未开通");
         },
         commentSubmit() {
+            if (!this.loggedIn) {
+                ElMessage.warning("请先登录");
+                return;
+            }
             if (this.comment.trim() === "") {
                 ElMessage.error("评论不能为空!");
                 return;
             }
             this.$axios
                 .post("/comment/", {
-                    article: this.$route.params.id,
+                    article: this.$route.params.aid,
                     content: this.comment,
                     reply: (this.reply.status && this.reply.id) || "",
                 })
                 .then(() => {
-                    ElMessage.success("评论成功！");
+                    ElMessage.success("评论成功!");
                     this.refresh();
                     this.comment = "";
                     setTimeout(() => {
@@ -375,8 +382,12 @@ export default {
             this.reply.status = false;
         },
         like() {
+            if (!this.loggedIn) {
+                ElMessage.warning("请先登录");
+                return;
+            }
             this.$axios
-                .post("/like/", { article: this.$route.params.id })
+                .post("/like/", { article: this.$route.params.aid })
                 .then(res => {
                     if (res.opt === "add") {
                         this.liked = true;
@@ -406,7 +417,7 @@ export default {
         collect() {
             this.$axios
                 .post("/collect/", {
-                    article: this.$route.params.id,
+                    article: this.$route.params.aid,
                 })
                 .then(res => {
                     ElMessage.success(res.detail);
@@ -415,6 +426,10 @@ export default {
     },
     watch: {
         $route() {
+            if (!this.$route.params.aid) {
+                return;
+            }
+            this.init();
             this.refresh();
         },
     },

@@ -4,15 +4,14 @@
             <el-card full class="login-card shadow-1">
                 <h3>注册新账号</h3>
                 <el-divider />
-                <br />
                 <el-form :model="form" @submit.prevent>
                     <el-input
                         v-model="username"
                         class="w-50 m-2"
                         placeholder="用户名"
                         maxlength="30"
+                        style="margin-bottom: 20px"
                     />
-                    <br /><br />
                     <el-input
                         v-model="password"
                         type="password"
@@ -20,8 +19,8 @@
                         placeholder="密码"
                         maxlength="30"
                         show-password
+                        style="margin-bottom: 20px"
                     />
-                    <br /><br />
                     <el-input
                         v-model="repassword"
                         type="password"
@@ -29,20 +28,30 @@
                         placeholder="请再次输入密码"
                         maxlength="30"
                         show-password
+                        style="margin-bottom: 20px"
                     />
-                    <br /><br /><br />
-                    <div>
-                        <el-button
-                            type="primary"
-                            native-type="submit"
-                            @click="register"
-                        >
-                            &ensp;&ensp;&emsp;&emsp;&emsp;注&emsp;册&emsp;&emsp;&emsp;&ensp;&ensp; </el-button
-                        >&ensp;
-                        <el-button native-type="submit" @click="cancel">
-                            &ensp;&ensp;&emsp;&emsp;&emsp;取&emsp;消&emsp;&emsp;&emsp;&ensp;&ensp;
-                        </el-button>
-                    </div>
+                    <el-row justify="space-between">
+                        <el-col :xs="24" :sm="11" :md="11" :lg="11" :xl="11">
+                            <el-button
+                                type="primary"
+                                native-type="submit"
+                                @click="register"
+                                style="width: 100%; margin: 5px 0"
+                            >
+                                注&emsp;册
+                            </el-button>
+                        </el-col>
+                        <el-col :xs="24" :sm="11" :md="11" :lg="11" :xl="11">
+                            <el-button
+                                plain
+                                native-type="submit"
+                                @click="cancel"
+                                style="width: 100%; margin: 5px 0"
+                            >
+                                取&emsp;消
+                            </el-button>
+                        </el-col>
+                    </el-row>
                 </el-form>
             </el-card>
         </el-col>
@@ -111,6 +120,6 @@ export default {
 
 <style>
 .login-card {
-    height: 410px;
+    height: 420px;
 }
 </style>

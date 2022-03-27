@@ -3,8 +3,12 @@ import VuexPersistence from "vuex-persist";
 
 const vuexPersistState = new VuexPersistence({
     storage: window.localStorage,
-    reducer: state => ({ theme: state.theme, user: state.user, jwt: state.jwt })
-})
+    reducer: state => ({
+        theme: state.theme,
+        user: state.user,
+        jwt: state.jwt,
+    }),
+});
 
 const store = createStore({
     state() {
@@ -12,7 +16,8 @@ const store = createStore({
             jwt: null,
             user: {},
             theme: "light",
-        }
+            readedAtc: [],
+        };
     },
     mutations: {
         setJwt(state, data) {
@@ -23,13 +28,16 @@ const store = createStore({
             state.user = data;
         },
         changeTheme(state) {
-            state.theme = state.theme === 'light' ? 'dark' : 'light';
+            state.theme = state.theme === "light" ? "dark" : "light";
+        },
+        addReadedAtc(state, id) {
+            state.readed.push(id);
         },
     },
     getters: {
-        loggedIn: state => state.jwt !== null
+        loggedIn: state => state.jwt !== null,
     },
-    plugins: [vuexPersistState.plugin]
-})
+    plugins: [vuexPersistState.plugin],
+});
 
 export { store };

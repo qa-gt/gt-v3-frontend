@@ -4,15 +4,14 @@
             <el-card full class="login-card shadow-1">
                 <h3>登录到瓜田</h3>
                 <el-divider />
-                <br />
                 <el-form :model="form" @submit.prevent>
                     <el-input
                         v-model="username"
                         class="w-50 m-2"
                         placeholder="用户名"
                         maxlength="30"
+                        style="margin-bottom: 20px"
                     />
-                    <br /><br />
                     <el-input
                         v-model="password"
                         type="password"
@@ -20,15 +19,15 @@
                         placeholder="密码"
                         maxlength="30"
                         show-password
+                        style="margin-bottom: 20px"
                     />
-                    <br /><br />
-                    <el-row justify="space-between">
+                    <el-row justify="space-between" style="margin-bottom: 40px">
                         <el-col :xs="24" :sm="11" :md="11" :lg="11" :xl="11">
                             <el-button
                                 type="primary"
                                 native-type="submit"
                                 @click="login"
-                                style="width: 100%; margin: 5px 0"
+                                style="width: 100%; margin: 10px 0"
                             >
                                 登&emsp;录
                             </el-button>
@@ -39,14 +38,12 @@
                                 type="primary"
                                 native-type="submit"
                                 @click="$router.push('/user/register')"
-                                style="width: 100%; margin: 5px 0"
+                                style="width: 100%; margin: 10px 0"
                             >
                                 注&emsp;册
                             </el-button>
                         </el-col>
                     </el-row>
-
-                    <br /><br /><br /><br />
                     <span style="font-size: 14px">
                         忘记密码？
                         <el-button
@@ -107,6 +104,6 @@ export default {
 
 <style>
 .login-card {
-    height: 500px;
+    height: 425px;
 }
 </style>

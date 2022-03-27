@@ -288,10 +288,22 @@ export default {
                     return this.getMyFollower;
             }
         },
+        getList() {
+            switch (this.cate) {
+                case "0":
+                    return this.myAtcs;
+                case "1":
+                    return this.myClts;
+                case "2":
+                    return this.myFollowing;
+                case "3":
+                    return this.myFollower;
+            }
+        },
         changeCate() {
-            console.log(this.cate);
             this.searchText = this.searchInput = "";
             this.getFunc()();
+            this.empty = this.getList().length === 0;
             this.pageInfo.num = 1;
         },
         doSearch() {
@@ -305,7 +317,7 @@ export default {
             this.$axios
                 .get("/article/", {
                     params: {
-                        author: this.$route.params.id,
+                        author: this.$route.params.uid,
                         min_state: -2,
                         page: this.pageInfo.num,
                         search: this.searchText,
@@ -324,7 +336,7 @@ export default {
             this.$axios
                 .get("/collect/", {
                     params: {
-                        user: this.$route.params.id,
+                        user: this.$route.params.uid,
                         page: this.pageInfo.num,
                         search: this.searchText,
                     },
@@ -344,15 +356,14 @@ export default {
             this.$axios
                 .get("/follow/", {
                     params: {
-                        follower: this.$route.params.id,
+                        follower: this.$route.params.uid,
                         page: this.pageInfo.num,
                         search: this.searchText,
                     },
                 })
                 .then(data => {
                     this.pageInfo.total = data.count;
-                    data = data.results;
-                    data.map(e => e.following);
+                    data = data.results.map(e => e.following);
                     this.myFollowing = data;
                     this.empty = this.myFollowing.length === 0;
                 })
@@ -364,15 +375,14 @@ export default {
             this.$axios
                 .get("/follow/", {
                     params: {
-                        following: this.$route.params.id,
+                        following: this.$route.params.uid,
                         page: this.pageInfo.num,
                         search: this.searchText,
                     },
                 })
                 .then(data => {
                     this.pageInfo.total = data.count;
-                    data = data.results;
-                    data.map(e => e.follower);
+                    data = data.results.map(e => e.follower);
                     this.myFollower = data;
                     this.empty = this.myFollower.length === 0;
                 })
@@ -382,15 +392,15 @@ export default {
     },
     watch: {
         $route() {
-            if (!this.$route.params.id) return;
-            this.$axios.get(`/user/${this.$route.params.id}/`).then(res => {
+            if (!this.$route.params.uid) return;
+            this.$axios.get(`/user/${this.$route.params.uid}/`).then(res => {
                 this.user = res;
             });
             this.getFunc()();
         },
     },
     mounted() {
-        this.$axios.get(`/user/${this.$route.params.id}/`).then(res => {
+        this.$axios.get(`/user/${this.$route.params.uid}/`).then(res => {
             this.user = res;
         });
         this.getMyAtcs();

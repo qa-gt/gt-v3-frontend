@@ -22,7 +22,7 @@ const routes = [
         component: () => import("@/views/UserEditView.vue"),
     },
     {
-        path: "/article/:id",
+        path: "/article/:aid",
         name: "article",
         component: () => import("@/views/ArticleView.vue"),
     },
@@ -45,7 +45,7 @@ const routes = [
         component: () => import("@/views/PasswordView.vue"),
     },
     {
-        path: "/user/:id",
+        path: "/user/:uid",
         name: "user",
         component: () => import("@/views/UserView.vue"),
     },
