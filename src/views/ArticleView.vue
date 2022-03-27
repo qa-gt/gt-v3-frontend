@@ -48,6 +48,7 @@
                   icon-color="red"
                   title="确定要删除文章吗？"
                   @confirm="deleteArticle"
+                  v-if="user.id === atc.author.id"
                 >
                   <template #reference>
                     <el-button
