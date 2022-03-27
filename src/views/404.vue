@@ -9,17 +9,20 @@
         "
     >
         <div class="oops">Oops!</div>
-        <embed
-            src="/src/assets/404.svg"
-            type="image/svg+xml"
-            style="height: 55%"
-        />
+        <embed :src="Svg404" type="image/svg+xml" style="height: 55%" />
         <h3 class="pagenf">404 Page Not Found</h3>
     </div>
 </template>
 
 <script>
-export default {};
+import Svg404 from "@/assets/404.svg";
+export default {
+    data() {
+        return {
+            Svg404: Svg404,
+        };
+    },
+};
 </script>
 
 <style>
