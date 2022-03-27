@@ -207,7 +207,7 @@
                 :page-size="pageInfo.size"
                 :pager-count="7"
                 :hide-on-single-page="true"
-                @current-change="getAtcs"
+                @current-change="getFunc()()"
                 class="hidden-sm-and-down"
             />
             <el-pagination
@@ -217,7 +217,7 @@
                 :page-size="pageInfo.size"
                 :pager-count="5"
                 :hide-on-single-page="true"
-                @current-change="getAtcs"
+                @current-change="getFunc()()"
                 class="hidden-md-and-up"
             />
         </el-col>
@@ -304,10 +304,12 @@ export default {
             const loading = ElLoading.service({ fullscreen: true });
             this.$axios
                 .get("/article/", {
-                    author: this.$route.params.id,
-                    min_state: -2, 
-                    page: this.pageInfo.num,
-                    search: this.searchText
+                    params: {
+                        author: this.$route.params.id,
+                        min_state: -2,
+                        page: this.pageInfo.num,
+                        search: this.searchText,
+                    },
                 })
                 .then(data => {
                     this.pageInfo.total = data.count;
@@ -321,9 +323,11 @@ export default {
             const loading = ElLoading.service({ fullscreen: true });
             this.$axios
                 .get("/collect/", {
-                    user: this.$route.params.id,
-                    page: this.pageInfo.num,
-                    search: this.searchText
+                    params: {
+                        user: this.$route.params.id,
+                        page: this.pageInfo.num,
+                        search: this.searchText,
+                    },
                 })
                 .then(data => {
                     this.pageInfo.total = data.count;
@@ -339,9 +343,11 @@ export default {
             const loading = ElLoading.service({ fullscreen: true });
             this.$axios
                 .get("/follow/", {
-                    follower: this.$route.params.id,
-                    page: this.pageInfo.num,
-                    search: this.searchText
+                    params: {
+                        follower: this.$route.params.id,
+                        page: this.pageInfo.num,
+                        search: this.searchText,
+                    },
                 })
                 .then(data => {
                     this.pageInfo.total = data.count;
@@ -357,9 +363,11 @@ export default {
             const loading = ElLoading.service({ fullscreen: true });
             this.$axios
                 .get("/follow/", {
-                    following: this.$route.params.id,
-                    page: this.pageInfo.num,
-                    search: this.searchText
+                    params: {
+                        following: this.$route.params.id,
+                        page: this.pageInfo.num,
+                        search: this.searchText,
+                    },
                 })
                 .then(data => {
                     this.pageInfo.total = data.count;
@@ -374,6 +382,7 @@ export default {
     },
     watch: {
         $route() {
+            if (!this.$route.params.id) return;
             this.$axios.get(`/user/${this.$route.params.id}/`).then(res => {
                 this.user = res;
             });

@@ -88,8 +88,6 @@
 </template>
 
 <style>
-
-
 .v-md-editor {
     box-shadow: 0 0px 0px rgba(0, 0, 0, 0) !important;
     border: 1px solid #dcdfe6 !important;
@@ -107,8 +105,8 @@ export default {
     computed: {
         ...mapState(["user"]),
         isMobile() {
-            return this.$root.isMobile
-        }
+            return this.$root.isMobile;
+        },
     },
     components: {
         gtUser,
@@ -184,7 +182,7 @@ export default {
                 this.atc.exist = true;
             });
         }
-        this.$axios.get("/topic/", { min_state: 0 }).then(data => {
+        this.$axios.get("/topic/", { params: { min_state: 0 } }).then(data => {
             this.topics = data.results;
         });
     },

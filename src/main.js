@@ -22,7 +22,7 @@ app
     .use(store)
     .use(Axios)
     .use(Moment)
-    .use(VueReCaptcha, { 
+    .use(VueReCaptcha, {
         siteKey: "6LdU6xAfAAAAAIY7YrFlAByuqIhOHO1stDNGWgnx",
         loaderOptions: {
             useRecaptchaNet: true,

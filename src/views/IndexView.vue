@@ -181,10 +181,12 @@ export default {
             const loading = ElLoading.service({ fullscreen: true });
             this.$axios
                 .get("/article/", {
-                    min_state: 0,
-                    page: this.pageInfo.num,
-                    topic: topic,
-                    search: this.searchText
+                    params: {
+                        min_state: 0,
+                        page: this.pageInfo.num,
+                        topic: topic,
+                        search: this.searchText,
+                    },
                 })
                 .then(data => {
                     this.pageInfo.total = data.count;
@@ -199,7 +201,7 @@ export default {
     name: "IndexView",
     created() {
         this.getAtcs();
-        this.$axios.get("/topic/", { min_state: 0 }).then(data => {
+        this.$axios.get("/topic/", { params: { min_state: 0 } }).then(data => {
             this.topics = this.topics.concat(data);
         });
     },
