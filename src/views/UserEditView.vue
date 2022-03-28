@@ -82,15 +82,32 @@
         <div style="color: #c11700">此实名信息将不可更改，请慎重填写！</div>
         <br /><br />
         <el-form :model="real_info" label-position="top" label-width="120px">
-          <el-form-item label="真实姓名">
-            <el-input v-model="real_info.name" placeholder="请确认无误后输入" />
+          <el-form-item label="爱云校账号">
+            <el-input
+              v-model="real_info.user"
+              maxlength="30"
+              placeholder="请确认无误后输入"
+            />
           </el-form-item>
-          <el-form-item label="真实学号">
-            <el-input v-model="real_info.number" placeholder="请确认无误后输入" />
+          <el-form-item label="爱云校密码">
+            <el-input
+              v-model="real_info.pass"
+              type="password"
+              maxlength="30"
+              show-password
+            />
           </el-form-item>
-          <br />
+          <el-form-item lable="是否显示">
+            <div>
+              <el-radio v-model="real_info.show" label="ture" size="large"
+                >显示（推荐）</el-radio
+              >
+              <el-radio v-model="real_info.show" label="false" size="large"
+                >不显示</el-radio
+              >
+            </div>
+          </el-form-item>
           <el-form-item>
-            
             <el-popconfirm
               title="确认要提交吗？提交后信息将不能更改。"
               confirm-button-text="确定提交"
@@ -101,7 +118,6 @@
                 <el-button type="primary"> 提交实名信息 </el-button>
               </template>
             </el-popconfirm>
-            
           </el-form-item>
         </el-form>
       </el-card>
@@ -149,8 +165,9 @@ export default {
         "114514",
       ],
       real_info: {
-        name: "",
-        number: "",
+        user: "",
+        pass: "",
+        show: false,
       },
     };
   },
@@ -178,8 +195,8 @@ export default {
       this.$router.go(-1);
     },
     confirm_info() {
-        ElMessage.success("提交成功")
-    }
+      ElMessage.success("提交成功");
+    },
   },
   created() {
     if (!this.loggedIn) {
