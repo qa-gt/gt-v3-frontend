@@ -4,8 +4,7 @@ import { store } from "@/store";
 import { ElMessage } from "element-plus";
 
 export const Axios = axios.create({
-    // baseURL: "/api",
-    baseURL: "https://nextqa.yxzl.top/api",
+    baseURL: process.env.NODE_ENV === "production" ? "https://gtapi.yxzl.top": "/api",
 });
 
 Axios.interceptors.request.use(

@@ -105,6 +105,7 @@ nav a.router-link-exact-active {
 
 <script>
 import { mapState, mapGetters } from "vuex";
+import Wasm from "@/assets/pkg/gt_v3_sign_bg.wasm";
 
 export default {
     mode: "history",
@@ -136,6 +137,9 @@ export default {
     },
     created() {
         document.firstElementChild.className = this.theme;
+        Wasm().then(e=>{
+            console.log(e)
+        })
     },
 };
 </script>

@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import Svg404 from "@/assets/404.svg";
+import Svg404 from "@/assets/img/404.svg";
 export default {
     data() {
         return {
