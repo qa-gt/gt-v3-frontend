@@ -2,6 +2,10 @@ import axios from "axios";
 import router from "@/router";
 import { store } from "@/store";
 import { ElMessage } from "element-plus";
+import SignWasm from "@/assets/wasm/sign.wasm";
+
+
+const Sign = await SignWasm()
 
 export const Axios = axios.create({
     baseURL: process.env.NODE_ENV === "production" ? "https://gtapi.yxzl.top": "/api",
@@ -11,6 +15,10 @@ Axios.interceptors.request.use(
     config => {
         if (store.state.jwt) {
             config.headers.Authorization = `${store.state.jwt}`;
+        }
+        if(["post", "put", "patch"].includes(config.method)) {
+            const time = new Date().getTime()
+            config.data._ = `${time}|${parseInt(Sign.makeSign(window.BigInt(time)))}`
         }
         return config;
     },
