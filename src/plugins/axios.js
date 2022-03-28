@@ -5,7 +5,7 @@ import { ElMessage } from "element-plus";
 
 export const Axios = axios.create({
     // baseURL: "/api",
-    baseURL: "https://nextqa.yxzl.top/api",
+    baseURL: "http://127.0.0.1:8000/",
 });
 
 Axios.interceptors.request.use(

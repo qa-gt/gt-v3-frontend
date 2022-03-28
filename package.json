@@ -13,6 +13,7 @@
     "@kangc/v-md-editor": "^2.3.14",
     "@vue/compiler-sfc": "^3.0.4",
     "assert": "^2.0.0",
+    "aws-sdk": "^2.1101.0",
     "axios": "^0.26.1",
     "core-js": "^3.21.1",
     "follow-redirects": "^1.14.9",

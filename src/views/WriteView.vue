@@ -100,6 +100,7 @@ import gtUser from "@/components/gtUser.vue";
 
 import { VMdEditor, processMarkdown } from "@/plugins/mdEditor";
 import { ElMessage } from "element-plus";
+import S3 from "aws-sdk/clients/s3";
 
 export default {
     computed: {
@@ -154,14 +155,51 @@ export default {
                 });
             }
         },
-        uploadImage(event, insertImage, files) {
+        async uploadImage(event, insertImage, files) {
             const file = files[0];
-            const formData = new FormData();
-            formData.append("file", file);
-            ElMessage.info("正在上传图片...");
-            this.$axios.post("/utils/upload_image", formData).then(res => {
-                insertImage({ url: res.url, desc: file.name });
-                ElMessage.success("上传成功！");
+            // const formData = new FormData();
+            // formData.append("file", file);
+            // ElMessage.info("正在上传图片...");
+            // this.$axios.post("/utils/upload_image", formData).then(res => {
+            //     insertImage({ url: res.url, desc: file.name });
+            //     ElMessage.success("上传成功！");
+            // });
+            let res = await this.$axios.get("/utils/upload_key").data;
+            if (!res.credentials) {
+                ElMessage.error("上传未授权!");
+                return;
+            }
+            const bucket = res.Buckets[0];
+            const s3 = new S3({
+                region: "automatic",
+                endpoint: bucket.s3Endpoint,
+                credentials: res.Credentials,
+                params: {
+                    Bucket: bucket.s3Bucket,
+                },
+            });
+            const fileKey = res.scope.replace("*", file.name);
+            let s3Upload = s3
+                .upload({
+                    Key: fileKey,
+                    Body: file,
+                    ContentType: file.type,
+                })
+                .on("httpUploadProgress", evt => {
+                    console.log(evt);
+                });
+            s3Upload.send((err, data) => {
+                if (err) {
+                    ElMessage.error("上传失败!");
+                    console.log(err);
+                    return;
+                } else {
+                    insertImage({
+                        url: `https://gtcdn.yxzl.top/${fileKey}`,
+                        desc: file.name,
+                    });
+                    ElMessage.success("上传成功!");
+                }
             });
         },
         cancel() {
