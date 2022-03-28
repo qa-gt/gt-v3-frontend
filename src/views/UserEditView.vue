@@ -17,7 +17,9 @@
                 <el-divider />
                 <el-form :model="form" label-position="top" label-width="120px">
                     <el-form-item>
-                        <el-button type="primary" @click="this.$router.push('/user/repassword')"
+                        <el-button
+                            type="primary"
+                            @click="this.$router.push('/user/repassword')"
                             >修改密码</el-button
                         >
                     </el-form-item>
@@ -83,6 +85,61 @@
                         </el-popconfirm>
                     </el-form-item>
                 </el-form>
+                <el-divider />
+
+                <h2>实名认证</h2>
+                <div
+                    style="color: #c11700; margin-bottom: 20px"
+                    v-if="!user.yunxiao"
+                >
+                    此实名信息提交后将不可更改（展示状态除外），请慎重填写！
+                </div>
+                <el-form label-position="top" label-width="120px">
+                    <div v-if="user.yunxiao" style="margin-bottom: 20px">
+                        实名信息：{{ user.yunxiao }}
+                    </div>
+                    <el-form-item label="爱云校账号" v-if="!user.yunxiao">
+                        <el-input
+                            v-model="yunxiaoInfo.student_id"
+                            maxlength="30"
+                            placeholder="冒充他人认证可能会被封号"
+                        />
+                    </el-form-item>
+                    <el-form-item label="爱云校密码" v-if="!user.yunxiao">
+                        <el-input
+                            v-model="yunxiaoInfo.password"
+                            type="password"
+                            maxlength="50"
+                            show-password
+                            placeholder="仅用于验证, 不会被保存"
+                        />
+                    </el-form-item>
+                    <el-form-item label="是否公开展示">
+                        <el-switch
+                            v-model="yunxiaoInfo.show"
+                            active-value="true"
+                            inactive-value="false"
+                            inline-prompt
+                            size="large"
+                            active-text="是"
+                            inactive-text="否"
+                        />
+                    </el-form-item>
+                    <el-form-item>
+                        <el-popconfirm
+                            title="确认要提交吗？提交后信息将不能更改。"
+                            confirm-button-text="确定提交"
+                            cancel-button-text="返回"
+                            @confirm="confirmYunxiao"
+                        >
+                            <template #reference>
+                                <el-button type="primary">
+                                    提交实名信息
+                                </el-button>
+                            </template>
+                        </el-popconfirm>
+                    </el-form-item>
+                </el-form>
             </el-card>
         </el-col>
     </el-row>
@@ -97,7 +154,7 @@ import gtUser from "@/components/gtUser.vue";
 export default {
     computed: {
         ...mapState(["user"]),
-        ...mapGetters(["loggedIn"])
+        ...mapGetters(["loggedIn"]),
     },
     data() {
         return {
@@ -127,6 +184,11 @@ export default {
                 "国际十二年级",
                 "114514",
             ],
+            yunxiaoInfo: {
+                student_id: "",
+                password: "",
+                show: "true",
+            },
         };
     },
     components: {
@@ -152,8 +214,20 @@ export default {
             ElMessage.info("已取消");
             this.$router.go(-1);
         },
+        confirmYunxiao() {
+            console.log(this.yunxiaoInfo);
+            this.$axios
+                .post("/user/yunxiao_auth/", this.yunxiaoInfo)
+                .then(res => {
+                    ElMessage.success("提交成功");
+                    this.$store.commit("setUser", res.user);
+                });
+        },
     },
     created() {
+        setTimeout(() => {
+            console.log(this.user);
+        }, 2000);
         if (!this.loggedIn) {
             this.$router.push({ path: "/user/login" });
         }

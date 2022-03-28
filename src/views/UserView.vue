@@ -404,6 +404,7 @@ export default {
             this.user = res;
         });
         this.getMyAtcs();
+
     },
     name: "UserInfoView",
 };
