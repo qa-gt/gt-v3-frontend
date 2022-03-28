@@ -90,22 +90,22 @@
                 <h2>实名认证</h2>
                 <div
                     style="color: #c11700; margin-bottom: 20px"
-                    v-if="user.yunxiao"
+                    v-if="!user.yunxiao"
                 >
                     此实名信息提交后将不可更改（展示状态除外），请慎重填写！
                 </div>
                 <el-form label-position="top" label-width="120px">
-                    <div v-if="!user.yunxiao" style="margin-bottom: 20px">
+                    <div v-if="user.yunxiao" style="margin-bottom: 20px">
                         实名信息：{{ user.yunxiao }}
                     </div>
-                    <el-form-item label="爱云校账号" v-if="user.yunxiao">
+                    <el-form-item label="爱云校账号" v-if="!user.yunxiao">
                         <el-input
                             v-model="yunxiaoInfo.student_id"
                             maxlength="30"
                             placeholder="冒充他人认证可能会被封号"
                         />
                     </el-form-item>
-                    <el-form-item label="爱云校密码" v-if="user.yunxiao">
+                    <el-form-item label="爱云校密码" v-if="!user.yunxiao">
                         <el-input
                             v-model="yunxiaoInfo.password"
                             type="password"
