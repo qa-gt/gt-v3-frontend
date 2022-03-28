@@ -79,9 +79,14 @@
         <el-divider />
 
         <h2>实名认证</h2>
-        <div style="color: #c11700">此实名信息将不可更改，请慎重填写！</div>
+        <div style="color: #c11700" v-show="!real_info.committed">此实名信息将不可更改，请慎重填写！</div>
         <br /><br />
-        <el-form :model="real_info" label-position="top" label-width="120px">
+        <el-form
+          :model="real_info"
+          label-position="top"
+          label-width="120px"
+          v-show="!real_info.committed"
+        >
           <el-form-item label="爱云校账号">
             <el-input
               v-model="real_info.user"
@@ -120,6 +125,7 @@
             </el-popconfirm>
           </el-form-item>
         </el-form>
+        <div v-show="real_info.committed">实名信息：{{ real_info.name }}，{{ real_info.user }}</div><br /><br />
       </el-card>
     </el-col>
   </el-row>
@@ -165,9 +171,11 @@ export default {
         "114514",
       ],
       real_info: {
+        name: "王子涵",
         user: "",
         pass: "",
         show: false,
+        committed: false,
       },
     };
   },
@@ -196,6 +204,7 @@ export default {
     },
     confirm_info() {
       ElMessage.success("提交成功");
+      this.real_info.committed = true;
     },
   },
   created() {
