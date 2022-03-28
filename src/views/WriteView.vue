@@ -100,7 +100,7 @@ import gtUser from "@/components/gtUser.vue";
 
 import { VMdEditor, processMarkdown } from "@/plugins/mdEditor";
 import { ElMessage } from "element-plus";
-import S3 from "aws-sdk/clients/s3";
+import AWS from "aws-sdk";
 
 export default {
     computed: {
@@ -170,7 +170,7 @@ export default {
                 return;
             }
             const bucket = res.Buckets[0];
-            const s3 = new S3({
+            const s3 = new AWS.S3({
                 region: "automatic",
                 endpoint: bucket.s3Endpoint,
                 credentials: res.Credentials,

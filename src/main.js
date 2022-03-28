@@ -1,11 +1,12 @@
+import "@/polyfills.ts";
 import { createApp } from "vue";
 import { store } from "./store";
 import ElementPlus from "element-plus";
 import { VueReCaptcha } from "vue-recaptcha-v3";
 import "element-plus/dist/index.css";
 import * as ElIcons from "@element-plus/icons";
-import App from "./App.vue";
-import router from "./router";
+import App from "@/App.vue";
+import router from "@/router";
 import Axios from "@/plugins/axios";
 import Moment from "@/plugins/moment";
 
@@ -16,8 +17,7 @@ for (const name in ElIcons) {
     app.component(name, ElIcons[name]);
 }
 
-app
-    .use(ElementPlus)
+app.use(ElementPlus)
     .use(router)
     .use(store)
     .use(Axios)
@@ -26,7 +26,7 @@ app
         siteKey: "6LdU6xAfAAAAAIY7YrFlAByuqIhOHO1stDNGWgnx",
         loaderOptions: {
             useRecaptchaNet: true,
-            autoHideBadge: true
-        }
+            autoHideBadge: true,
+        },
     })
     .mount("#app");
