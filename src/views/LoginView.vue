@@ -4,7 +4,7 @@
             <el-card full class="login-card shadow-1">
                 <h3>登录到瓜田</h3>
                 <el-divider />
-                <el-form :model="form" @submit.prevent>
+                <el-form @submit.prevent>
                     <el-input
                         v-model="username"
                         class="w-50 m-2"

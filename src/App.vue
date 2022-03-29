@@ -40,14 +40,33 @@
             <span>{{ user.username }}</span>
         </div>
     </el-header>
-    <div style="margin: 45px 25px">
+    <div style="margin: 45px 25px 20px 25px" id="main">
         <router-view v-slot="{ Component }">
             <keep-alive>
                 <component :is="Component" />
             </keep-alive>
         </router-view>
     </div>
-    <div style="height: 20px"></div>
+    <div style="color: rgb(190, 190, 190); padding: 20px" id="footer">
+        <el-link
+            :href="`https://yiyan.yixiangzhilv.com/?id=${yiyan.uuid}`"
+            target="_blank"
+            :underline="false"
+            :class="isMobile ? 'footer-yiyan-center' : 'footer-yiyan'"
+            v-if="!isMobile"
+        >
+            {{ yiyan.content }}
+            <span v-show="yiyan.from_show">
+                - 「 {{ yiyan.from_show }} 」
+            </span>
+        </el-link>
+        <el-link
+            href="https://beian.miit.gov.cn/"
+            :class="isMobile ? 'footer-beian-center' : 'footer-beian'"
+        >
+            鲁ICP备2020034769号-2
+        </el-link>
+    </div>
 </template>
 
 <style lang="scss" scoped>
@@ -84,6 +103,22 @@ nav a.router-link-exact-active {
     background: var(--el-color-primary-light-9);
     color: var(--el-color-primary);
 }
+
+.footer-yiyan {
+    color: rgb(190, 190, 190);
+    display: inline-block;
+    // max-width: 35%;
+}
+
+.footer-beian {
+    color: rgb(190, 190, 190);
+    float: right;
+}
+.footer-beian-center {
+    color: rgb(190, 190, 190);
+    text-align: center;
+    width: 100%;
+}
 </style>
 
 <script>
@@ -98,6 +133,7 @@ export default {
             viewTransition: "slide-right-leave-active",
             drawer: false,
             haveDot: true,
+            yiyan: {},
         };
     },
     computed: {
@@ -117,8 +153,20 @@ export default {
             this.haveDot = false;
         },
     },
+    mounted() {
+        document.querySelector("#main").style.minHeight =
+            window.innerHeight - 50 - 65 - 65 + "px";
+    },
     created() {
         document.firstElementChild.className = this.theme;
+        this.$axios.get("https://yiyan.yixiangzhilv.com/get").then(res => {
+            if (res.from_who && res.from) {
+                res.from_show = `${res.from} · ${res.from_who}`;
+            } else {
+                res.from_show = `${res.from || res.from_who || "未知"}`;
+            }
+            this.yiyan = res;
+        });
     },
 };
 </script>

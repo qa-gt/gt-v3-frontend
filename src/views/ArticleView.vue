@@ -345,6 +345,10 @@ export default {
                 });
         },
         replyCmt(cmt) {
+            if (!this.loggedIn) {
+                ElMessage.warning("请先登录");
+                return;
+            }
             this.reply.status = true;
             this.reply.id = cmt.id;
             this.reply.username = cmt.author.username;
@@ -354,13 +358,13 @@ export default {
                 .scrollIntoView({ behavior: "smooth" });
         },
         report() {
-            ElMessage.warning("举报功能暂未开通");
-        },
-        commentSubmit() {
             if (!this.loggedIn) {
                 ElMessage.warning("请先登录");
                 return;
             }
+            ElMessage.warning("举报功能暂未开通");
+        },
+        commentSubmit() {
             if (this.comment.trim() === "") {
                 ElMessage.error("评论不能为空!");
                 return;
@@ -381,6 +385,10 @@ export default {
                 });
         },
         writeComment() {
+            if (!this.loggedIn) {
+                ElMessage.warning("请先登录");
+                return;
+            }
             this.showComment = true;
             this.reply.status = false;
         },
@@ -417,6 +425,10 @@ export default {
             );
         },
         collect() {
+            if (!this.loggedIn) {
+                ElMessage.warning("请先登录");
+                return;
+            }
             this.$axios
                 .post("/collect/", {
                     article: this.$route.params.aid,
@@ -433,12 +445,10 @@ export default {
                 return;
             }
             this.init();
-            // this.refresh();
         },
     },
     created() {
         this.init();
-        // this.refresh();
     },
 };
 </script>
@@ -455,7 +465,6 @@ export default {
 }
 
 .info-2 {
-    /* font-size: 1.3rem; */
     color: #7c7c7c;
     align-items: center;
     display: inline;
@@ -480,9 +489,7 @@ export default {
     width: 100%;
     height: 100%;
 }
-</style>
 
-<style>
 .comment-item {
     margin-top: -5px;
     padding: 5px 15px;
@@ -508,8 +515,6 @@ export default {
 
 .comment-divider {
     margin: 10px;
-    /* margin-left: 5%; */
-    /* width: 90%; */
 }
 
 .el-collapse-item__header,

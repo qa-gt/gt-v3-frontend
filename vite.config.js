@@ -51,5 +51,8 @@ export default defineConfig({
             },
         },
     },
-    transpileDependencies: ["vuex-persist"]
+    build: {
+        target: 'es2022',
+    },
+    transpileDependencies: ["vuex-persist"],
 });

@@ -222,7 +222,7 @@ export default {
     },
     created() {
         if (!this.loggedIn) {
-            this.$router.push({ path: "/user/login" });
+            this.$router.push({ name: "login" });
         }
     },
 };
