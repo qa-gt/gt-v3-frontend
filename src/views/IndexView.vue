@@ -128,7 +128,7 @@
     </el-row>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import url("@/assets/scss/Index.scss");
 .article-preview {
     word-break: break-all;

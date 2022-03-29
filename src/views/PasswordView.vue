@@ -1,7 +1,7 @@
 <template>
     <el-row style="text-align: center; justify-content: center">
         <el-col :span="24" style="max-width: 450px">
-            <el-card full class="login-card">
+            <el-card full class="password-card">
                 <h3>重置密码</h3>
                 <el-divider />
                 <el-form :model="form" @submit.prevent>
@@ -82,8 +82,8 @@ export default {
 };
 </script>
 
-<style>
-.login-card {
+<style lang="scss" scoped>
+.password-card {
     height: 375px;
 }
 </style>

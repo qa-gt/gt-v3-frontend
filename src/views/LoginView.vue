@@ -100,7 +100,7 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
 .login-card {
     height: 425px;
 }

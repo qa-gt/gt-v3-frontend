@@ -41,14 +41,15 @@
             <span>{{ user.username }}</span>
         </div>
     </el-header>
-    <div style="margin: 45px 25px 20px 25px" id="main">
+    <div :style="{margin: '45px 25px 20px 25px', minHeight: `${minHeight}px`}">
         <router-view v-slot="{ Component }">
-            <keep-alive>
+            <keep-alive v-if="$route.meta.keepAlive">
                 <component :is="Component" />
             </keep-alive>
+            <component :is="Component" v-else />
         </router-view>
     </div>
-    <div style="color: rgb(190, 190, 190); padding: 20px" id="footer">
+    <div style="color: rgb(190, 190, 190); height: 30px; padding: 0px 20px 0px 20px" id="footer">
         <el-link
             :href="`https://yiyan.yixiangzhilv.com/?id=${yiyan.uuid}`"
             target="_blank"
@@ -63,6 +64,7 @@
         </el-link>
         <el-link
             href="https://beian.miit.gov.cn/"
+            :underline="false"
             :class="isMobile ? 'footer-beian-center' : 'footer-beian'"
         >
             鲁ICP备2020034769号-2
@@ -128,7 +130,6 @@ import { mapState, mapGetters } from "vuex";
 import logoWid from "@/assets/img/logo-wid.png";
 
 export default {
-    mode: "history",
     data() {
         return {
             title: "QA瓜田",
@@ -137,15 +138,19 @@ export default {
             drawer: false,
             haveDot: true,
             yiyan: {},
-            logoWid: logoWid,
+            windowWidth: 0,
+            windowHeight: 0
         };
     },
     computed: {
         ...mapState(["user", "theme"]),
         ...mapGetters(["loggedIn"]),
         isMobile() {
-            return window.innerWidth < 960;
+            return this.windowWidth < 960;
         },
+        minHeight() {
+            return this.windowHeight - 50 - 30 - 45 - 22;
+        }
     },
     methods: {
         changeTheme() {
@@ -156,10 +161,14 @@ export default {
             this.drawer = !this.drawer;
             this.haveDot = false;
         },
+        updateWindowSize() {
+            this.windowWidth = window.innerWidth,
+            this.windowHeight = window.innerHeight
+        }
     },
     mounted() {
-        document.querySelector("#main").style.minHeight =
-            window.innerHeight - 50 - 65 - 65 + "px";
+        window.addEventListener('resize', this.updateWindowSize)
+        this.updateWindowSize()
     },
     created() {
         document.firstElementChild.className = this.theme;

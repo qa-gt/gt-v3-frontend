@@ -4,18 +4,19 @@ import { store } from "@/store";
 import { ElMessage } from "element-plus";
 import SignWasm from "@/assets/wasm/sign.wasm";
 
-const Sign = await SignWasm();
+let Sign = SignWasm();
 
 export const Axios = axios.create({
     baseURL: import.meta.env.PROD ? "https://gtapi.yxzl.top" : "/api",
 });
 
 Axios.interceptors.request.use(
-    config => {
+    async config => {
         if (store.state.jwt) {
             config.headers.Authorization = `${store.state.jwt}`;
         }
         if (!["get", "head", "options"].includes(config.method)) {
+            Sign = await Sign;
             const time = window.BigInt(Date.now());
             config.params = config.params || {};
             config.params._ = `${time}|${parseInt(Sign.makeSign(time))}`;

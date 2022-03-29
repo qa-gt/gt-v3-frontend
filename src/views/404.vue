@@ -25,7 +25,7 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
 .oops {
     color: #a5a5a5;
     font-size: 60px;

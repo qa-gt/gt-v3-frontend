@@ -1,4 +1,4 @@
-import "@/polyfills.ts";
+import "@/polyfills.js";
 import { createApp } from "vue";
 import { store } from "./store";
 import ElementPlus from "element-plus";
