@@ -5,11 +5,6 @@ import 'nprogress/nprogress.css';
 const routes = [
     {
         path: "/",
-        name: "home",
-        redirect: "/index",
-    },
-    {
-        path: "/index",
         name: "index",
         component: () => import("@/views/IndexView.vue"),
         meta: {
@@ -20,6 +15,9 @@ const routes = [
         path: "/user/edit",
         name: "user_edit",
         component: () => import("@/views/UserEditView.vue"),
+        meta: {
+            keepAlive: true,
+        },
     },
     {
         path: "/article/:aid",
@@ -38,11 +36,17 @@ const routes = [
         path: "/write",
         name: "write",
         component: () => import("@/views/WriteView.vue"),
+        meta: {
+            keepAlive: true,
+        },
     },
     {
         path: "/user/repassword",
         name: "repassword",
         component: () => import("@/views/PasswordView.vue"),
+        meta: {
+            keepAlive: true,
+        },
     },
     {
         path: "/user/:uid",
@@ -53,6 +57,9 @@ const routes = [
         path: "/user/register",
         name: "register",
         component: () => import("@/views/RegisterView.vue"),
+        meta: {
+            keepAlive: true,
+        },
     },
     {
         path: "/404",

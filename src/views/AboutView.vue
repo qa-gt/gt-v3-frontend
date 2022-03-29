@@ -15,7 +15,7 @@
   </el-row>
 </template>
 
-<style>
+<style lang="scss" scoped>
 .el-col {
   border-radius: 4px;
 }

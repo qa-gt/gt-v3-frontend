@@ -90,7 +90,7 @@
     </el-row>
 </template>
 
-<style>
+<style lang="scss" scoped>
 .v-md-editor {
     box-shadow: 0 0px 0px rgba(0, 0, 0, 0) !important;
     border: 1px solid #dcdfe6 !important;

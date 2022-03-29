@@ -453,7 +453,7 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
 .vuepress-markdown-body {
     margin-top: -10px;
     padding: 0 10px !important;

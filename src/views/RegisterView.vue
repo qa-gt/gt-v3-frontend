@@ -1,7 +1,7 @@
 <template>
     <el-row style="text-align: center; justify-content: center">
         <el-col :span="24" style="max-width: 450px">
-            <el-card full class="login-card shadow-1">
+            <el-card full class="register-card shadow-1">
                 <h3>注册新账号</h3>
                 <el-divider />
                 <el-form :model="form" @submit.prevent>
@@ -118,8 +118,8 @@ export default {
 };
 </script>
 
-<style>
-.login-card {
+<style lang="scss" scoped>
+.register-card {
     height: 420px;
 }
 </style>
