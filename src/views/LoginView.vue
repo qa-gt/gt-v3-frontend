@@ -80,7 +80,7 @@ export default {
                 return;
             }
             this.$axios
-                .post("/user/login", {
+                .post("/user/login?test=t", {
                     username: this.username,
                     password: this.password,
                 })
@@ -94,9 +94,7 @@ export default {
                         this.$router.go(-1);
                     }
                 })
-                .catch(err => {
-                    ElMessage.error(err);
-                });
+                .catch(err => err);
         },
     },
 };

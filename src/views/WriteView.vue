@@ -104,7 +104,7 @@ import AWS from "aws-sdk";
 
 export default {
     computed: {
-        ...mapState(["user"]),
+        ...mapState(["user", "uploadKey"]),
         ...mapGetters(["loggedIn"]),
         isMobile() {
             return this.$root.isMobile;
@@ -165,13 +165,16 @@ export default {
             //     insertImage({ url: res.url, desc: file.name });
             //     ElMessage.success("上传成功！");
             // });
-            let res = await this.$axios
-                .get("/utils/upload_key")
-                .then(res => res.data);
-            console.log(res);
-            if (!res.Credentials) {
-                ElMessage.error("上传未授权!");
-                return;
+            let res = this.uploadKey;
+            if (!res || !res.expire || res.expire < Date.now()) {
+                res = await this.$axios
+                    .get("/utils/upload_key")
+                    .then(res => res.data);
+                if (!res.Credentials) {
+                    ElMessage.error("上传未授权!");
+                    return;
+                }
+                this.$store.commit("setUploadKey", res);
             }
             const bucket = res.Buckets[0];
             const s3 = new AWS.S3({
@@ -195,7 +198,6 @@ export default {
             s3Upload.send((err, data) => {
                 if (err) {
                     ElMessage.error("上传失败!");
-                    console.log(err);
                     return;
                 } else {
                     insertImage({
@@ -220,12 +222,15 @@ export default {
         }
         if (this.$route.query.id) {
             this.atc.id = this.$route.query.id;
-            this.$axios.get(`/article/${this.atc.id}/`).then(res => {
-                this.atc.topic = res.topic.id;
-                this.atc.title = res.title;
-                this.atc.content = res.content;
-                this.atc.exist = true;
-            }).catch(err => err);
+            this.$axios
+                .get(`/article/${this.atc.id}/`)
+                .then(res => {
+                    this.atc.topic = res.topic.id;
+                    this.atc.title = res.title;
+                    this.atc.content = res.content;
+                    this.atc.exist = true;
+                })
+                .catch(err => err);
         }
         this.$axios.get("/topic/", { params: { min_state: 0 } }).then(data => {
             // this.topics = data.results;

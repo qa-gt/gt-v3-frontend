@@ -8,6 +8,7 @@ const vuexPersistState = new VuexPersistence({
         user: state.user,
         jwt: state.jwt,
         readedAtc: state.readedAtc,
+        uploadKey: state.uploadKey,
     }),
 });
 
@@ -18,6 +19,7 @@ const store = createStore({
             user: {},
             theme: "light",
             readedAtc: [],
+            uploadKey: null,
         };
     },
     mutations: {
@@ -34,6 +36,10 @@ const store = createStore({
         },
         addReadedAtc(state, id) {
             state.readedAtc.push(id);
+        },
+        setUploadKey(state, data) {
+            data.expire = Date.now() + 1700 * 1000;
+            state.uploadKey = data;
         },
     },
     getters: {

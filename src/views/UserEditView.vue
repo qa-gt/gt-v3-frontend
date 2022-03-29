@@ -207,15 +207,11 @@ export default {
                     ElMessage.error(err);
                 });
         },
-        handleChange(value) {
-            console.log(value);
-        },
         cancel() {
             ElMessage.info("已取消");
             this.$router.go(-1);
         },
         confirmYunxiao() {
-            console.log(this.yunxiaoInfo);
             this.$axios
                 .post("/user/yunxiao_auth/", this.yunxiaoInfo)
                 .then(res => {
@@ -225,9 +221,6 @@ export default {
         },
     },
     created() {
-        setTimeout(() => {
-            console.log(this.user);
-        }, 2000);
         if (!this.loggedIn) {
             this.$router.push({ path: "/user/login" });
         }

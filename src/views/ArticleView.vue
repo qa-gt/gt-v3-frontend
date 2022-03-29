@@ -318,9 +318,7 @@ export default {
                 .then(res => {
                     this.atcComment = res;
                 });
-            console.log(this.readedAtc);
             if (!this.readedAtc.includes(this.$route.params.aid)) {
-                console.log("read");
                 this.$axios
                     .patch(`/article/${this.$route.params.aid}/read/`)
                     .then(() => {
@@ -412,7 +410,6 @@ export default {
             done();
         },
         commentAnimation3(el, done) {
-            console.log(el);
             Velocity(
                 el,
                 { opacity: 0, height: 0 },

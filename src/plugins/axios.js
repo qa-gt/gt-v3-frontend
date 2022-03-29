@@ -7,10 +7,7 @@ import SignWasm from "@/assets/wasm/sign.wasm";
 const Sign = await SignWasm();
 
 export const Axios = axios.create({
-    baseURL:
-        import.meta.env.PROD
-            ? "https://gtapi.yxzl.top"
-            : "/api",
+    baseURL: import.meta.env.PROD ? "https://gtapi.yxzl.top" : "/api",
 });
 
 Axios.interceptors.request.use(
@@ -18,13 +15,10 @@ Axios.interceptors.request.use(
         if (store.state.jwt) {
             config.headers.Authorization = `${store.state.jwt}`;
         }
-        console.log(config);
-        if (["post", "put", "patch"].includes(config.method)) {
-            const time = new Date().getTime();
-            config.data = config.data || {};
-            config.data._ = `${time}|${parseInt(
-                Sign.makeSign(window.BigInt(time))
-            )}`;
+        if (!["get", "head", "options"].includes(config.method)) {
+            const time = window.BigInt(Date.now());
+            config.params = config.params || {};
+            config.params._ = `${time}|${parseInt(Sign.makeSign(time))}`;
         }
         return config;
     },
@@ -43,7 +37,6 @@ Axios.interceptors.response.use(
         return response;
     },
     async error => {
-        console.log(error);
         // if (
         //     error.response.request.responseType === "blob" &&
         //     error.response.data instanceof Blob
@@ -71,7 +64,8 @@ Axios.interceptors.response.use(
             ElMessage.error("403错误: 身份校验失败");
             return Promise.reject("身份校验失败");
         } else if (error.response.status === 400) {
-            // ElMessage.error(error.response.data.detail);
+            if (error.response.data.detail)
+                ElMessage.error(error.response.data.detail);
             return Promise.reject(error.response.data.detail);
         } else if (error.response.status === 500) {
             ElMessage.error("服务器错误");
