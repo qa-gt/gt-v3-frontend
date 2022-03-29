@@ -1,15 +1,10 @@
 <template>
     <el-header class="header">
-        <h3
-            style="color: #000000"
-            @click="$router.push({ name: 'index' })"
-        >
+        <h3 style="color: #000000" @click="$router.push({ name: 'index' })">
             {{ title }}
         </h3>
         <div class="user">
-            <el-icon
-                @click="$router.push({ name: 'index' })"
-            >
+            <el-icon @click="$router.push({ name: 'index' })">
                 <home-filled />
             </el-icon>
             <el-icon @click="changeTheme()">
@@ -17,16 +12,10 @@
                 <moon v-else />
             </el-icon>
             <el-icon v-if="loggedIn" style="margin-top: 5px">
-                <el-badge
-                    :hidden="!haveDot"
-                    is-dot
-                >
-                    <bell
-                        v-if="loggedIn"
-                        @click="messages()"
-                    />
+                <el-badge :hidden="!haveDot" is-dot>
+                    <bell v-if="loggedIn" @click="messages()" />
                 </el-badge>
-             </el-icon>
+            </el-icon>
             <el-drawer
                 v-model="drawer"
                 title="消息列表"
@@ -35,18 +24,12 @@
                 :lock-scroll="false"
             >
                 <el-scrollbar full>
-                    <p
-                        v-for="item in 20"
-                        :key="item"
-                        class="scrollbar-item"
-                    >
+                    <p v-for="item in 20" :key="item" class="scrollbar-item">
                         {{ item }}{{ isMobile }}
                     </p>
                 </el-scrollbar>
             </el-drawer>
-            <el-icon
-                @click="$router.push('/write')"
-            >
+            <el-icon @click="$router.push('/write')">
                 <edit />
             </el-icon>
             <el-icon
@@ -122,7 +105,7 @@ export default {
         ...mapGetters(["loggedIn"]),
         isMobile() {
             return window.innerWidth < 960;
-        }
+        },
     },
     methods: {
         changeTheme() {

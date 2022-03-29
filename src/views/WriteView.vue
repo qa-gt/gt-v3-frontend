@@ -95,7 +95,7 @@
 </style>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 import gtUser from "@/components/gtUser.vue";
 
 import { VMdEditor, processMarkdown } from "@/plugins/mdEditor";
@@ -105,6 +105,7 @@ import AWS from "aws-sdk";
 export default {
     computed: {
         ...mapState(["user"]),
+        ...mapGetters(["loggedIn"]),
         isMobile() {
             return this.$root.isMobile;
         },
@@ -164,8 +165,11 @@ export default {
             //     insertImage({ url: res.url, desc: file.name });
             //     ElMessage.success("上传成功！");
             // });
-            let res = await this.$axios.get("/utils/upload_key").data;
-            if (!res.credentials) {
+            let res = await this.$axios
+                .get("/utils/upload_key")
+                .then(res => res.data);
+            console.log(res);
+            if (!res.Credentials) {
                 ElMessage.error("上传未授权!");
                 return;
             }
@@ -211,6 +215,9 @@ export default {
         },
     },
     created() {
+        if (!this.loggedIn) {
+            this.$router.push({ name: "login" });
+        }
         if (this.$route.query.id) {
             this.atc.id = this.$route.query.id;
             this.$axios.get(`/article/${this.atc.id}/`).then(res => {
@@ -218,10 +225,11 @@ export default {
                 this.atc.title = res.title;
                 this.atc.content = res.content;
                 this.atc.exist = true;
-            });
+            }).catch(err => err);
         }
         this.$axios.get("/topic/", { params: { min_state: 0 } }).then(data => {
-            this.topics = data.results;
+            // this.topics = data.results;
+            this.topics = data;
         });
     },
 };

@@ -7,6 +7,7 @@ const vuexPersistState = new VuexPersistence({
         theme: state.theme,
         user: state.user,
         jwt: state.jwt,
+        readedAtc: state.readedAtc,
     }),
 });
 
@@ -32,7 +33,7 @@ const store = createStore({
             state.theme = state.theme === "light" ? "dark" : "light";
         },
         addReadedAtc(state, id) {
-            state.readed.push(id);
+            state.readedAtc.push(id);
         },
     },
     getters: {

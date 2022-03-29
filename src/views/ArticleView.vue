@@ -27,7 +27,9 @@
                                 type="primary"
                                 size="small"
                                 plain
-                                @click="this.$router.push(`/write/${atc.id}`)"
+                                @click="
+                                    this.$router.push(`/write?id=${atc.id}`)
+                                "
                                 style="float: right; margin-right: 5px"
                                 v-if="user.id === atc.author.id"
                             >
@@ -269,7 +271,7 @@ import Velocity from "velocity-animate";
 import { mapState, mapGetters } from "vuex";
 import gtUser from "@/components/gtUser.vue";
 import { ElLoading } from "element-plus";
-import { VMdPreview } from "@/plugins/mdEditor";
+import { VMdPreview, processMarkdown } from "@/plugins/mdEditor";
 
 export default {
     components: {
@@ -297,6 +299,7 @@ export default {
             this.$axios.get(`/article/${this.$route.params.aid}/`).then(res => {
                 res.create_time = this.$moment(res.create_time).fromNow();
                 res.update_time = this.$moment(res.update_time).fromNow();
+                res.content = processMarkdown(res.content);
                 this.atc = res;
                 setTimeout(loading.close, 100);
             });
@@ -315,7 +318,9 @@ export default {
                 .then(res => {
                     this.atcComment = res;
                 });
-            if (this.readedAtc.includes(this.$route.params.aid)) {
+            console.log(this.readedAtc);
+            if (!this.readedAtc.includes(this.$route.params.aid)) {
+                console.log("read");
                 this.$axios
                     .patch(`/article/${this.$route.params.aid}/read/`)
                     .then(() => {
@@ -423,6 +428,7 @@ export default {
                     ElMessage.success(res.detail);
                 });
         },
+        deleteArticle() {},
     },
     watch: {
         $route() {
@@ -430,10 +436,13 @@ export default {
                 return;
             }
             this.init();
-            this.refresh();
+            // this.refresh();
         },
     },
-    created() {},
+    created() {
+        this.init();
+        // this.refresh();
+    },
 };
 </script>
 
