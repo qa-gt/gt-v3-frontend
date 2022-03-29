@@ -1,8 +1,9 @@
 <template>
     <el-header class="header">
-        <h3 style="color: #000000" @click="$router.push({ name: 'index' })">
+        <!-- <h3 style="color: #000000" @click="$router.push({ name: 'index' })">
             {{ title }}
-        </h3>
+        </h3> -->
+        <img style="height: 100px" :src="logoWid" />
         <div class="user">
             <el-icon @click="$router.push({ name: 'index' })">
                 <home-filled />
@@ -67,6 +68,7 @@
             鲁ICP备2020034769号-2
         </el-link>
     </div>
+    <el-backtop />
 </template>
 
 <style lang="scss" scoped>
@@ -123,6 +125,7 @@ nav a.router-link-exact-active {
 
 <script>
 import { mapState, mapGetters } from "vuex";
+import logoWid from "@/assets/img/logo-wid.png";
 
 export default {
     mode: "history",
@@ -134,6 +137,7 @@ export default {
             drawer: false,
             haveDot: true,
             yiyan: {},
+            logoWid: logoWid,
         };
     },
     computed: {
