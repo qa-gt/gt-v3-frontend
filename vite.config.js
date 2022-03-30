@@ -1,6 +1,6 @@
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
-import legacy from '@vitejs/plugin-legacy'
+import legacy from "@vitejs/plugin-legacy";
 import prismjs from "vite-plugin-prismjs";
 
 const path = require("path");
@@ -32,19 +32,22 @@ export default defineConfig({
             ],
         }),
         legacy({
-            targets: ['defaults', 'not IE 11']
-        })
+            targets: ["defaults", "not IE 11"],
+        }),
     ],
     resolve: {
-        alias: [
-            {
-                find: "@",
-                replacement: path.resolve(__dirname, "src"),
-            },
-        ],
+        alias: {
+            "@": path.resolve(__dirname, "src"),
+            "./runtimeConfig": "./runtimeConfig.browser",
+        },
     },
     optimizeDeps: {
         include: ["@kangc/v-md-editor/lib/theme/vuepress.js"],
+        esbuildOptions: {
+            define: {
+                global: "globalThis", //<-- AWS SDK
+            },
+        },
     },
     server: {
         proxy: {
@@ -56,7 +59,7 @@ export default defineConfig({
         },
     },
     build: {
-        target: 'es2022',
+        target: "es2022",
     },
     transpileDependencies: ["vuex-persist"],
 });

@@ -120,8 +120,9 @@
                                     color: black;
                                     font-width: 2500px;
                                     font-size: 18px;
+                                    font-weight: bold;
                                 "
-                                @click="route_to_article(id)"
+                                @click="$router.push(`/article/${item.id}`)"
                             >
                                 {{ item.title }}
                             </el-button>
@@ -130,19 +131,13 @@
                             >
                         </div>
                     </template>
-                    <el-button
-                        type="text"
-                        style="
-                            color: black;
-                            font-width: 2500px;
-                            font-size: 13px;
-                        "
-                        @click="route_to_article()"
-                    >
-                        <div class="text item">
-                            {{ item.info }}
-                        </div>
-                    </el-button>
+                    <div class="article-preview">
+                        {{ item.author.username }} &emsp; 更新于{{
+                            $moment(item.update_time).fromNow()
+                        }}
+                        &emsp;
+                        {{ item.read_count }}阅读
+                    </div>
                 </el-card>
             </div>
             <div v-if="cate === '2'">
@@ -343,8 +338,8 @@ export default {
                 })
                 .then(data => {
                     this.pageInfo.total = data.count;
-                    data = data.results;
-                    data.map(e => e.article);
+                    data = data.results.map(e => e.article);
+                    console.log(data);
                     this.myClts = data;
                     this.empty = this.myClts.length === 0;
                 })
@@ -392,8 +387,23 @@ export default {
     },
     watch: {
         $route() {
-            if (!this.$route.params.uid) return;
-            this.$axios.get(`/user/${this.$route.params.uid}/`).then(res => {
+            if (
+                now.name !== "article" ||
+                !now.params.aid ||
+                old.params.aid === now.params.aid
+            ) {
+                return;
+            }
+            this.init();
+        },
+        $route(now, old) {
+            if (
+                now.name !== "user" ||
+                !now.params.uid ||
+                old.params.uid === now.params.uid
+            )
+                return;
+            this.$axios.get(`/user/${now.params.uid}/`).then(res => {
                 this.user = res;
             });
             this.getFunc()();
@@ -404,7 +414,6 @@ export default {
             this.user = res;
         });
         this.getMyAtcs();
-
     },
     name: "UserInfoView",
 };

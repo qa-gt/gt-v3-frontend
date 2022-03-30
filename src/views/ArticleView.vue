@@ -91,13 +91,29 @@
                     </el-collapse-item>
                 </el-collapse>
                 <el-divider style="margin-top: 10px" />
-                <v-md-preview
+                <!-- <v-md-preview
                     :text="atc.content"
                     :style="{
                         minHeight: '250px',
                         overflow: 'auto',
                         padding: '10px',
                     }"
+                /> -->
+                <md-editor
+                    v-model="atc.content"
+                    katexJs="https://cdn.staticfile.org/KaTeX/0.15.1/katex.min.js"
+                    katexCss="https://cdn.staticfile.org/KaTeX/0.15.1/katex.min.css"
+                    highlightJs="https://cdn.staticfile.org/highlight.js/11.2.0/highlight.min.js"
+                    highlightCss="https://cdn.staticfile.org/highlight.js/10.0.0/styles/atom-one-dark.min.css"
+                    prettierCDN="https://cdn.staticfile.org/prettier/2.0.3/standalone.min.js"
+                    prettierMDCDN="https://cdn.staticfile.org/prettier/2.0.3/parser-markdown.min.js"
+                    cropperCss="https://cdn.staticfile.org/cropperjs/1.5.12/cropper.min.css"
+                    cropperJs="https://cdn.staticfile.org/cropperjs/1.5.12/cropper.min.js"
+                    screenfullJs="https://cdn.staticfile.org/screenfull.js/5.1.0/screenfull.min.js"
+                    noMermaid
+                    previewTheme="vuepress"
+                    showCodeRowNumber
+                    :previewOnly="true"
                 />
             </el-card>
             <br /><br />
@@ -271,12 +287,12 @@ import Velocity from "velocity-animate";
 import { mapState, mapGetters } from "vuex";
 import gtUser from "@/components/gtUser.vue";
 import { ElLoading } from "element-plus";
-import { VMdPreview, processMarkdown } from "@/plugins/mdEditor";
+import { processMd, MdEditor } from "@/plugins/markdown";
 
 export default {
     components: {
         gtUser,
-        VMdPreview,
+        MdEditor,
     },
     data() {
         return {
@@ -299,7 +315,7 @@ export default {
             this.$axios.get(`/article/${this.$route.params.aid}/`).then(res => {
                 res.create_time = this.$moment(res.create_time).fromNow();
                 res.update_time = this.$moment(res.update_time).fromNow();
-                res.content = processMarkdown(res.content);
+                res.content = processMd(res.content);
                 this.atc = res;
                 setTimeout(loading.close, 100);
             });
@@ -440,8 +456,12 @@ export default {
         deleteArticle() {},
     },
     watch: {
-        $route() {
-            if (!this.$route.params.aid) {
+        $route(now, old) {
+            if (
+                now.name !== "article" ||
+                !now.params.aid ||
+                old.params.aid === now.params.aid
+            ) {
                 return;
             }
             this.init();
@@ -517,11 +537,6 @@ export default {
     margin: 10px;
 }
 
-.el-collapse-item__header,
-.el-collapse-item__wrap {
-    border-bottom: 0px solid rgba(255, 255, 255, 0) !important;
-}
-
 .overflow {
     overflow: hidden;
     white-space: nowrap;
@@ -536,5 +551,12 @@ export default {
 }
 .articleInfo p {
     margin: 0 5px !important;
+}
+</style>
+
+<style>
+.el-collapse-item__header,
+.el-collapse-item__wrap {
+    border-bottom: 0px solid rgba(255, 255, 255, 0) !important;
 }
 </style>

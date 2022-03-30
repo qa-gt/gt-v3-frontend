@@ -1,5 +1,5 @@
 <template>
-    <el-row justify="space-evenly">
+    <el-row justify="space-evenly" style="margin-bottom: 40px">
         <el-col
             :xs="24"
             :sm="18"
@@ -25,7 +25,6 @@
                             maxlength="100"
                             show-word-limit
                             placeholder="起个名字..."
-                            @input="change($event)"
                         />
                     </el-form-item>
 
@@ -49,11 +48,63 @@
                         @upload-image="uploadImage"
                         @save="save"
                     ></v-md-editor> -->
-                    <md-editor v-model="atc.content" />
+                    <md-editor
+                        style="height: 600px; margin-bottom: 20px"
+                        v-model="atc.content"
+                        katexJs="https://cdn.staticfile.org/KaTeX/0.15.1/katex.min.js"
+                        katexCss="https://cdn.staticfile.org/KaTeX/0.15.1/katex.min.css"
+                        highlightJs="https://cdn.staticfile.org/highlight.js/11.2.0/highlight.min.js"
+                        highlightCss="https://cdn.staticfile.org/highlight.js/10.0.0/styles/atom-one-dark.min.css"
+                        prettierCDN="https://cdn.staticfile.org/prettier/2.0.3/standalone.min.js"
+                        prettierMDCDN="https://cdn.staticfile.org/prettier/2.0.3/parser-markdown.min.js"
+                        cropperCss="https://cdn.staticfile.org/cropperjs/1.5.12/cropper.min.css"
+                        cropperJs="https://cdn.staticfile.org/cropperjs/1.5.12/cropper.min.js"
+                        screenfullJs="https://cdn.staticfile.org/screenfull.js/5.1.0/screenfull.min.js"
+                        :toolbars="
+                            isMobile
+                                ? [
+                                      'link',
+                                      'image',
+                                      '-',
+                                      'save',
+                                      '-',
+                                      'pageFullscreen',
+                                      'preview',
+                                  ]
+                                : [
+                                      'revoke',
+                                      'next',
+                                      '-',
+                                      'bold',
+                                      'underline',
+                                      'strikeThrough',
+                                      'quote',
+                                      '-',
+                                      'link',
+                                      'image',
+                                      'table',
+                                      '-',
+                                      'save',
+                                      '=',
+                                      'pageFullscreen',
+                                      'preview',
+                                  ]
+                        "
+                        :preview="!isMobile"
+                        noMermaid
+                        previewTheme="vuepress"
+                        :historyLength="20"
+                        showCodeRowNumber
+                        :sanitize="processMarkdown"
+                        :onSave="save"
+                        :onUploadImg="uploadImage"
+                    />
 
-                    <br />
-
-                    <el-row :gutter="20" justify="space-between">
+                    <el-row
+                        :gutter="20"
+                        justify="space-between"
+                        style="margin-bottom: 30px"
+                    >
                         <el-col>
                             <el-select
                                 v-model="atc.topic"
@@ -68,7 +119,6 @@
                             </el-select>
                         </el-col>
                     </el-row>
-                    <br /><br />
                     <el-form-item>
                         <el-button type="primary" @click="doSubmit">
                             <el-icon><promotion /></el-icon>
@@ -91,7 +141,7 @@
     </el-row>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .v-md-editor {
     box-shadow: 0 0px 0px rgba(0, 0, 0, 0) !important;
     border: 1px solid #dcdfe6 !important;
@@ -102,12 +152,8 @@
 import { mapState, mapGetters } from "vuex";
 import gtUser from "@/components/gtUser.vue";
 
-// import { VMdEditor, processMarkdown } from "@/plugins/mdEditor";
-import MdEditor from "md-editor-v3";
-import "md-editor-v3/lib/style.css";
+import { processMd, MdEditor } from "@/plugins/markdown";
 import { ElMessage } from "element-plus";
-// import AWS from "aws-sdk";
-
 export default {
     computed: {
         ...mapState(["user", "uploadKey"]),
@@ -118,7 +164,6 @@ export default {
     },
     components: {
         gtUser,
-        // VMdEditor,
         MdEditor,
     },
     data() {
@@ -134,8 +179,8 @@ export default {
         };
     },
     methods: {
-        beforePreviewChange(text, next) {
-            next(processMarkdown(text, true));
+        processMarkdown(content) {
+            return processMd(content, true);
         },
         doSubmit() {
             if (
@@ -163,58 +208,60 @@ export default {
                 });
             }
         },
-        // async uploadImage(event, insertImage, files) {
-        //     const file = files[0];
-        //     // const formData = new FormData();
-        //     // formData.append("file", file);
-        //     // ElMessage.info("正在上传图片...");
-        //     // this.$axios.post("/utils/upload_image", formData).then(res => {
-        //     //     insertImage({ url: res.url, desc: file.name });
-        //     //     ElMessage.success("上传成功！");
-        //     // });
-        //     let res = this.uploadKey;
-        //     if (!res || !res.expire || res.expire < Date.now()) {
-        //         res = await this.$axios
-        //             .get("/utils/upload_key")
-        //             .then(res => res.data);
-        //         if (!res.Credentials) {
-        //             ElMessage.error("上传未授权!");
-        //             return;
-        //         }
-        //         this.$store.commit("setUploadKey", res);
-        //     }
-        //     const bucket = res.Buckets[0];
-        //     const s3 = new AWS.S3({
-        //         region: "automatic",
-        //         endpoint: bucket.s3Endpoint,
-        //         credentials: res.Credentials,
-        //         params: {
-        //             Bucket: bucket.s3Bucket,
-        //         },
-        //     });
-        //     const fileKey = res.scope.replace("*", file.name);
-        //     let s3Upload = s3
-        //         .upload({
-        //             Key: fileKey,
-        //             Body: file,
-        //             ContentType: file.type,
-        //         })
-        //         .on("httpUploadProgress", evt => {
-        //             console.log(evt);
-        //         });
-        //     s3Upload.send((err, data) => {
-        //         if (err) {
-        //             ElMessage.error("上传失败!");
-        //             return;
-        //         } else {
-        //             insertImage({
-        //                 url: `https://gtcdn.yxzl.top/${fileKey}/30`,
-        //                 desc: file.name,
-        //             });
-        //             ElMessage.success("上传成功!");
-        //         }
-        //     });
-        // },
+        async uploadImage(files, callback) {
+            const file = files[0];
+            if (file.size > 1024 * 1024 * 5) {
+                ElMessage.error("图片大小不能超过5M");
+                return;
+            }
+            // const formData = new FormData();
+            // formData.append("file", file);
+            // ElMessage.info("正在上传图片...");
+            // this.$axios.post("/utils/upload_image", formData).then(res => {
+            //     insertImage({ url: res.url, desc: file.name });
+            //     ElMessage.success("上传成功！");
+            // });
+            let res = this.uploadKey;
+            if (!res || !res.expire || res.expire < Date.now()) {
+                res = await this.$axios
+                    .post("/utils/upload_key")
+                    .then(res => res.data);
+                if (!res.Credentials) {
+                    ElMessage.error("上传未授权!");
+                    return;
+                }
+                this.$store.commit("setUploadKey", res);
+            }
+            const bucket = res.Buckets[0];
+            const s3 = new AWS.S3({
+                // const s3 = new window.S3({
+                region: "automatic",
+                endpoint: bucket.s3Endpoint,
+                credentials: res.Credentials,
+                params: {
+                    Bucket: bucket.s3Bucket,
+                },
+            });
+            const fileKey = res.scope.replace("*", file.name);
+            let s3Upload = s3
+                .upload({
+                    Key: fileKey,
+                    Body: file,
+                    ContentType: file.type,
+                })
+                .on("httpUploadProgress", evt => {
+                    console.log(evt);
+                });
+            s3Upload.send((err, data) => {
+                if (err) {
+                    ElMessage.error("上传失败!");
+                    return;
+                } else {
+                    callback([`https://gtcdn.yxzl.top/${fileKey}/30`]);
+                    ElMessage.success("上传成功!");
+                }
+            });
+        },
         cancel() {
             this.$router.go(-1);
             ElMessage.info("已取消");

@@ -3,7 +3,11 @@
         <!-- <h3 style="color: #000000" @click="$router.push({ name: 'index' })">
             {{ title }}
         </h3> -->
-        <img style="height: 100px" :src="logoWid" />
+        <img
+            style="height: 100px; margin-top: -7px"
+            :src="logoLr"
+            @click="$router.push({ name: 'index' })"
+        />
         <div class="user">
             <el-icon @click="$router.push({ name: 'index' })">
                 <home-filled />
@@ -41,7 +45,9 @@
             <span>{{ user.username }}</span>
         </div>
     </el-header>
-    <div :style="{margin: '45px 25px 20px 25px', minHeight: `${minHeight}px`}">
+    <div
+        :style="{ margin: '45px 25px 20px 25px', minHeight: `${minHeight}px` }"
+    >
         <router-view v-slot="{ Component }">
             <keep-alive v-if="$route.meta.keepAlive">
                 <component :is="Component" />
@@ -49,21 +55,28 @@
             <component :is="Component" v-else />
         </router-view>
     </div>
-    <div style="color: rgb(190, 190, 190); height: 30px; padding: 0px 20px 0px 20px" id="footer">
+    <div
+        style="
+            color: rgb(190, 190, 190);
+            height: 30px;
+            padding: 0px 20px 0px 20px;
+        "
+        id="footer"
+    >
         <el-link
             :href="`https://yiyan.yixiangzhilv.com/?id=${yiyan.uuid}`"
             target="_blank"
             :underline="false"
             :class="isMobile ? 'footer-yiyan-center' : 'footer-yiyan'"
-            v-if="!isMobile"
         >
             {{ yiyan.content }}
-            <span v-show="yiyan.from_show">
+            <span v-show="yiyan.from_show" v-if="!isMobile">
                 - 「 {{ yiyan.from_show }} 」
             </span>
         </el-link>
         <el-link
             href="https://beian.miit.gov.cn/"
+            target="_blank"
             :underline="false"
             :class="isMobile ? 'footer-beian-center' : 'footer-beian'"
         >
@@ -72,6 +85,66 @@
     </div>
     <el-backtop />
 </template>
+
+<script>
+import { mapState, mapGetters } from "vuex";
+import logoLr from "@/assets/img/logo-lr.png";
+
+export default {
+    data() {
+        return {
+            title: "QA瓜田",
+            username: "test",
+            viewTransition: "slide-right-leave-active",
+            drawer: false,
+            haveDot: true,
+            yiyan: {},
+            logoLr: logoLr,
+            windowWidth: 0,
+            windowHeight: 0,
+        };
+    },
+    computed: {
+        ...mapState(["user", "theme"]),
+        ...mapGetters(["loggedIn"]),
+        isMobile() {
+            return this.windowWidth < 960;
+        },
+        minHeight() {
+            return this.windowHeight - 50 - 30 - 45 - 22;
+        },
+    },
+    methods: {
+        changeTheme() {
+            this.$store.commit("changeTheme");
+            document.firstElementChild.className = this.theme;
+        },
+        messages() {
+            this.drawer = !this.drawer;
+            this.haveDot = false;
+        },
+        updateWindowSize() {
+            (this.windowWidth = window.innerWidth),
+                (this.windowHeight = window.innerHeight);
+        },
+    },
+    mounted() {
+        window.addEventListener("resize", this.updateWindowSize);
+        this.updateWindowSize();
+    },
+    created() {
+        document.firstElementChild.className = this.theme;
+        this.$axios.get("https://yiyan.yixiangzhilv.com/get").then(res => {
+            if (res.from_who && res.from) {
+                res.from_show = `${res.from} · ${res.from_who}`;
+            } else {
+                res.from_show = `${res.from || res.from_who || "未知"}`;
+            }
+            this.yiyan = res;
+        });
+    },
+};
+</script>
 
 <style lang="scss" scoped>
 #app {
@@ -110,8 +183,15 @@ nav a.router-link-exact-active {
 
 .footer-yiyan {
     color: rgb(190, 190, 190);
+    display: inline;
+}
+
+.footer-yiyan-center {
+    color: rgb(190, 190, 190);
     display: inline-block;
-    // max-width: 35%;
+    text-align: center;
+    width: 100%;
+    margin-bottom: 5px;
 }
 
 .footer-beian {
@@ -122,64 +202,7 @@ nav a.router-link-exact-active {
     color: rgb(190, 190, 190);
     text-align: center;
     width: 100%;
+    display: inline-block;
+    margin-bottom: 15px;
 }
 </style>
-
-<script>
-import { mapState, mapGetters } from "vuex";
-import logoWid from "@/assets/img/logo-wid.png";
-
-export default {
-    data() {
-        return {
-            title: "QA瓜田",
-            username: "test",
-            viewTransition: "slide-right-leave-active",
-            drawer: false,
-            haveDot: true,
-            yiyan: {},
-            windowWidth: 0,
-            windowHeight: 0
-        };
-    },
-    computed: {
-        ...mapState(["user", "theme"]),
-        ...mapGetters(["loggedIn"]),
-        isMobile() {
-            return this.windowWidth < 960;
-        },
-        minHeight() {
-            return this.windowHeight - 50 - 30 - 45 - 22;
-        }
-    },
-    methods: {
-        changeTheme() {
-            this.$store.commit("changeTheme");
-            document.firstElementChild.className = this.theme;
-        },
-        messages() {
-            this.drawer = !this.drawer;
-            this.haveDot = false;
-        },
-        updateWindowSize() {
-            this.windowWidth = window.innerWidth,
-            this.windowHeight = window.innerHeight
-        }
-    },
-    mounted() {
-        window.addEventListener('resize', this.updateWindowSize)
-        this.updateWindowSize()
-    },
-    created() {
-        document.firstElementChild.className = this.theme;
-        this.$axios.get("https://yiyan.yixiangzhilv.com/get").then(res => {
-            if (res.from_who && res.from) {
-                res.from_show = `${res.from} · ${res.from_who}`;
-            } else {
-                res.from_show = `${res.from || res.from_who || "未知"}`;
-            }
-            this.yiyan = res;
-        });
-    },
-};
-</script>
