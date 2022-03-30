@@ -71,6 +71,11 @@ const routes = [
         redirect: "/404",
         hidden: true,
     },
+    {
+        path: "/allusers",
+        name: "allusers",
+        component: () => import("@/views/AllUserView.vue")
+    }
 ];
 
 const router = createRouter({
