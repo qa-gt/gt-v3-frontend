@@ -88,24 +88,34 @@
                 <el-divider />
 
                 <h2>实名认证</h2>
-                <div
-                    style="color: #c11700; margin-bottom: 20px"
-                    v-if="!user.yunxiao"
-                >
-                    此实名信息提交后将不可更改（展示状态除外），请慎重填写！
-                </div>
+
                 <el-form label-position="top" label-width="120px">
-                    <div v-if="user.yunxiao" style="margin-bottom: 20px">
-                        实名信息：{{ user.yunxiao }}
+                    <div
+                        v-if="user.yunxiao !== undefined"
+                        style="margin-bottom: 20px"
+                    >
+                        实名信息：已认证 · {{ user.yunxiao || "已隐藏" }}
                     </div>
-                    <el-form-item label="爱云校账号" v-if="!user.yunxiao">
+                    <div
+                        style="color: #c11700; margin-bottom: 20px"
+                        v-if="user.yunxiao === undefined"
+                    >
+                        此实名信息提交后将不可更改（展示状态除外），请慎重填写！
+                    </div>
+                    <el-form-item
+                        label="爱云校账号"
+                        v-if="user.yunxiao === undefined"
+                    >
                         <el-input
                             v-model="yunxiaoInfo.student_id"
                             maxlength="30"
                             placeholder="冒充他人认证可能会被封号"
                         />
                     </el-form-item>
-                    <el-form-item label="爱云校密码" v-if="!user.yunxiao">
+                    <el-form-item
+                        label="爱云校密码"
+                        v-if="user.yunxiao === undefined"
+                    >
                         <el-input
                             v-model="yunxiaoInfo.password"
                             type="password"
@@ -131,6 +141,7 @@
                             confirm-button-text="确定提交"
                             cancel-button-text="返回"
                             @confirm="confirmYunxiao"
+                            v-if="user.yunxiao === undefined"
                         >
                             <template #reference>
                                 <el-button type="primary">
@@ -138,6 +149,13 @@
                                 </el-button>
                             </template>
                         </el-popconfirm>
+                        <el-button
+                            type="primary"
+                            @click="confirmYunxiao"
+                            v-if="user.yunxiao !== undefined"
+                        >
+                            更新实名信息
+                        </el-button>
                     </el-form-item>
                 </el-form>
             </el-card>
@@ -250,6 +268,9 @@ export default {
         if (!this.loggedIn) {
             this.$router.push({ name: "login" });
         }
+        this.yunxiaoInfo.show = String(
+            Boolean(this.user.yunxiao !== undefined ? this.user.yunxiao : true)
+        );
     },
 };
 </script>

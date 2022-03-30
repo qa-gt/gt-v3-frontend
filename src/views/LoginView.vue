@@ -85,6 +85,7 @@ export default {
                     password: this.password,
                 })
                 .then(res => {
+                    console.log(res.user.yunxiao, typeof res.user.yunxiao);
                     this.$store.commit("setJwt", res.token);
                     this.$store.commit("setUser", res.user);
                     ElMessage.success("登录成功");

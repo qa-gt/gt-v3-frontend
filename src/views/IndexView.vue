@@ -171,7 +171,8 @@ export default {
         },
         doSearch() {
             if (this.searchText === this.searchInput) return;
-            this.searchText = encodeURIComponent(this.searchInput);
+            // this.searchText = encodeURIComponent(this.searchInput);
+            this.searchText = this.searchInput;
             this.getAtcs();
             this.pageInfo.num = 1;
         },
