@@ -462,6 +462,7 @@ export default {
                 !now.params.aid ||
                 old.params.aid === now.params.aid
             ) {
+                console.log("OK");
                 return;
             }
             this.init();

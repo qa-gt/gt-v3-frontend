@@ -8,6 +8,11 @@ const sanitizeData = {
         "img",
         "audio",
         "video",
+        "del",
+        "math",
+        "semantics",
+        "mrow",
+        "annotation",
     ]),
     allowedIframeHostnames: ["player.bilibili.com"],
     allowedAttributes: {

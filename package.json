@@ -19,6 +19,7 @@
     "http": "^0.0.1-security",
     "https": "^1.0.0",
     "https-browserify": "^1.0.0",
+    "katex": "^0.15.3",
     "md-editor-v3": "^1.11.3",
     "moment": "^2.29.1",
     "nprogress": "^0.2.0",

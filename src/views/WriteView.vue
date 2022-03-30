@@ -92,13 +92,13 @@
                         "
                         :preview="!isMobile"
                         noMermaid
-                        previewTheme="vuepress"
                         :historyLength="20"
                         showCodeRowNumber
                         :sanitize="processMarkdown"
                         :onSave="save"
                         :onUploadImg="uploadImage"
                     />
+                    <!-- <mmd-editor v-model="atc.content" /> -->
 
                     <el-row
                         :gutter="20"
@@ -151,7 +151,6 @@
 <script>
 import { mapState, mapGetters } from "vuex";
 import gtUser from "@/components/gtUser.vue";
-
 import { processMd, MdEditor } from "@/plugins/markdown";
 import { ElMessage } from "element-plus";
 export default {
@@ -176,6 +175,7 @@ export default {
                 topic: "",
             },
             topics: [],
+            // katex: katex,
         };
     },
     methods: {
