@@ -29,7 +29,7 @@
                         />
                     </el-form-item>
 
-                    <v-md-editor
+                    <!-- <v-md-editor
                         v-model="atc.content"
                         height="600px"
                         style="box-shadow: 0 0"
@@ -48,7 +48,8 @@
                         :before-preview-change="beforePreviewChange"
                         @upload-image="uploadImage"
                         @save="save"
-                    ></v-md-editor>
+                    ></v-md-editor> -->
+                    <md-editor v-model="atc.content" />
 
                     <br />
 
@@ -101,9 +102,11 @@
 import { mapState, mapGetters } from "vuex";
 import gtUser from "@/components/gtUser.vue";
 
-import { VMdEditor, processMarkdown } from "@/plugins/mdEditor";
+// import { VMdEditor, processMarkdown } from "@/plugins/mdEditor";
+import MdEditor from "md-editor-v3";
+import "md-editor-v3/lib/style.css";
 import { ElMessage } from "element-plus";
-import AWS from "aws-sdk";
+// import AWS from "aws-sdk";
 
 export default {
     computed: {
@@ -115,7 +118,8 @@ export default {
     },
     components: {
         gtUser,
-        VMdEditor,
+        // VMdEditor,
+        MdEditor,
     },
     data() {
         return {
@@ -159,58 +163,58 @@ export default {
                 });
             }
         },
-        async uploadImage(event, insertImage, files) {
-            const file = files[0];
-            // const formData = new FormData();
-            // formData.append("file", file);
-            // ElMessage.info("正在上传图片...");
-            // this.$axios.post("/utils/upload_image", formData).then(res => {
-            //     insertImage({ url: res.url, desc: file.name });
-            //     ElMessage.success("上传成功！");
-            // });
-            let res = this.uploadKey;
-            if (!res || !res.expire || res.expire < Date.now()) {
-                res = await this.$axios
-                    .get("/utils/upload_key")
-                    .then(res => res.data);
-                if (!res.Credentials) {
-                    ElMessage.error("上传未授权!");
-                    return;
-                }
-                this.$store.commit("setUploadKey", res);
-            }
-            const bucket = res.Buckets[0];
-            const s3 = new AWS.S3({
-                region: "automatic",
-                endpoint: bucket.s3Endpoint,
-                credentials: res.Credentials,
-                params: {
-                    Bucket: bucket.s3Bucket,
-                },
-            });
-            const fileKey = res.scope.replace("*", file.name);
-            let s3Upload = s3
-                .upload({
-                    Key: fileKey,
-                    Body: file,
-                    ContentType: file.type,
-                })
-                .on("httpUploadProgress", evt => {
-                    console.log(evt);
-                });
-            s3Upload.send((err, data) => {
-                if (err) {
-                    ElMessage.error("上传失败!");
-                    return;
-                } else {
-                    insertImage({
-                        url: `https://gtcdn.yxzl.top/${fileKey}/30`,
-                        desc: file.name,
-                    });
-                    ElMessage.success("上传成功!");
-                }
-            });
-        },
+        // async uploadImage(event, insertImage, files) {
+        //     const file = files[0];
+        //     // const formData = new FormData();
+        //     // formData.append("file", file);
+        //     // ElMessage.info("正在上传图片...");
+        //     // this.$axios.post("/utils/upload_image", formData).then(res => {
+        //     //     insertImage({ url: res.url, desc: file.name });
+        //     //     ElMessage.success("上传成功！");
+        //     // });
+        //     let res = this.uploadKey;
+        //     if (!res || !res.expire || res.expire < Date.now()) {
+        //         res = await this.$axios
+        //             .get("/utils/upload_key")
+        //             .then(res => res.data);
+        //         if (!res.Credentials) {
+        //             ElMessage.error("上传未授权!");
+        //             return;
+        //         }
+        //         this.$store.commit("setUploadKey", res);
+        //     }
+        //     const bucket = res.Buckets[0];
+        //     const s3 = new AWS.S3({
+        //         region: "automatic",
+        //         endpoint: bucket.s3Endpoint,
+        //         credentials: res.Credentials,
+        //         params: {
+        //             Bucket: bucket.s3Bucket,
+        //         },
+        //     });
+        //     const fileKey = res.scope.replace("*", file.name);
+        //     let s3Upload = s3
+        //         .upload({
+        //             Key: fileKey,
+        //             Body: file,
+        //             ContentType: file.type,
+        //         })
+        //         .on("httpUploadProgress", evt => {
+        //             console.log(evt);
+        //         });
+        //     s3Upload.send((err, data) => {
+        //         if (err) {
+        //             ElMessage.error("上传失败!");
+        //             return;
+        //         } else {
+        //             insertImage({
+        //                 url: `https://gtcdn.yxzl.top/${fileKey}/30`,
+        //                 desc: file.name,
+        //             });
+        //             ElMessage.success("上传成功!");
+        //         }
+        //     });
+        // },
         cancel() {
             this.$router.go(-1);
             ElMessage.info("已取消");
