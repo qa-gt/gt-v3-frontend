@@ -100,7 +100,7 @@
                     }"
                 /> -->
                 <md-editor
-                    v-model="atc.content"
+                    :modelValue="atc.content"
                     katexJs="https://cdn.staticfile.org/KaTeX/0.15.1/katex.min.js"
                     katexCss="https://cdn.staticfile.org/KaTeX/0.15.1/katex.min.css"
                     highlightJs="https://cdn.staticfile.org/highlight.js/11.2.0/highlight.min.js"
@@ -456,17 +456,17 @@ export default {
         deleteArticle() {},
     },
     watch: {
-        $route(now, old) {
-            if (
-                now.name !== "article" ||
-                !now.params.aid ||
-                old.params.aid === now.params.aid
-            ) {
-                console.log("OK");
-                return;
-            }
-            this.init();
-        },
+        // $route(now, old) {
+        //     if (
+        //         now.name !== "article" ||
+        //         !now.params.aid ||
+        //         old.params.aid === now.params.aid
+        //     ) {
+        //         console.log("OK");
+        //         return;
+        //     }
+        //     this.init();
+        // },
     },
     created() {
         this.init();

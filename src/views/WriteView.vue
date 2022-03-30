@@ -85,7 +85,7 @@
                                       'table',
                                       '-',
                                       'save',
-                                      '=',
+                                      '-',
                                       'pageFullscreen',
                                       'preview',
                                   ]
@@ -95,10 +95,10 @@
                         :historyLength="20"
                         showCodeRowNumber
                         :sanitize="processMarkdown"
+                        previewTheme="vuepress"
                         :onSave="save"
                         :onUploadImg="uploadImage"
                     />
-                    <!-- <mmd-editor v-model="atc.content" /> -->
 
                     <el-row
                         :gutter="20"

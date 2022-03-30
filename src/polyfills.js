@@ -1,3 +1,3 @@
-if(typeof(window).global === "undefined") {
+if (typeof window.global === "undefined") {
     window.global = window;
 }
