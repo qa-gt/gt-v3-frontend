@@ -13,6 +13,9 @@ const sanitizeData = {
         "semantics",
         "mrow",
         "annotation",
+        "blockquote",
+        "br",
+        "hr",
     ]),
     allowedIframeHostnames: ["player.bilibili.com"],
     allowedAttributes: {

@@ -56,7 +56,6 @@
                                         type="danger"
                                         size="small"
                                         plain
-                                        @click="del"
                                         style="float: right; margin-right: 5px"
                                     >
                                         <el-icon>
@@ -114,6 +113,7 @@
                     previewTheme="vuepress"
                     showCodeRowNumber
                     :previewOnly="true"
+                    :sanitize="processMarkdown"
                 />
             </el-card>
             <br /><br />
@@ -142,7 +142,7 @@
                         </el-col>
                     </el-row>
                 </transition>
-                <el-row justify="right" style="float: right">
+                <el-row style="float: right">
                     <el-button
                         type="primary"
                         style="padding: 10px; margin-right: 5px"
@@ -175,7 +175,7 @@
                                         <el-icon><comment /></el-icon>
                                         &ensp;评&ensp;论&ensp;
                                     </el-dropdown-item>
-                                    <el-dropdown-item @click="fav">
+                                    <el-dropdown-item @click="collect">
                                         <el-icon><star /></el-icon>
                                         &ensp;收&ensp;藏&ensp;
                                     </el-dropdown-item>
@@ -186,7 +186,7 @@
                 </el-row>
                 <el-divider style="margin-top: 60px" />
                 <p style="font-weight: bold; font-size: 1.1rem">吃瓜</p>
-                <el-row justify="left">
+                <el-row>
                     <div class="info-2">
                         {{ atcLike.map(item => item.user.username).join(",") }}
                     </div>
@@ -310,15 +310,20 @@ export default {
         ...mapGetters(["loggedIn"]),
     },
     methods: {
+        processMarkdown(content) {
+            return processMd(content, false);
+        },
         init() {
             const loading = ElLoading.service({ fullscreen: true });
-            this.$axios.get(`/article/${this.$route.params.aid}/`).then(res => {
-                res.create_time = this.$moment(res.create_time).fromNow();
-                res.update_time = this.$moment(res.update_time).fromNow();
-                res.content = processMd(res.content);
-                this.atc = res;
-                setTimeout(loading.close, 100);
-            });
+            this.$axios
+                .get(`/article/${this.$route.params.aid}/`)
+                .then(res => {
+                    res.create_time = this.$moment(res.create_time).fromNow();
+                    res.update_time = this.$moment(res.update_time).fromNow();
+                    this.atc = res;
+                })
+                .catch(err => err)
+                .then(() => setTimeout(loading.close, 100));
             this.$axios
                 .get("/like/", { params: { article: this.$route.params.aid } })
                 .then(res => {
@@ -456,17 +461,17 @@ export default {
         deleteArticle() {},
     },
     watch: {
-        // $route(now, old) {
-        //     if (
-        //         now.name !== "article" ||
-        //         !now.params.aid ||
-        //         old.params.aid === now.params.aid
-        //     ) {
-        //         console.log("OK");
-        //         return;
-        //     }
-        //     this.init();
-        // },
+        $route(now, old) {
+            if (
+                now.name !== "article" ||
+                !now.params.aid ||
+                old.params.aid === now.params.aid
+            ) {
+                console.log("OK");
+                return;
+            }
+            this.init();
+        },
     },
     created() {
         this.init();
