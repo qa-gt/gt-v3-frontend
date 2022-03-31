@@ -89,7 +89,11 @@ export default {
     props: {
         user: {
             type: Object,
-            default: { id: false },
+            default() {
+                return {
+                    id: false
+                }
+            },
         },
     },
     data() {

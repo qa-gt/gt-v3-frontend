@@ -1,4 +1,3 @@
-import "@/polyfills";
 import { createApp } from "vue";
 import { store } from "./store";
 import ElementPlus from "element-plus";
@@ -25,7 +24,7 @@ app.use(ElementPlus)
     .use(VueReCaptcha, {
         siteKey: "6LdU6xAfAAAAAIY7YrFlAByuqIhOHO1stDNGWgnx",
         loaderOptions: {
-            useRecaptchaNet: true,
+            customUrl: "https://recaptcha.google.cn/recaptcha/api.js",
             autoHideBadge: true,
         },
     })

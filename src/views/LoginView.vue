@@ -80,12 +80,11 @@ export default {
                 return;
             }
             this.$axios
-                .post("/user/login?test=t", {
+                .post("/user/login", {
                     username: this.username,
                     password: this.password,
                 })
                 .then(res => {
-                    console.log(res.user.yunxiao, typeof res.user.yunxiao);
                     this.$store.commit("setJwt", res.token);
                     this.$store.commit("setUser", res.user);
                     ElMessage.success("登录成功");

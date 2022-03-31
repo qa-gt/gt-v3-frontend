@@ -1,10 +1,7 @@
 <template>
     <el-header class="header">
-        <!-- <h3 style="color: #000000" @click="$router.push({ name: 'index' })">
-            {{ title }}
-        </h3> -->
         <img
-            style="height: 100px; margin-top: -7px"
+            style="height: 50px; "
             :src="logoLr"
             @click="$router.push({ name: 'index' })"
         />
@@ -58,7 +55,7 @@
     <div
         style="
             color: rgb(190, 190, 190);
-            height: 30px;
+            height: 28px;
             padding: 0px 20px 0px 20px;
         "
         id="footer"
@@ -67,10 +64,11 @@
             :href="`https://yiyan.yixiangzhilv.com/?id=${yiyan.uuid}`"
             target="_blank"
             :underline="false"
-            :class="isMobile ? 'footer-yiyan-center' : 'footer-yiyan'"
+            :class="footer-yiyan"
+            v-if="!isMobile"
         >
             {{ yiyan.content }}
-            <span v-show="yiyan.from_show" v-if="!isMobile">
+            <span v-show="yiyan.from_show">
                 - 「 {{ yiyan.from_show }} 」
             </span>
         </el-link>
@@ -111,7 +109,7 @@ export default {
             return this.windowWidth < 960;
         },
         minHeight() {
-            return this.windowHeight - 50 - 30 - 45 - 22;
+            return this.windowHeight - 50 - 30 - 45 - 20;
         },
     },
     methods: {
@@ -131,6 +129,9 @@ export default {
     mounted() {
         window.addEventListener("resize", this.updateWindowSize);
         this.updateWindowSize();
+        let awsSdk = document.createElement('script');
+        awsSdk.setAttribute('src', 'https://sdk.dogecloud.com/sdk/s3/js/aws-sdk-2.683.0.min.js')
+        document.head.appendChild(awsSdk)
     },
     created() {
         document.firstElementChild.className = this.theme;
@@ -184,14 +185,6 @@ nav a.router-link-exact-active {
 .footer-yiyan {
     color: rgb(190, 190, 190);
     display: inline;
-}
-
-.footer-yiyan-center {
-    color: rgb(190, 190, 190);
-    display: inline-block;
-    text-align: center;
-    width: 100%;
-    margin-bottom: 5px;
 }
 
 .footer-beian {

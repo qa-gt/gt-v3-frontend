@@ -41,13 +41,6 @@ export default defineConfig({
             "./runtimeConfig": "./runtimeConfig.browser",
         },
     },
-    optimizeDeps: {
-        esbuildOptions: {
-            define: {
-                global: "globalThis", //<-- AWS SDK
-            },
-        },
-    },
     server: {
         proxy: {
             "/api": {
@@ -58,7 +51,8 @@ export default defineConfig({
         },
     },
     build: {
-        target: "es2022",
+        target: "es2015",
+        chunkSizeWarningLimit: 1600,
     },
     transpileDependencies: ["vuex-persist"],
 });

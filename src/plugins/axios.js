@@ -2,9 +2,16 @@ import axios from "axios";
 import router from "@/router";
 import { store } from "@/store";
 import { ElMessage } from "element-plus";
-import SignWasm from "@/assets/wasm/sign.wasm";
+import "@/assets/js/go";
+import WasmLoader from "@/assets/js/wasm-loader";
+import WebGuard from  "@/assets/wasm/guard.wasm?url";
 
-let Sign = SignWasm();
+const go = new window.Go();
+
+(async () => {
+    const wasmModule = await WasmLoader(WebGuard, go.importObject);
+    go.run(wasmModule.instance);
+})()
 
 export const Axios = axios.create({
     baseURL: import.meta.env.PROD ? "https://gtapi.yxzl.top" : "/api",
@@ -13,13 +20,10 @@ export const Axios = axios.create({
 Axios.interceptors.request.use(
     async config => {
         if (store.state.jwt) {
-            config.headers.Authorization = `${store.state.jwt}`;
+            config.headers.Authorization = store.state.jwt;
         }
-        if (!["get", "head", "options"].includes(config.method)) {
-            Sign = await Sign;
-            const time = window.BigInt(Date.now());
-            config.params = config.params || {};
-            config.params._ = `${time}|${parseInt(Sign.makeSign(time))}`;
+        if (["post", "put", "patch"].includes(config.method)) {
+            config.data = window.GuardEncode(JSON.stringify(config.data));
         }
         return config;
     },
