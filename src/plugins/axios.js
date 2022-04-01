@@ -68,17 +68,17 @@ Axios.interceptors.response.use(
             }
             ElMessage.error("403错误: 身份校验失败");
             return Promise.reject("身份校验失败");
-        } else if (error.response.status === 400) {
-            if (error.response.data.detail)
-                ElMessage.error(error.response.data.detail);
-            return Promise.reject(error.response.data.detail);
+        }
+        const reason = error.response.data.detail ?? error.response.data[0]
+        if (error.response.status === 400) {
+            if (reason)
+                ElMessage.error(reason);
+            return Promise.reject(reason);
         } else if (error.response.status === 500) {
             ElMessage.error("服务器错误");
             return Promise.reject("服务器错误");
         } else {
-            return Promise.reject(
-                error.response.data.detail ?? error.response.data[0]
-            );
+            return Promise.reject(reason);
         }
     }
 );

@@ -314,10 +314,10 @@ export default {
                     this.pageInfo.total = res.count;
                     this.atcComment = res.results;
                 })
-                .catch(err => err)
                 .then(() => {
                     this.pageInfo.loading = false;
-                });
+                })
+                .catch(err => err);
         },
         init() {
             const loading = ElLoading.service({ fullscreen: true });
@@ -328,8 +328,8 @@ export default {
                     res.update_time = this.$moment(res.update_time).fromNow();
                     this.atc = res;
                 })
-                .catch(err => err)
-                .then(() => setTimeout(loading.close, 100));
+                .then(() => setTimeout(loading.close, 100))
+                .catch(err => err);
             this.$axios
                 .get("/like/", { params: { article: this.$route.params.aid } })
                 .then(res => {
@@ -344,7 +344,8 @@ export default {
                     .patch(`/article/${this.$route.params.aid}/read/`)
                     .then(() => {
                         this.atc.read_count += 1;
-                    });
+                    })
+                    .catch(err => err);
                 this.$store.commit("addReadedAtc", this.$route.params.aid);
             }
         },
@@ -353,7 +354,8 @@ export default {
                 .get("/like/", { params: { article: this.$route.params.aid } })
                 .then(res => {
                     this.atcLike = res;
-                });
+                })
+                .catch(err => err);
             this.getCmts();
         },
         replyCmt(cmt) {
@@ -394,7 +396,8 @@ export default {
                     setTimeout(() => {
                         this.writeComment();
                     }, 100);
-                });
+                })
+                .catch(err => err);
         },
         writeComment() {
             if (!this.loggedIn) {
@@ -419,7 +422,8 @@ export default {
                     }
                     this.refresh();
                     ElMessage.success(res.detail);
-                });
+                })
+                .catch(err => err);
         },
         commentAnimation1(el) {
             el.style.opacity = 0;
@@ -447,7 +451,8 @@ export default {
                 })
                 .then(res => {
                     ElMessage.success(res.detail);
-                });
+                })
+                .catch(err => err);
         },
         deleteArticle() { },
     },
