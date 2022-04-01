@@ -19,7 +19,7 @@
                 <i
                     class="fal fa-bell"
                     @click="messages()"
-                    style="margin-right: "
+                    style="margin-right: 1px"
                 />
             </el-badge>
 
