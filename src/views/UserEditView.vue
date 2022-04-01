@@ -63,7 +63,11 @@
                         />
                     </el-form-item>
                     <el-form-item label="pushplus token">
-                        <el-input maxlength="32" v-model="form.token" />
+                        <el-input
+                            maxlength="32"
+                            v-model="form.token"
+                            disabled
+                        />
                     </el-form-item>
                     <el-form-item label="头像">
                         <el-input v-model="form.portrait" />
@@ -91,20 +95,20 @@
 
                 <el-form label-position="top" label-width="120px">
                     <div
-                        v-if="user.yunxiao !== undefined"
+                        v-if="user.yunxiao !== null"
                         style="margin-bottom: 20px"
                     >
                         实名信息：已认证 · {{ user.yunxiao || "已隐藏" }}
                     </div>
                     <div
                         style="color: #c11700; margin-bottom: 20px"
-                        v-if="user.yunxiao === undefined"
+                        v-if="user.yunxiao === null"
                     >
                         此实名信息提交后将不可更改（展示状态除外），请慎重填写！
                     </div>
                     <el-form-item
                         label="爱云校账号"
-                        v-if="user.yunxiao === undefined"
+                        v-if="user.yunxiao === null"
                     >
                         <el-input
                             v-model="yunxiaoInfo.student_id"
@@ -114,7 +118,7 @@
                     </el-form-item>
                     <el-form-item
                         label="爱云校密码"
-                        v-if="user.yunxiao === undefined"
+                        v-if="user.yunxiao === null"
                     >
                         <el-input
                             v-model="yunxiaoInfo.password"
@@ -141,7 +145,7 @@
                             confirm-button-text="确定提交"
                             cancel-button-text="返回"
                             @confirm="confirmYunxiao"
-                            v-if="user.yunxiao === undefined"
+                            v-if="user.yunxiao === null"
                         >
                             <template #reference>
                                 <el-button type="primary">
@@ -152,7 +156,7 @@
                         <el-button
                             type="primary"
                             @click="confirmYunxiao"
-                            v-if="user.yunxiao !== undefined"
+                            v-if="user.yunxiao !== null"
                         >
                             更新实名信息
                         </el-button>
@@ -190,7 +194,6 @@
 </style>
 
 <script>
-import { ref } from "vue";
 import { mapState } from "vuex";
 import { ElMessage } from "element-plus";
 import gtUser from "@/components/gtUser.vue";
@@ -250,17 +253,20 @@ export default {
             this.$router.go(-1);
         },
         confirmYunxiao() {
+            console.log(this.yunxiaoInfo);
             this.$axios
                 .post("/user/yunxiao_auth/", this.yunxiaoInfo)
                 .then(res => {
                     ElMessage.success("提交成功");
+                    console.log(res);
+                    this.$store.commit("setUser", res.user);
                     this.$store.commit("setUser", res.user);
                 });
         },
     },
     created() {
         this.yunxiaoInfo.show = String(
-            Boolean(this.user.yunxiao !== undefined ? this.user.yunxiao : true)
+            Boolean(this.user.yunxiao !== null && this.user.yunxiao)
         );
     },
 };

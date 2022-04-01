@@ -105,7 +105,7 @@
 </template>
 
 <script>
-import { ElMessageBox } from "element-plus";
+import { ElMessage, ElMessageBox } from "element-plus";
 import { mapState, mapGetters } from "vuex";
 import logoLr from "@/assets/img/logo-lr.png";
 
@@ -116,7 +116,7 @@ export default {
             username: "test",
             viewTransition: "slide-right-leave-active",
             drawer: false,
-            haveDot: true,
+            haveDot: true && false,
             yiyan: {},
             logoLr: logoLr,
             windowWidth: 0,
@@ -139,6 +139,8 @@ export default {
             document.firstElementChild.className = this.theme;
         },
         messages() {
+            ElMessage.info("通知系统还在开发中！");
+            return;
             this.drawer = !this.drawer;
             this.haveDot = false;
         },

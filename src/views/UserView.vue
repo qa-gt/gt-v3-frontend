@@ -101,6 +101,7 @@
                     class="content-card"
                     v-for="item in myClts"
                     :key="item"
+                    @click="$router.push(`/article/${item.id}`)"
                 >
                     <template #header>
                         <div

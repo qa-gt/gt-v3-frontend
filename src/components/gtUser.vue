@@ -52,7 +52,7 @@
                 <el-tag
                     v-for="tag in user.tags.split(' ')"
                     :key="tag"
-                    style="margin: 2px 2px !important"
+                    style="margin: 2px 2px"
                     :type="tag.type"
                 >
                     {{ tag }}
@@ -60,7 +60,7 @@
             </p>
             <p v-if="user.yunxiao" style="margin-top: -8px">
                 <b>实名: &ensp;</b>
-                <el-tag type="info" style="margin: 3px 0px !important">
+                <el-tag type="info" style="margin: 3px 0px">
                     {{ user.yunxiao }}
                 </el-tag>
             </p>

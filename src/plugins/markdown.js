@@ -179,10 +179,8 @@ const extMd = (text, writing = false) => {
 };
 
 const processMd = (text, writing = false) => {
-    console.log("before", text);
     text = cleanMd(text);
     text = extMd(text, writing);
-    console.log("after", text);
     return text;
 };
 

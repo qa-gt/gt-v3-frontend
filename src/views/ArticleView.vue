@@ -81,10 +81,7 @@
                     </el-collapse-item>
                 </el-collapse>
                 <el-divider style="margin-top: 10px" />
-                <gt-md-editor
-                    :modelValue="atc.content"
-                    :previewOnly="true"
-                />
+                <gt-md-editor :modelValue="atc.content" :previewOnly="true" />
             </el-card>
             <br /><br />
             <el-card shadow="hover" class="comments-card">
@@ -145,7 +142,12 @@
                                     </el-dropdown-item>
                                     <el-dropdown-item @click="collect">
                                         <i class="fal fa-star"></i>
-                                        &ensp;收&ensp;藏&ensp;
+                                        <span v-if="!atc.collected">
+                                            &ensp;吃&ensp;瓜&ensp;
+                                        </span>
+                                        <span v-else>
+                                            &ensp;取&ensp;消&ensp;
+                                        </span>
                                     </el-dropdown-item>
                                 </span>
                             </el-dropdown-menu>
@@ -189,7 +191,6 @@
                                         : '20px',
                                 }"
                             >
-
                                 <div class="comment-title">
                                     <span class="comment comment-user">
                                         {{ item.author.username }}
@@ -222,13 +223,17 @@
                                                             replyCmt(item)
                                                         "
                                                     >
-                                                        <i class="fal fa-reply"></i>
+                                                        <i
+                                                            class="fal fa-reply"
+                                                        ></i>
                                                         &ensp;回&ensp;复&ensp;
                                                     </el-dropdown-item>
                                                     <el-dropdown-item
                                                         @click="report"
                                                     >
-                                                        <i class="fal fa-exclamation-circle"></i>
+                                                        <i
+                                                            class="fal fa-exclamation-circle"
+                                                        ></i>
                                                         &ensp;举&ensp;报&ensp;
                                                     </el-dropdown-item>
                                                 </el-dropdown-menu>
@@ -380,7 +385,7 @@ export default {
         },
         commentSubmit() {
             if (this.comment.trim() === "") {
-                ElMessage.error("评论不能为空!");
+                ElMessage.error("评论不能为空！");
                 return;
             }
             this.$axios
@@ -390,7 +395,9 @@ export default {
                     reply: (this.reply.status && this.reply.id) || "",
                 })
                 .then(() => {
-                    ElMessage.success("评论成功!");
+                    ElMessage.success(
+                        (this.reply.status ? "回复" : "评论") + "成功！"
+                    );
                     this.refresh();
                     this.comment = "";
                     setTimeout(() => {
@@ -445,16 +452,29 @@ export default {
                 ElMessage.warning("请先登录");
                 return;
             }
-            this.$axios
-                .post("/collect/", {
-                    article: this.$route.params.aid,
-                })
-                .then(res => {
-                    ElMessage.success(res.detail);
-                })
-                .catch(err => err);
+            if (!this.atc.collected) {
+                this.$axios
+                    .post("/collect/", {
+                        article: this.$route.params.aid,
+                    })
+                    .then(res => {
+                        ElMessage.success(res.detail);
+                    })
+                    .catch(err => err);
+            } else {
+                this.$axios
+                    .delete(`/collect/0/`, {
+                        params: { article: this.$route.params.aid },
+                    })
+                    .then(res => {
+                        ElMessage.success(res.detail);
+                    })
+                    .catch(err => err);
+            }
         },
-        deleteArticle() { },
+        deleteArticle() {
+            ElMessage.warning("删除功能暂未开通");
+        },
     },
     watch: {
         $route(now, old) {
@@ -462,7 +482,8 @@ export default {
                 now.name !== "article" ||
                 !now.params.aid ||
                 old.params.aid === now.params.aid
-            ) return;
+            )
+                return;
             this.init();
         },
     },
