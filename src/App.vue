@@ -38,8 +38,13 @@
                 </span>
                 <template #dropdown>
                     <el-dropdown-menu>
+                        <el-dropdown-item
+                            @click="$router.push(`/user/${user.id}`)"
+                        >
+                            个人主页
+                        </el-dropdown-item>
                         <el-dropdown-item @click="$router.push('/user/edit')">
-                            个人中心
+                            设置
                         </el-dropdown-item>
                         <el-dropdown-item @click="logout">
                             登出
@@ -105,7 +110,7 @@
 </template>
 
 <script>
-import { ElMessageBox } from 'element-plus';
+import { ElMessageBox } from "element-plus";
 import { mapState, mapGetters } from "vuex";
 import logoLr from "@/assets/img/logo-lr.png";
 
@@ -147,21 +152,17 @@ export default {
                 (this.windowHeight = window.innerHeight);
         },
         logout() {
-            ElMessageBox.confirm(
-                '确认退出登录吗？',
-                '提示',
-                {
-                    confirmButtonText: '登出',
-                    cancelButtonText: '取消',
-                    type: 'warning',
-                }
-            )
+            ElMessageBox.confirm("确认退出登录吗？", "提示", {
+                confirmButtonText: "登出",
+                cancelButtonText: "取消",
+                type: "warning",
+            })
                 .then(() => {
-                    this.$store.commit('logout');
-                    this.$router.push({ name: 'login' });
+                    this.$store.commit("logout");
+                    this.$router.push({ name: "login" });
                 })
-                .catch(() => { })
-        }
+                .catch(() => {});
+        },
     },
     mounted() {
         window.addEventListener("resize", this.updateWindowSize);
