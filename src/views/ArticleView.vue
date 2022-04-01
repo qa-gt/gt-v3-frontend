@@ -81,22 +81,9 @@
                     </el-collapse-item>
                 </el-collapse>
                 <el-divider style="margin-top: 10px" />
-                <md-editor
+                <gt-md-editor
                     :modelValue="atc.content"
-                    katexJs="https://cdn.staticfile.org/KaTeX/0.15.1/katex.min.js"
-                    katexCss="https://cdn.staticfile.org/KaTeX/0.15.1/katex.min.css"
-                    highlightJs="https://cdn.staticfile.org/highlight.js/11.2.0/highlight.min.js"
-                    highlightCss="https://cdn.staticfile.org/highlight.js/10.0.0/styles/atom-one-dark.min.css"
-                    prettierCDN="https://cdn.staticfile.org/prettier/2.0.3/standalone.min.js"
-                    prettierMDCDN="https://cdn.staticfile.org/prettier/2.0.3/parser-markdown.min.js"
-                    cropperCss="https://cdn.staticfile.org/cropperjs/1.5.12/cropper.min.css"
-                    cropperJs="https://cdn.staticfile.org/cropperjs/1.5.12/cropper.min.js"
-                    screenfullJs="https://cdn.staticfile.org/screenfull.js/5.1.0/screenfull.min.js"
-                    noMermaid
-                    previewTheme="vuepress"
-                    showCodeRowNumber
                     :previewOnly="true"
-                    :sanitize="processMarkdown"
                 />
             </el-card>
             <br /><br />
@@ -288,13 +275,13 @@ import { ElMessage } from "element-plus";
 import Velocity from "velocity-animate";
 import { mapState, mapGetters } from "vuex";
 import gtUser from "@/components/gtUser.vue";
+import gtMdEditor from "@/components/mdEditor.vue";
 import { ElLoading } from "element-plus";
-import { processMd, MdEditor } from "@/plugins/markdown";
 
 export default {
     components: {
         gtUser,
-        MdEditor,
+        gtMdEditor,
     },
     data() {
         return {
@@ -313,9 +300,6 @@ export default {
         ...mapGetters(["loggedIn"]),
     },
     methods: {
-        processMarkdown(content) {
-            return processMd(content, false);
-        },
         getCmts() {
             this.pageInfo.loading = true;
             this.$axios
@@ -475,10 +459,7 @@ export default {
                 now.name !== "article" ||
                 !now.params.aid ||
                 old.params.aid === now.params.aid
-            ) {
-                console.log("OK");
-                return;
-            }
+            ) return;
             this.init();
         },
     },

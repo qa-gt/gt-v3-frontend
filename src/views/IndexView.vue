@@ -8,7 +8,7 @@
             :xl="4"
             style="margin-bottom: 20px"
         >
-            <gt-user :user="user"></gt-user>
+            <gt-user :user="user" :showFollow="false"></gt-user>
         </el-col>
 
         <el-col :xs="24" :sm="18" :md="17" :lg="18" :xl="19">
@@ -56,7 +56,7 @@
                         >
                             <template #append>
                                 <el-button type="primary" @click="doSearch">
-                                    <i class="fal fa-search"/>
+                                    <i class="fal fa-search" />
                                 </el-button>
                             </template>
                         </el-input>
@@ -73,25 +73,22 @@
                 class="content-card"
                 v-for="item in atcs"
                 :key="item.id"
+                @click="$router.push(`/article/${item.id}`)"
             >
                 <template #header>
-                    <div class="content-card-header">
-                        <el-button
-                            type="text"
-                            style="
-                                color: black;
-                                font-width: 2500px;
-                                font-size: 18px;
-                                font-weight: bold;
-                                overflow: hidden;
-                            "
-                            @click="$router.push(`/article/${item.id}`)"
-                        >
-                            {{ item.title }}
-                        </el-button>
-                        <!-- <el-button class="button" type="text">
-                            预览
-                        </el-button> -->
+                    <div
+                        class="content-card-header"
+                        style="
+                            font-width: 2500px;
+                            font-size: 18px;
+                            font-weight: bold;
+                            overflow: hidden;
+                            white-space: nowrap;
+                            text-overflow: ellipsis;
+                            -o-text-overflow: ellipsis;
+                        "
+                    >
+                        {{ item.title }}
                     </div>
                 </template>
                 <div class="article-preview">
@@ -189,7 +186,6 @@ export default {
                 .then(data => {
                     this.pageInfo.total = data.count;
                     this.atcs = data.results;
-                    console.log(this.atcs);
                     setTimeout(loading.close, 100);
                 });
         },

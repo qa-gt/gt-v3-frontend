@@ -31,6 +31,7 @@
                     v-bind:title="
                         user.id === $store.state.user.id ? '不能关注自己哦' : ''
                     "
+                    v-if="showFollow"
                 >
                     关&ensp;注
                 </el-button>
@@ -91,6 +92,12 @@ export default {
                 };
             },
         },
+        showFollow: {
+            type: Boolean,
+            default() {
+                return true;
+            },
+        },
     },
     data() {
         return {
@@ -112,9 +119,6 @@ export default {
         setTimeout(() => {
             this.show = false;
         }, 50);
-        setTimeout(() => {
-            console.log(this.user);
-        }, 1000);
     },
 };
 </script>

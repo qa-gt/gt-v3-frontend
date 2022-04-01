@@ -1,35 +1,30 @@
 <template>
     <el-header class="header">
-        <img
-            style="height: 50px"
-            :src="logoLr"
-            @click="$router.push({ name: 'index' })"
-        />
+        <el-button @click="$router.push({ name: 'index' })" type="text">
+            <img style="height: 50px" :src="logoLr" />
+        </el-button>
         <div class="user">
-            <i
-                class="fal fa-home-alt"
-                @click="$router.push({ name: 'index' })"
-            />
-            <i
-                :class="['fal', theme === 'light' ? 'fa-sun' : 'fa-moon']"
-                @click="changeTheme()"
-            />
+            <el-button @click="changeTheme()" type="text">
+                <i :class="['fal', theme === 'light' ? 'fa-sun' : 'fa-moon']" />
+            </el-button>
 
-            <el-badge :hidden="!haveDot" is-dot>
-                <i
-                    class="fal fa-bell"
-                    @click="messages()"
-                    style="margin-right: 1px"
-                />
-            </el-badge>
+            <el-button @click="messages()" type="text">
+                <el-badge :hidden="!haveDot" is-dot>
+                    <i class="fal fa-bell" />
+                </el-badge>
+            </el-button>
 
-            <i class="fal fa-comment-edit" @click="$router.push('/write')"></i>
+            <el-button @click="$router.push('/write')" type="text">
+                <i class="fal fa-comment-edit"></i>
+            </el-button>
 
-            <i
-                class="fal fa-sign-in-alt"
+            <el-button
                 @click="$router.push('/user/login')"
+                type="text"
                 v-if="!loggedIn"
-            ></i>
+            >
+                <i class="fal fa-sign-in-alt"></i>
+            </el-button>
 
             <el-dropdown v-else>
                 <span class="el-dropdown-link">
@@ -161,7 +156,7 @@ export default {
                     this.$store.commit("logout");
                     this.$router.push({ name: "login" });
                 })
-                .catch(() => {});
+                .catch(() => { });
         },
     },
     mounted() {

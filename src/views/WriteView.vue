@@ -27,54 +27,9 @@
                             placeholder="起个名字..."
                         />
                     </el-form-item>
-                    <md-editor
+                    <gt-md-editor
                         style="height: 600px; margin-bottom: 20px"
                         v-model="atc.content"
-                        katexJs="https://cdn.staticfile.org/KaTeX/0.15.1/katex.min.js"
-                        katexCss="https://cdn.staticfile.org/KaTeX/0.15.1/katex.min.css"
-                        highlightJs="https://cdn.staticfile.org/highlight.js/11.2.0/highlight.min.js"
-                        highlightCss="https://cdn.staticfile.org/highlight.js/10.0.0/styles/atom-one-dark.min.css"
-                        prettierCDN="https://cdn.staticfile.org/prettier/2.0.3/standalone.min.js"
-                        prettierMDCDN="https://cdn.staticfile.org/prettier/2.0.3/parser-markdown.min.js"
-                        cropperCss="https://cdn.staticfile.org/cropperjs/1.5.12/cropper.min.css"
-                        cropperJs="https://cdn.staticfile.org/cropperjs/1.5.12/cropper.min.js"
-                        screenfullJs="https://cdn.staticfile.org/screenfull.js/5.1.0/screenfull.min.js"
-                        :toolbars="
-                            isMobile
-                                ? [
-                                      'link',
-                                      'image',
-                                      '-',
-                                      'save',
-                                      '-',
-                                      'pageFullscreen',
-                                      'preview',
-                                  ]
-                                : [
-                                      'revoke',
-                                      'next',
-                                      '-',
-                                      'bold',
-                                      'underline',
-                                      'strikeThrough',
-                                      'quote',
-                                      '-',
-                                      'link',
-                                      'image',
-                                      'table',
-                                      '-',
-                                      'save',
-                                      '-',
-                                      'pageFullscreen',
-                                      'preview',
-                                  ]
-                        "
-                        :preview="!isMobile"
-                        noMermaid
-                        :historyLength="20"
-                        showCodeRowNumber
-                        :sanitize="processMarkdown"
-                        previewTheme="vuepress"
                         :onSave="save"
                         :onUploadImg="uploadImage"
                     />
@@ -100,7 +55,7 @@
                     </el-row>
                     <el-form-item>
                         <el-button type="primary" @click="doSubmit">
-                            <i class="fal fa-paper-plane"/>
+                            <i class="fal fa-paper-plane" />
                             &emsp;提&ensp;交&ensp;
                         </el-button>
                         <el-popconfirm
@@ -130,7 +85,7 @@
 <script>
 import { mapState } from "vuex";
 import gtUser from "@/components/gtUser.vue";
-import { processMd, MdEditor } from "@/plugins/markdown";
+import gtMdEditor from "@/components/mdEditor.vue";
 import { ElMessage } from "element-plus";
 export default {
     computed: {
@@ -141,7 +96,7 @@ export default {
     },
     components: {
         gtUser,
-        MdEditor,
+        gtMdEditor
     },
     data() {
         return {
@@ -153,13 +108,9 @@ export default {
                 topic: "",
             },
             topics: [],
-            // katex: katex,
         };
     },
     methods: {
-        processMarkdown(content) {
-            return processMd(content, true);
-        },
         doSubmit() {
             if (
                 this.atc.title.trim() === "" ||
@@ -212,7 +163,6 @@ export default {
             }
             const bucket = res.Buckets[0];
             const s3 = new AWS.S3({
-                // const s3 = new window.S3({
                 region: "automatic",
                 endpoint: bucket.s3Endpoint,
                 credentials: res.Credentials,
@@ -230,7 +180,7 @@ export default {
                 .on("httpUploadProgress", evt => {
                     console.log(evt);
                 });
-            s3Upload.send((err, data) => {
+            s3Upload.send(err => {
                 if (err) {
                     ElMessage.error("上传失败!");
                     return;
