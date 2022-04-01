@@ -31,6 +31,10 @@ const store = createStore({
             data.yunxiao = data.yunxiao && data.yunxiao[0];
             state.user = data;
         },
+        logout(state) {
+            state.jwt = null;
+            state.user = {};
+        },
         changeTheme(state) {
             state.theme = state.theme === "light" ? "dark" : "light";
         },

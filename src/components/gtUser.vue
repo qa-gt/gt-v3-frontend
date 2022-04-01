@@ -1,9 +1,5 @@
 <template>
-    <el-card
-        shadow="hover"
-        class="box-card"
-        v-if="user.id || show"
-    >
+    <el-card shadow="hover" class="box-card" v-if="user.id || show">
         <template #header>
             <div class="card-header" style="vertical-align: middle">
                 <el-avatar
@@ -42,16 +38,17 @@
         </template>
         <div>
             <p>
-                ID:{{ user.id }} | {{ user.grade }} |
+                ID:{{ user.id }} |
+                {{ user.grade === "保密" ? "年级保密" : user.grade }} |
                 {{ { 0: "性别保密", 1: "♂", 2: "♀" }[user.gender] }}
             </p>
             <p>
                 {{ user.introduction }}
             </p>
-            <p>
+            <p v-if="user && user.tags">
                 <b>认证: &ensp;</b>
                 <el-tag
-                    v-for="tag in tags"
+                    v-for="tag in user.tags.split(' ')"
                     :key="tag"
                     style="margin: 2px 2px !important"
                     :type="tag.type"
@@ -59,14 +56,13 @@
                     {{ tag }}
                 </el-tag>
             </p>
+            <p v-if="user.yunxiao" style="margin-top: -8px">
+                <b>实名: &ensp;</b>
+                <el-tag type="info" style="margin: 3px 0px !important">
+                    {{ user.yunxiao }}
+                </el-tag>
+            </p>
         </div>
-
-        <!-- <div style="margin: 2px 2px !important">
-            <b>实名: &ensp;</b>
-            <el-tag type="info" style="margin: 3px 0px !important">{{
-                real_name
-            }}</el-tag>
-        </div> -->
     </el-card>
     <el-card shadow="hover" class="box-card" v-else>
         <template #header>
@@ -91,8 +87,8 @@ export default {
             type: Object,
             default() {
                 return {
-                    id: false
-                }
+                    id: false,
+                };
             },
         },
     },
@@ -102,8 +98,6 @@ export default {
                 "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
 
             data: "",
-            tags: [],
-            real_name: "王子涵（210409**）",
             show: true,
         };
     },
@@ -115,13 +109,12 @@ export default {
         },
     },
     mounted() {
-        this.data = "创始人 超级管理";
-        var data1 = this.data;
-        var info = data1.split(" ");
-        this.tags = info;
         setTimeout(() => {
             this.show = false;
         }, 50);
+        setTimeout(() => {
+            console.log(this.user);
+        }, 1000);
     },
 };
 </script>

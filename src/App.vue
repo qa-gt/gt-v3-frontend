@@ -39,7 +39,19 @@
             >
                 <user style="width: 1em; height: 1em" />
             </el-icon>
-            <span>{{ user.username }}</span>
+            <el-popconfirm
+                title="确认退出登录吗？"
+                confirm-button-text="登出"
+                cancel-button-text="取消"
+                @confirm="
+                    $store.commit('logout');
+                    $router.push({ name: 'login' });
+                "
+            >
+                <template #reference>
+                    <span>{{ user.username }}</span>
+                </template>
+            </el-popconfirm>
         </div>
     </el-header>
     <div

@@ -27,27 +27,6 @@
                             placeholder="起个名字..."
                         />
                     </el-form-item>
-
-                    <!-- <v-md-editor
-                        v-model="atc.content"
-                        height="600px"
-                        style="box-shadow: 0 0"
-                        :left-toolbar="
-                            isMobile
-                                ? 'undo redo | link image | save'
-                                : 'undo redo | h bold italic strikethrough quote emoji | ul ol table hr | link image | save'
-                        "
-                        :right-toolbar="
-                            isMobile
-                                ? 'preview'
-                                : 'preview toc sync-scroll fullscreen'
-                        "
-                        :disabled-menus="[]"
-                        :mode="isMobile ? 'edit' : 'editable'"
-                        :before-preview-change="beforePreviewChange"
-                        @upload-image="uploadImage"
-                        @save="save"
-                    ></v-md-editor> -->
                     <md-editor
                         style="height: 600px; margin-bottom: 20px"
                         v-model="atc.content"

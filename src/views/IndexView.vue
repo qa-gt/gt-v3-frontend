@@ -65,7 +65,7 @@
                     </div>
                 </el-card>
             </el-row>
-            <el-empty description="这里空空如也~" v-show="!atcs">
+            <el-empty description="Empty" v-show="!atcs.length">
                 <el-button plain @click="refresh"
                     >&emsp;刷&ensp;新&emsp;</el-button
                 >
@@ -85,6 +85,7 @@
                                 font-width: 2500px;
                                 font-size: 18px;
                                 font-weight: bold;
+                                overflow: hidden;
                             "
                             @click="$router.push(`/article/${item.id}`)"
                         >
@@ -171,7 +172,6 @@ export default {
         },
         doSearch() {
             if (this.searchText === this.searchInput) return;
-            // this.searchText = encodeURIComponent(this.searchInput);
             this.searchText = this.searchInput;
             this.getAtcs();
             this.pageInfo.num = 1;
@@ -191,6 +191,7 @@ export default {
                 .then(data => {
                     this.pageInfo.total = data.count;
                     this.atcs = data.results;
+                    console.log(this.atcs);
                     setTimeout(loading.close, 100);
                 });
         },

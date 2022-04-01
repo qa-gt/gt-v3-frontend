@@ -90,14 +90,6 @@
                     </el-collapse-item>
                 </el-collapse>
                 <el-divider style="margin-top: 10px" />
-                <!-- <v-md-preview
-                    :text="atc.content"
-                    :style="{
-                        minHeight: '250px',
-                        overflow: 'auto',
-                        padding: '10px',
-                    }"
-                /> -->
                 <md-editor
                     :modelValue="atc.content"
                     katexJs="https://cdn.staticfile.org/KaTeX/0.15.1/katex.min.js"
@@ -188,94 +180,126 @@
                 <p style="font-weight: bold; font-size: 1.1rem">吃瓜</p>
                 <el-row>
                     <div class="info-2">
-                        {{ atcLike.map(item => item.user.username).join(",") }}
+                        {{ atcLike.map(item => item.user.username).join(", ") }}
                     </div>
                 </el-row>
                 <el-divider />
                 <p style="font-weight: bold; font-size: 1.1rem">评论</p>
-                <el-row
-                    class="comment-item"
-                    v-for="item in atcComment"
-                    :key="item.id"
-                >
-                    <el-col
-                        :xs="4"
-                        :sm="3"
-                        :md="2"
-                        :lg="1"
-                        :xl="1"
-                        style="padding: 5px"
+                <div v-loading="pageInfo.loading">
+                    <el-row
+                        class="comment-item"
+                        v-for="item in atcComment"
+                        :key="item.id"
                     >
-                        <img :src="item.author.portrait" style="width: 100%" />
-                    </el-col>
-                    <el-col :xs="20" :sm="21" :md="22" :lg="23" :xl="23">
-                        <div
-                            class="comment-content"
-                            :style="{
-                                'padding-left': $root.isMobile ? '5px' : '20px',
-                            }"
+                        <el-col
+                            :xs="4"
+                            :sm="3"
+                            :md="2"
+                            :lg="1"
+                            :xl="1"
+                            style="padding: 5px"
                         >
-                            <div class="comment-title">
-                                <span class="comment comment-user">
-                                    {{ item.author.username }}
-                                </span>
-                                <span
-                                    class="comment comment-user"
-                                    v-if="item.reply"
-                                >
-                                    &ensp;回复&ensp;
-                                    {{ item.reply.author.username }}
-                                </span>
-                                <span class="comment comment-time">
-                                    {{ $moment(item.time).fromNow() }}
-                                    <el-dropdown trigger="hover">
-                                        <el-icon
-                                            style="
-                                                margin-left: 5px;
-                                                margin-top: 4px;
-                                            "
-                                        >
-                                            <plus
+                            <img
+                                :src="item.author.portrait"
+                                style="width: 100%"
+                            />
+                        </el-col>
+                        <el-col :xs="20" :sm="21" :md="22" :lg="23" :xl="23">
+                            <div
+                                class="comment-content"
+                                :style="{
+                                    'padding-left': $root.isMobile
+                                        ? '5px'
+                                        : '20px',
+                                }"
+                            >
+                                <div class="comment-title">
+                                    <span class="comment comment-user">
+                                        {{ item.author.username }}
+                                    </span>
+                                    <span
+                                        class="comment comment-user"
+                                        v-if="item.reply"
+                                    >
+                                        &ensp;回复&ensp;
+                                        {{ item.reply.author.username }}
+                                    </span>
+                                    <span class="comment comment-time">
+                                        {{ $moment(item.time).fromNow() }}
+                                        <el-dropdown trigger="hover">
+                                            <el-icon
                                                 style="
-                                                    color: rgb(185, 185, 185);
+                                                    margin-left: 5px;
+                                                    margin-top: 4px;
                                                 "
-                                            />
-                                        </el-icon>
-                                        <template v-slot:dropdown>
-                                            <el-dropdown-menu>
-                                                <el-dropdown-item disabled>
-                                                    ID: {{ item.id }}
-                                                </el-dropdown-item>
-                                                <el-dropdown-item
-                                                    @click.prevent="
-                                                        replyCmt(item)
+                                            >
+                                                <plus
+                                                    style="
+                                                        color: rgb(
+                                                            185,
+                                                            185,
+                                                            185
+                                                        );
                                                     "
-                                                >
-                                                    <el-icon>
-                                                        <comment />
-                                                    </el-icon>
-                                                    &ensp;回&ensp;复&ensp;
-                                                </el-dropdown-item>
-                                                <el-dropdown-item
-                                                    @click="report"
-                                                >
-                                                    <el-icon>
-                                                        <warning />
-                                                    </el-icon>
-                                                    &ensp;举&ensp;报&ensp;
-                                                </el-dropdown-item>
-                                            </el-dropdown-menu>
-                                        </template>
-                                    </el-dropdown>
-                                </span>
+                                                />
+                                            </el-icon>
+                                            <template v-slot:dropdown>
+                                                <el-dropdown-menu>
+                                                    <el-dropdown-item disabled>
+                                                        ID: {{ item.id }}
+                                                    </el-dropdown-item>
+                                                    <el-dropdown-item
+                                                        @click.prevent="
+                                                            replyCmt(item)
+                                                        "
+                                                    >
+                                                        <el-icon>
+                                                            <comment />
+                                                        </el-icon>
+                                                        &ensp;回&ensp;复&ensp;
+                                                    </el-dropdown-item>
+                                                    <el-dropdown-item
+                                                        @click="report"
+                                                    >
+                                                        <el-icon>
+                                                            <warning />
+                                                        </el-icon>
+                                                        &ensp;举&ensp;报&ensp;
+                                                    </el-dropdown-item>
+                                                </el-dropdown-menu>
+                                            </template>
+                                        </el-dropdown>
+                                    </span>
+                                </div>
+                                <div class="comment comment-text">
+                                    {{ item.content }}
+                                </div>
                             </div>
-                            <div class="comment comment-text">
-                                {{ item.content }}
-                            </div>
-                        </div>
-                    </el-col>
-                    <el-divider class="comment-divider" />
-                </el-row>
+                        </el-col>
+                        <el-divider class="comment-divider" />
+                    </el-row>
+                </div>
+                <el-pagination
+                    background
+                    layout="prev, pager, next, jumper, ->, total"
+                    v-model:current-page="pageInfo.num"
+                    :total="pageInfo.total"
+                    :page-size="pageInfo.size"
+                    :pager-count="7"
+                    :hide-on-single-page="true"
+                    @current-change="getCmts"
+                    class="hidden-sm-and-down"
+                />
+                <el-pagination
+                    layout="prev, pager, next"
+                    v-model="pageInfo.num"
+                    :total="pageInfo.total"
+                    :page-size="pageInfo.size"
+                    :pager-count="5"
+                    :hide-on-single-page="true"
+                    @current-change="getCmts"
+                    class="hidden-md-and-up"
+                />
             </el-card>
         </el-col>
     </el-row>
@@ -303,6 +327,7 @@ export default {
             liked: false,
             comment: "",
             reply: { status: false, id: 0, username: "" },
+            pageInfo: { total: 0, num: 1, size: 20, loading: false },
         };
     },
     computed: {
@@ -313,6 +338,25 @@ export default {
         processMarkdown(content) {
             return processMd(content, false);
         },
+        getCmts() {
+            this.pageInfo.loading = true;
+            this.$axios
+                .get("/comment/", {
+                    params: {
+                        article: this.$route.params.aid,
+                        min_state: 0,
+                        page: this.pageInfo.num,
+                    },
+                })
+                .then(res => {
+                    this.pageInfo.total = res.count;
+                    this.atcComment = res.results;
+                })
+                .catch(err => err)
+                .then(() => {
+                    this.pageInfo.loading = false;
+                });
+        },
         init() {
             const loading = ElLoading.service({ fullscreen: true });
             this.$axios
@@ -320,6 +364,8 @@ export default {
                 .then(res => {
                     res.create_time = this.$moment(res.create_time).fromNow();
                     res.update_time = this.$moment(res.update_time).fromNow();
+                    res.author.yunxiao =
+                        res.author.yunxiao.length && res.author.yunxiao[0];
                     this.atc = res;
                 })
                 .catch(err => err)
@@ -332,13 +378,7 @@ export default {
                         item => item.user.id === this.user.id
                     );
                 });
-            this.$axios
-                .get("/comment/", {
-                    params: { article: this.$route.params.aid, min_state: 0 },
-                })
-                .then(res => {
-                    this.atcComment = res;
-                });
+            this.getCmts();
             if (!this.readedAtc.includes(this.$route.params.aid)) {
                 this.$axios
                     .patch(`/article/${this.$route.params.aid}/read/`)
@@ -354,16 +394,7 @@ export default {
                 .then(res => {
                     this.atcLike = res;
                 });
-            this.$axios
-                .get("/comment/", {
-                    params: {
-                        article: this.$route.params.aid,
-                        min_state: 0,
-                    },
-                })
-                .then(res => {
-                    this.atcComment = res;
-                });
+            this.getCmts();
         },
         replyCmt(cmt) {
             if (!this.loggedIn) {
