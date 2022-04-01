@@ -1,5 +1,5 @@
 <template>
-    <el-row justify="space-evenly" style="margin-top: 50px">
+    <el-row justify="space-evenly">
         <el-col
             :xs="24"
             :sm="18"
@@ -384,16 +384,6 @@ export default {
         },
     },
     watch: {
-        $route() {
-            if (
-                now.name !== "article" ||
-                !now.params.aid ||
-                old.params.aid === now.params.aid
-            ) {
-                return;
-            }
-            this.init();
-        },
         $route(now, old) {
             if (
                 now.name !== "user" ||
@@ -402,6 +392,7 @@ export default {
             )
                 return;
             this.$axios.get(`/user/${now.params.uid}/`).then(res => {
+                res.yunxiao = res.yunxiao.length && res.yunxiao[0];
                 this.user = res;
             });
             this.getFunc()();
@@ -409,6 +400,7 @@ export default {
     },
     mounted() {
         this.$axios.get(`/user/${this.$route.params.uid}/`).then(res => {
+            res.yunxiao = res.yunxiao.length && res.yunxiao[0];
             this.user = res;
         });
         this.getMyAtcs();

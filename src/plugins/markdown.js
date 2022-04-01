@@ -3,43 +3,92 @@ import "md-editor-v3/lib/style.css";
 
 import sanitizeHtml from "sanitize-html";
 
-const sanitizeData = {
-    allowedTags: sanitizeHtml.defaults.allowedTags.concat([
-        "img",
-        "audio",
-        "video",
-        "del",
-        "math",
-        "semantics",
-        "mrow",
-        "annotation",
-        "blockquote",
-        "br",
-        "hr",
-    ]),
+const katexTag = [
+    "math",
+    "semantics",
+    "mrow",
+    "annotation",
+    "blockquote",
+    "mn",
+    "mi",
+    "mo",
+    "mtext",
+    "mspace",
+    "ms",
+    "mfrac",
+    "mroot",
+    "msqrt",
+    "mstyle",
+    "mtable",
+    "mtr",
+    "mtd",
+    "msub",
+    "span",
+    "mover",
+];
+const katexAttr = [
+    "xmlns",
+    "encoding",
+    "class",
+    "data-*",
+    "aria-*",
+    "style",
+    "fence",
+    "accent",
+];
+const cssSize = [/^[-+]?[0-9]*\.?[0-9]+(?:px|em|rem|%)$/];
+
+let sanitizeData = {
+    allowedTags: sanitizeHtml.defaults.allowedTags
+        .concat(["img", "audio", "video", "del", "br", "hr", "svg", "path"])
+        .concat(katexTag),
     allowedIframeHostnames: ["player.bilibili.com"],
     allowedAttributes: {
         a: ["href", "name", "target"],
         img: ["src", "srcset", "alt", "title", "width", "height", "loading"],
         audio: ["src", "controls"],
         video: ["src", "controls"],
-        "*": ["style", "title"],
+        svg: ["*"],
+        path: ["*"],
     },
     allowedStyles: {
         "*": {
-            width: [/^\d+(?:px|em|rem|%)$/],
-            height: [/^\d+(?:px|em|rem|%)$/],
+            width: cssSize,
+            height: cssSize,
             color: [
                 /^#(0x)?[0-9a-f]+$/i,
                 /^rgb\(\s*(\d)\s*,\s*(\d)\s*,\s*(\d)\s*\)$/,
             ],
+            margin: cssSize,
+            "margin-top": cssSize,
+            "margin-bottom": cssSize,
+            "margin-left": cssSize,
+            "margin-right": cssSize,
+            top: cssSize,
+            bottom: cssSize,
+            left: cssSize,
+            right: cssSize,
+            "vertical-align": cssSize,
+            "border-width": cssSize,
+            "border-top-width": cssSize,
+            "border-bottom-width": cssSize,
             "text-align": [/^left$/, /^right$/, /^center$/],
             "font-size": [/^\d+(?:px|em|rem|%)$/],
+            "font-weight": [
+                /^\d+$/,
+                /^bold$/,
+                /^normal$/,
+                /^bolder$/,
+                /^lighter$/,
+            ],
         },
     },
     disallowedTagsMode: "escape",
     enforceHtmlBoundary: true,
 };
+for (let tag of katexTag) {
+    sanitizeData.allowedAttributes[tag] = katexAttr;
+}
 
 const cleanMd = text => sanitizeHtml(text, sanitizeData);
 

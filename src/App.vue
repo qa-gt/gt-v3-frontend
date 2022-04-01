@@ -16,15 +16,37 @@
             />
 
             <el-badge :hidden="!haveDot" is-dot>
-                <i class="fal fa-bell" @click="messages()" style="margin-right: " />
+                <i
+                    class="fal fa-bell"
+                    @click="messages()"
+                    style="margin-right: "
+                />
             </el-badge>
 
             <i class="fal fa-comment-edit" @click="$router.push('/write')"></i>
+
             <i
-                class="fal fa-user"
-                @click="$router.push('/user/' + (loggedIn ? 'edit' : 'login'))"
+                class="fal fa-sign-in-alt"
+                @click="$router.push('/user/login')"
+                v-if="!loggedIn"
             ></i>
-            <span>{{ user.username }}</span>
+
+            <el-dropdown v-else>
+                <span class="el-dropdown-link">
+                    {{ user.username }}
+                    <i class="fal fa-angle-down"></i>
+                </span>
+                <template #dropdown>
+                    <el-dropdown-menu>
+                        <el-dropdown-item @click="$router.push('/user/edit')">
+                            个人中心
+                        </el-dropdown-item>
+                        <el-dropdown-item @click="logout">
+                            登出
+                        </el-dropdown-item>
+                    </el-dropdown-menu>
+                </template>
+            </el-dropdown>
         </div>
         <el-drawer
             v-model="drawer"
@@ -62,7 +84,7 @@
             :href="`https://yiyan.yixiangzhilv.com/?id=${yiyan.uuid}`"
             target="_blank"
             :underline="false"
-            :class="footer - yiyan"
+            class="footer-yiyan"
             v-if="!isMobile"
         >
             {{ yiyan.content }}
@@ -83,6 +105,7 @@
 </template>
 
 <script>
+import { ElMessageBox } from 'element-plus';
 import { mapState, mapGetters } from "vuex";
 import logoLr from "@/assets/img/logo-lr.png";
 
@@ -123,13 +146,32 @@ export default {
             (this.windowWidth = window.innerWidth),
                 (this.windowHeight = window.innerHeight);
         },
+        logout() {
+            ElMessageBox.confirm(
+                '确认退出登录吗？',
+                '提示',
+                {
+                    confirmButtonText: '登出',
+                    cancelButtonText: '取消',
+                    type: 'warning',
+                }
+            )
+                .then(() => {
+                    this.$store.commit('logout');
+                    this.$router.push({ name: 'login' });
+                })
+                .catch(() => { })
+        }
     },
     mounted() {
         window.addEventListener("resize", this.updateWindowSize);
         this.updateWindowSize();
-        let awsSdk = document.createElement('script');
-        awsSdk.setAttribute('src', 'https://sdk.dogecloud.com/sdk/s3/js/aws-sdk-2.683.0.min.js')
-        document.head.appendChild(awsSdk)
+        let awsSdk = document.createElement("script");
+        awsSdk.setAttribute(
+            "src",
+            "https://sdk.dogecloud.com/sdk/s3/js/aws-sdk-2.683.0.min.js"
+        );
+        document.head.appendChild(awsSdk);
     },
     created() {
         document.firstElementChild.className = this.theme;

@@ -61,8 +61,17 @@ p {
         }
 
         .el-badge {
-            margin-right: 8px;
+            margin-right: 9px;
             font-size: 1.4rem;
+            
+            .is-dot {
+                top: 3px;
+            }
+        }
+
+        .el-dropdown {
+            font-size: 1.1rem;
+            color: black;
         }
     }
 
