@@ -1,7 +1,7 @@
 <template>
     <el-header class="header">
         <img
-            style="height: 50px; "
+            style="height: 50px"
             :src="logoLr"
             @click="$router.push({ name: 'index' })"
         />
@@ -64,7 +64,7 @@
             :href="`https://yiyan.yixiangzhilv.com/?id=${yiyan.uuid}`"
             target="_blank"
             :underline="false"
-            :class="footer-yiyan"
+            class="footer-yiyan"
             v-if="!isMobile"
         >
             {{ yiyan.content }}
@@ -129,9 +129,12 @@ export default {
     mounted() {
         window.addEventListener("resize", this.updateWindowSize);
         this.updateWindowSize();
-        let awsSdk = document.createElement('script');
-        awsSdk.setAttribute('src', 'https://sdk.dogecloud.com/sdk/s3/js/aws-sdk-2.683.0.min.js')
-        document.head.appendChild(awsSdk)
+        let awsSdk = document.createElement("script");
+        awsSdk.setAttribute(
+            "src",
+            "https://sdk.dogecloud.com/sdk/s3/js/aws-sdk-2.683.0.min.js"
+        );
+        document.head.appendChild(awsSdk);
     },
     created() {
         document.firstElementChild.className = this.theme;
