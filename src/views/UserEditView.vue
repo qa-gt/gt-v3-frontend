@@ -201,11 +201,6 @@ export default {
     },
     data() {
         return {
-            tags: ref([
-                { text: "创始人", type: "" },
-                { text: "超级管理员", type: "" },
-                { text: "实名信息：王**(210819**)", type: "info" },
-            ]),
             form: { ...this.$store.state.user },
             grades: [
                 "保密",

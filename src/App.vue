@@ -27,7 +27,7 @@
             </el-button>
 
             <el-dropdown v-else>
-                <span class="el-dropdown-link">
+                <span class="el-dropdown-link" style="cursor: pointer">
                     {{ user.username }}
                     <i class="fal fa-angle-down"></i>
                 </span>
@@ -156,7 +156,7 @@ export default {
                     this.$store.commit("logout");
                     this.$router.push({ name: "login" });
                 })
-                .catch(() => { });
+                .catch(() => {});
         },
     },
     mounted() {

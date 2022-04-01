@@ -68,40 +68,38 @@ export default {
         onSave: {
             type: Function,
             default() {
-                return () => { };
-            }
+                return () => {};
+            },
         },
         onUploadImg: {
             type: Function,
             default() {
-                return () => { };
-            }
-        }
+                return () => {};
+            },
+        },
     },
     computed: {
         content: {
             get() {
-                return this.contentValue
+                return this.contentValue;
             },
             set(value) {
-                this.$emit('update:contentValue', value)
-            }
+                this.$emit("update:contentValue", value);
+            },
         },
         isMobile() {
             return this.$root.isMobile;
-        }
+        },
     },
     components: {
         MdEditor,
     },
     data() {
-        return {
-
-        };
+        return {};
     },
     methods: {
         processMarkdown(content) {
-            return processMd(content, true);
+            return processMd(content, !this.previewOnly);
         },
     },
 };

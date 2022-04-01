@@ -56,42 +56,34 @@
                         >
                             <template #append>
                                 <el-button type="primary" @click="doSearch">
-                                    <i class="fal fa-search"/>
+                                    <i class="fal fa-search" />
                                 </el-button>
                             </template>
                         </el-input>
                     </div>
                 </el-card>
             </el-row>
-            <el-empty description="Empty" v-show="empty">
-                <!-- <el-button plain @click="refresh">
-                    &emsp;刷&ensp;新&emsp;
-                </el-button> -->
-            </el-empty>
+            <el-empty description="Empty" v-show="empty"> </el-empty>
             <div v-if="cate === '0'">
                 <el-card
                     shadow="hover"
                     class="content-card"
                     v-for="item in myAtcs"
                     :key="item"
+                    @click="$router.push(`/article/${item.id}`)"
                 >
                     <template #header>
-                        <div class="content-card-header">
-                            <el-button
-                                type="text"
-                                style="
-                                    color: black;
-                                    font-width: 2500px;
-                                    font-size: 18px;
-                                    font-weight: bold;
-                                "
-                                @click="$router.push(`/article/${item.id}`)"
-                            >
-                                {{ item.title }}
-                            </el-button>
-                            <!-- <el-button class="button" type="text">
-                            预览
-                        </el-button> -->
+                        <div
+                            class="content-card-header"
+                            style="
+                                color: black;
+                                font-width: 2500px;
+                                font-size: 18px;
+                                font-weight: bold;
+                                cursor: pointer;
+                            "
+                        >
+                            {{ item.title }}
                         </div>
                     </template>
                     <div class="article-preview">
@@ -111,22 +103,20 @@
                     :key="item"
                 >
                     <template #header>
-                        <div class="content-card-header">
-                            <el-button
-                                type="text"
-                                style="
-                                    color: black;
-                                    font-width: 2500px;
-                                    font-size: 18px;
-                                    font-weight: bold;
-                                "
-                                @click="$router.push(`/article/${item.id}`)"
-                            >
-                                {{ item.title }}
+                        <div
+                            class="content-card-header"
+                            style="
+                                color: black;
+                                font-width: 2500px;
+                                font-size: 18px;
+                                font-weight: bold;
+                                cursor: pointer;
+                            "
+                        >
+                            {{ item.title }}
+                            <el-button class="button" type="text">
+                                取消收藏
                             </el-button>
-                            <el-button class="button" type="text"
-                                >取消收藏</el-button
-                            >
                         </div>
                     </template>
                     <div class="article-preview">
@@ -158,9 +148,6 @@
                             <el-avatar :src="item.portrait" />
                             &emsp;
                             {{ item.username }}
-                        </el-button>
-                        <el-button class="button" type="text">
-                            取消关注
                         </el-button>
                     </div>
                 </el-card>
@@ -392,7 +379,6 @@ export default {
             )
                 return;
             this.$axios.get(`/user/${now.params.uid}/`).then(res => {
-                res.yunxiao = res.yunxiao.length && res.yunxiao[0];
                 this.user = res;
             });
             this.getFunc()();
@@ -400,7 +386,6 @@ export default {
     },
     mounted() {
         this.$axios.get(`/user/${this.$route.params.uid}/`).then(res => {
-            res.yunxiao = res.yunxiao.length && res.yunxiao[0];
             this.user = res;
         });
         this.getMyAtcs();

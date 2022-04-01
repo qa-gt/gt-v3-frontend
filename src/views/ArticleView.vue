@@ -326,8 +326,6 @@ export default {
                 .then(res => {
                     res.create_time = this.$moment(res.create_time).fromNow();
                     res.update_time = this.$moment(res.update_time).fromNow();
-                    res.author.yunxiao =
-                        res.author.yunxiao.length && res.author.yunxiao[0];
                     this.atc = res;
                 })
                 .catch(err => err)

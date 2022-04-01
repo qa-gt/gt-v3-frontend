@@ -86,6 +86,7 @@
                             white-space: nowrap;
                             text-overflow: ellipsis;
                             -o-text-overflow: ellipsis;
+                            cursor: pointer;
                         "
                     >
                         {{ item.title }}
