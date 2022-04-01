@@ -126,7 +126,7 @@ export default {
                 this.$axios.patch(`/article/${atc.id}/`, atc).then(res => {
                     ElMessage.success("修改成功!");
                     this.$router.push(`/article/${res.id}`);
-                });
+                }).catch(err => err);
             } else {
                 let atc = this.atc;
                 atc._topic = atc.topic;
@@ -134,7 +134,7 @@ export default {
                 this.$axios.post("/article/", atc).then(res => {
                     ElMessage.success("提交成功!");
                     this.$router.push(`/article/${res.id}`);
-                });
+                }).catch(err => err);
             }
         },
         async uploadImage(files, callback) {
