@@ -191,14 +191,13 @@
 
 <script>
 import { ref } from "vue";
-import { mapState, mapGetters } from "vuex";
+import { mapState } from "vuex";
 import { ElMessage } from "element-plus";
 import gtUser from "@/components/gtUser.vue";
 
 export default {
     computed: {
         ...mapState(["user"]),
-        ...mapGetters(["loggedIn"]),
     },
     data() {
         return {
@@ -265,9 +264,6 @@ export default {
         },
     },
     created() {
-        if (!this.loggedIn) {
-            this.$router.push({ name: "login" });
-        }
         this.yunxiaoInfo.show = String(
             Boolean(this.user.yunxiao !== undefined ? this.user.yunxiao : true)
         );

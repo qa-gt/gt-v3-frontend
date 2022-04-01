@@ -56,9 +56,7 @@
                         >
                             <template #append>
                                 <el-button type="primary" @click="doSearch">
-                                    <el-icon style="vertical-align: middle">
-                                        <search />
-                                    </el-icon>
+                                    <i class="fal fa-search"/>
                                 </el-button>
                             </template>
                         </el-input>

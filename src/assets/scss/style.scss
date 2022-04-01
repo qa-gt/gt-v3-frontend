@@ -55,8 +55,12 @@ p {
         align-items: center;
         flex-grow: 1;
         
-        .el-icon{
-            margin-top: 2px;
+        > i{
+            margin-right: 8px;
+            font-size: 1.4rem;
+        }
+
+        .el-badge {
             margin-right: 8px;
             font-size: 1.4rem;
         }

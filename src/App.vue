@@ -1,46 +1,44 @@
 <template>
     <el-header class="header">
         <img
-            style="height: 50px; "
+            style="height: 50px"
             :src="logoLr"
             @click="$router.push({ name: 'index' })"
         />
         <div class="user">
-            <el-icon @click="$router.push({ name: 'index' })">
-                <home-filled />
-            </el-icon>
-            <el-icon @click="changeTheme()">
-                <sunny v-if="theme === 'light'" />
-                <moon v-else />
-            </el-icon>
-            <el-icon v-if="loggedIn" style="margin-top: 5px">
-                <el-badge :hidden="!haveDot" is-dot>
-                    <bell v-if="loggedIn" @click="messages()" />
-                </el-badge>
-            </el-icon>
-            <el-drawer
-                v-model="drawer"
-                title="消息列表"
-                direction="rtl"
-                :size="this.isMobile ? '75%' : '30%'"
-                :lock-scroll="false"
-            >
-                <el-scrollbar full>
-                    <p v-for="item in 20" :key="item" class="scrollbar-item">
-                        {{ item }}{{ isMobile }}
-                    </p>
-                </el-scrollbar>
-            </el-drawer>
-            <el-icon @click="$router.push('/write')">
-                <edit />
-            </el-icon>
-            <el-icon
+            <i
+                class="fal fa-home-alt"
+                @click="$router.push({ name: 'index' })"
+            />
+            <i
+                :class="['fal', theme === 'light' ? 'fa-sun' : 'fa-moon']"
+                @click="changeTheme()"
+            />
+
+            <el-badge :hidden="!haveDot" is-dot>
+                <i class="fal fa-bell" @click="messages()" style="margin-right: " />
+            </el-badge>
+
+            <i class="fal fa-comment-edit" @click="$router.push('/write')"></i>
+            <i
+                class="fal fa-user"
                 @click="$router.push('/user/' + (loggedIn ? 'edit' : 'login'))"
-            >
-                <user style="width: 1em; height: 1em" />
-            </el-icon>
+            ></i>
             <span>{{ user.username }}</span>
         </div>
+        <el-drawer
+            v-model="drawer"
+            title="消息列表"
+            direction="rtl"
+            :size="this.isMobile ? '75%' : '30%'"
+            :lock-scroll="false"
+        >
+            <el-scrollbar full>
+                <p v-for="item in 20" :key="item" class="scrollbar-item">
+                    {{ item }}{{ isMobile }}
+                </p>
+            </el-scrollbar>
+        </el-drawer>
     </el-header>
     <div
         :style="{ margin: '45px 25px 20px 25px', minHeight: `${minHeight}px` }"
@@ -64,7 +62,7 @@
             :href="`https://yiyan.yixiangzhilv.com/?id=${yiyan.uuid}`"
             target="_blank"
             :underline="false"
-            :class="footer-yiyan"
+            :class="footer - yiyan"
             v-if="!isMobile"
         >
             {{ yiyan.content }}
@@ -154,19 +152,6 @@ export default {
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
     color: #2c3e50;
-}
-
-nav {
-    padding: 30px;
-}
-
-nav a {
-    font-weight: bold;
-    color: #2c3e50;
-}
-
-nav a.router-link-exact-active {
-    color: #3287d6;
 }
 
 .scrollbar-item {

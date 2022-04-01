@@ -33,9 +33,7 @@
                                 style="float: right; margin-right: 5px"
                                 v-if="user.id === atc.author.id"
                             >
-                                <el-icon>
-                                    <Edit class="report-icon" />
-                                </el-icon>
+                                <i class="fal fa-edit" />
                                 <div>&ensp;修改文章</div>
                             </el-button>
                         </p>
@@ -58,11 +56,7 @@
                                         plain
                                         style="float: right; margin-right: 5px"
                                     >
-                                        <el-icon>
-                                            <circle-close-filled
-                                                class="report-icon"
-                                            />
-                                        </el-icon>
+                                        <i class="fal fa-trash" />
                                         <div>&ensp;删除文章</div>
                                     </el-button>
                                 </template>
@@ -81,9 +75,7 @@
                                 style="float: right; margin-right: 5px"
                                 v-if="!(user.id === atc.author.id)"
                             >
-                                <el-icon>
-                                    <Warning class="report-icon" />
-                                </el-icon>
+                                <i class="fal fa-exclamation-circle"></i>
                                 <div>&ensp;举&ensp;报</div>
                             </el-button>
                         </p>
@@ -155,15 +147,13 @@
 
                     <el-dropdown trigger="hover">
                         <el-button type="primary" style="padding: 10px">
-                            互动<el-icon style="margin-left: 10px"
-                                ><arrow-down
-                            /></el-icon>
+                            互动&emsp;<i class="fal fa-angle-down"></i>
                         </el-button>
                         <template v-slot:dropdown>
                             <el-dropdown-menu>
                                 <span>
                                     <el-dropdown-item @click="like">
-                                        <el-icon><watermelon /></el-icon>
+                                        <i class="fal fa-thumbs-up"></i>
                                         <span v-if="!liked">
                                             &ensp;吃&ensp;瓜&ensp;
                                         </span>
@@ -172,11 +162,11 @@
                                         </span>
                                     </el-dropdown-item>
                                     <el-dropdown-item @click="writeComment">
-                                        <el-icon><comment /></el-icon>
+                                        <i class="fal fa-comment-dots"></i>
                                         &ensp;评&ensp;论&ensp;
                                     </el-dropdown-item>
                                     <el-dropdown-item @click="collect">
-                                        <el-icon><star /></el-icon>
+                                        <i class="fal fa-star"></i>
                                         &ensp;收&ensp;藏&ensp;
                                     </el-dropdown-item>
                                 </span>
@@ -188,7 +178,9 @@
                 <p style="font-weight: bold; font-size: 1.1rem">吃瓜</p>
                 <el-row>
                     <div class="info-2">
-                        {{ atcLike.map(item => item.user.username).join(",") }}
+                        {{
+                            atcLike.map((item) => item.user.username).join(",")
+                        }}
                     </div>
                 </el-row>
                 <el-divider />
@@ -229,18 +221,14 @@
                                 <span class="comment comment-time">
                                     {{ $moment(item.time).fromNow() }}
                                     <el-dropdown trigger="hover">
-                                        <el-icon
+                                        <i
+                                            class="fal fa-plus"
                                             style="
                                                 margin-left: 5px;
                                                 margin-top: 4px;
+                                                color: rgb(185, 185, 185);
                                             "
-                                        >
-                                            <plus
-                                                style="
-                                                    color: rgb(185, 185, 185);
-                                                "
-                                            />
-                                        </el-icon>
+                                        ></i>
                                         <template v-slot:dropdown>
                                             <el-dropdown-menu>
                                                 <el-dropdown-item disabled>
@@ -251,17 +239,13 @@
                                                         replyCmt(item)
                                                     "
                                                 >
-                                                    <el-icon>
-                                                        <comment />
-                                                    </el-icon>
+                                                    <i class="fal fa-reply"></i>
                                                     &ensp;回&ensp;复&ensp;
                                                 </el-dropdown-item>
                                                 <el-dropdown-item
                                                     @click="report"
                                                 >
-                                                    <el-icon>
-                                                        <warning />
-                                                    </el-icon>
+                                                    <i class="fal fa-exclamation-circle"></i>
                                                     &ensp;举&ensp;报&ensp;
                                                 </el-dropdown-item>
                                             </el-dropdown-menu>
@@ -458,7 +442,7 @@ export default {
                     ElMessage.success(res.detail);
                 });
         },
-        deleteArticle() {},
+        deleteArticle() { },
     },
     watch: {
         $route(now, old) {

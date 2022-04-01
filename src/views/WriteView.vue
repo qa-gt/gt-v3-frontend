@@ -121,7 +121,7 @@
                     </el-row>
                     <el-form-item>
                         <el-button type="primary" @click="doSubmit">
-                            <el-icon><promotion /></el-icon>
+                            <i class="fal fa-paper-plane"/>
                             &emsp;提&ensp;交&ensp;
                         </el-button>
                         <el-popconfirm
@@ -149,14 +149,13 @@
 </style>
 
 <script>
-import { mapState, mapGetters } from "vuex";
+import { mapState } from "vuex";
 import gtUser from "@/components/gtUser.vue";
 import { processMd, MdEditor } from "@/plugins/markdown";
 import { ElMessage } from "element-plus";
 export default {
     computed: {
         ...mapState(["user", "uploadKey"]),
-        ...mapGetters(["loggedIn"]),
         isMobile() {
             return this.$root.isMobile;
         },
@@ -271,9 +270,6 @@ export default {
         },
     },
     created() {
-        if (!this.loggedIn) {
-            this.$router.push({ name: "login" });
-        }
         if (this.$route.query.id) {
             this.atc.id = this.$route.query.id;
             this.$axios
