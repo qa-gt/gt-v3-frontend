@@ -28,7 +28,7 @@ const store = createStore({
         },
         setUser(state, data) {
             data.gender = String(data.gender);
-            data.yunxiao = data.yunxiao && data.yunxiao[0];
+            data.yunxiao = data.yunxiao;
             state.user = data;
         },
         logout(state) {
