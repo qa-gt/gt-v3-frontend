@@ -52,14 +52,31 @@
             v-model="drawer"
             title="消息列表"
             direction="rtl"
-            :size="this.isMobile ? '75%' : '30%'"
+            :size="this.isMobile ? '75%' : '35%'"
             :lock-scroll="false"
         >
-            <el-scrollbar full>
-                <p v-for="item in 20" :key="item" class="scrollbar-item">
-                    {{ item }}{{ isMobile }}
-                </p>
+            <el-scrollbar full v-loading="loading" v-if="notices.length">
+                <el-card
+                    shadow="never"
+                    v-for="item in notices"
+                    :key="item"
+                    :style="{
+                        'box-shadow': '0 0px 0px #ffffff !important',
+                        'margin-bottom': '15px',
+                        'font-weight': item.state === 0 ? 'bold' : 'normal',
+                    }"
+                    @click="$router.push(item.url)"
+                >
+                    <template #header>
+                        {{ item.title }}
+                        <small style="float: right">
+                            {{ $moment(item.time).fromNow() }}
+                        </small>
+                    </template>
+                    {{ item.content }}
+                </el-card>
             </el-scrollbar>
+            <el-empty description="Empty" v-else />
         </el-drawer>
     </el-header>
     <div
@@ -113,14 +130,14 @@ export default {
     data() {
         return {
             title: "QA瓜田",
-            username: "test",
-            viewTransition: "slide-right-leave-active",
             drawer: false,
-            haveDot: true && false,
+            haveDot: false,
             yiyan: {},
             logoLr: logoLr,
             windowWidth: 0,
             windowHeight: 0,
+            loading: false,
+            notices: [],
         };
     },
     computed: {
@@ -139,10 +156,28 @@ export default {
             document.firstElementChild.className = this.theme;
         },
         messages() {
-            ElMessage.info("通知系统还在开发中！");
-            return;
+            if (!this.loggedIn) {
+                ElMessage.warning("请先登录");
+                this.$router.push("/user/login");
+                return;
+            }
+            this.getNotices(false);
             this.drawer = !this.drawer;
             this.haveDot = false;
+            this.$axios.post("/notice/read/");
+        },
+        getNotices(dot = true) {
+            this.loading = true;
+            this.$axios.get("/notice/").then(data => {
+                for (let i = 0; dot && i < data.length; i++) {
+                    if (data[i].state === 0) {
+                        this.haveDot = true;
+                        break;
+                    }
+                }
+                this.notices = data;
+                this.loading = false;
+            });
         },
         updateWindowSize() {
             (this.windowWidth = window.innerWidth),
@@ -158,7 +193,7 @@ export default {
                     this.$store.commit("logout");
                     this.$router.push({ name: "login" });
                 })
-                .catch(() => {});
+                .catch(err => err);
         },
     },
     mounted() {
@@ -181,6 +216,8 @@ export default {
             }
             this.yiyan = res;
         });
+        this.getNotices();
+        setInterval(this.getNotices, 120000);
     },
 };
 </script>

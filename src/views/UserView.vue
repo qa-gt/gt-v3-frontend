@@ -325,7 +325,6 @@ export default {
                 .then(data => {
                     this.pageInfo.total = data.count;
                     data = data.results.map(e => e.article);
-                    console.log(data);
                     this.myClts = data;
                     this.empty = this.myClts.length === 0;
                 })
