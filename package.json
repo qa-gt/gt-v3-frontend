@@ -8,7 +8,6 @@
     "lint": "vite lint"
   },
   "dependencies": {
-    "@fingerprintjs/fingerprintjs-pro": "^3.6.0",
     "@vue/compiler-sfc": "^3.0.4",
     "assert": "^2.0.0",
     "axios": "^0.26.1",

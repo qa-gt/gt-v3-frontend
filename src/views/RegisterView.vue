@@ -60,10 +60,7 @@
 
 <script>
 import { ElMessage, ElLoading } from "element-plus";
-import FingerprintJS from '@fingerprintjs/fingerprintjs-pro'
 import { mapState } from "vuex";
-
-const fpPromise = FingerprintJS.load({ apiKey: 'EEzi690lZJzNBNJMlH12', region: 'ap', endpoint: 'https://fpjs.yxzl.top' });
 
 export default {
     computed: {
@@ -93,14 +90,11 @@ export default {
             await this.$recaptchaLoaded();
             const token = await this.$recaptcha("register");
 
-            const visitorId = await fpPromise.then(fp => fp.get()).then(result => result.visitorId)
-
             this.$axios
                 .post("/user/register", {
                     username: this.username,
                     password: this.password,
                     recaptcha: token,
-                    visitorId: visitorId,
                 })
                 .then(res => {
                     this.$store.commit("setJwt", res.token);
