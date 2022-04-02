@@ -167,6 +167,7 @@ export default {
             this.$axios.post("/notice/read/");
         },
         getNotices(dot = true) {
+            if (!this.loggedIn) return;
             this.loading = true;
             this.$axios.get("/notice/").then(data => {
                 for (let i = 0; dot && i < data.length; i++) {
