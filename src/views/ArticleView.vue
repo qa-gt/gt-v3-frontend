@@ -159,7 +159,12 @@
                                     </el-dropdown-item>
                                     <el-dropdown-item @click="collect">
                                         <i class="fal fa-star"></i>
-                                        &ensp;收&ensp;藏&ensp;
+                                        <span v-if="!atc.collected">
+                                            &ensp;吃&ensp;瓜&ensp;
+                                        </span>
+                                        <span v-else>
+                                            &ensp;取&ensp;消&ensp;
+                                        </span>
                                     </el-dropdown-item>
                                 </span>
                             </el-dropdown-menu>
@@ -402,7 +407,7 @@ export default {
         },
         async commentSubmit() {
             if (this.comment.trim() === "") {
-                ElMessage.error("评论不能为空!");
+                ElMessage.error("评论不能为空！");
                 return;
             }
 
@@ -417,7 +422,9 @@ export default {
                     recaptcha: token
                 })
                 .then(() => {
-                    ElMessage.success("评论成功!");
+                    ElMessage.success(
+                        (this.reply.status ? "回复" : "评论") + "成功！"
+                    );
                     this.refresh();
                     this.comment = "";
                     setTimeout(() => {
@@ -472,16 +479,29 @@ export default {
                 ElMessage.warning("请先登录");
                 return;
             }
-            this.$axios
-                .post("/collect/", {
-                    article: this.$route.params.aid,
-                })
-                .then(res => {
-                    ElMessage.success(res.detail);
-                })
-                .catch(err => err);
+            if (!this.atc.collected) {
+                this.$axios
+                    .post("/collect/", {
+                        article: this.$route.params.aid,
+                    })
+                    .then(res => {
+                        ElMessage.success(res.detail);
+                    })
+                    .catch(err => err);
+            } else {
+                this.$axios
+                    .delete(`/collect/0/`, {
+                        params: { article: this.$route.params.aid },
+                    })
+                    .then(res => {
+                        ElMessage.success(res.detail);
+                    })
+                    .catch(err => err);
+            }
         },
-        deleteArticle() { },
+        deleteArticle() {
+            ElMessage.warning("删除功能暂未开通");
+        },
     },
     watch: {
         $route(now, old) {
@@ -489,7 +509,8 @@ export default {
                 now.name !== "article" ||
                 !now.params.aid ||
                 old.params.aid === now.params.aid
-            ) return;
+            )
+                return;
             this.init();
         },
     },

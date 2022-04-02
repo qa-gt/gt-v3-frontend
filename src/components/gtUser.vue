@@ -6,7 +6,7 @@
                     :size="40"
                     :src="user.portrait || circleUrl"
                     fit="cover"
-                    style="vertical-align: middle"
+                    style="vertical-align: middle; cursor: pointer"
                     @click="$router.push('/user/' + user.id)"
                 />&emsp;
                 <div
@@ -17,6 +17,7 @@
                         word-break: break-all;
                         vertical-align: middle;
                         max-width: 120px;
+                        cursor: pointer;
                     "
                     @click="$router.push('/user/' + user.id)"
                 >
@@ -33,7 +34,7 @@
                     "
                     v-if="showFollow"
                 >
-                    关&ensp;注
+                    {{ !followed ? "关&ensp;注" : "取&ensp;关" }}
                 </el-button>
             </div>
         </template>
@@ -51,7 +52,7 @@
                 <el-tag
                     v-for="tag in user.tags.split(' ')"
                     :key="tag"
-                    style="margin: 2px 2px !important"
+                    style="margin: 2px 2px"
                     :type="tag.type"
                 >
                     {{ tag }}
@@ -59,7 +60,7 @@
             </p>
             <p v-if="user.yunxiao" style="margin-top: -8px">
                 <b>实名: &ensp;</b>
-                <el-tag type="info" style="margin: 3px 0px !important">
+                <el-tag type="info" style="margin: 3px 0px">
                     {{ user.yunxiao }}
                 </el-tag>
             </p>
@@ -106,13 +107,38 @@ export default {
 
             data: "",
             show: true,
+            followed: false,
         };
     },
     methods: {
         follow() {
-            this.$axios.post(`/user/${this.user.id}/follow/`).then(res => {
-                this.$message.success(res.detail);
-            });
+            if (!this.$store.state.jwt) {
+                this.$message.warning("请先登录");
+                return;
+            }
+            if (!this.followed) {
+                this.$axios.post(`/user/${this.user.id}/follow/`).then(res => {
+                    this.$message.success(res.detail);
+                    this.followed = true;
+                });
+            } else {
+                this.$axios
+                    .post(`/user/${this.user.id}/unfollow/`)
+                    .then(res => {
+                        this.$message.success(res.detail);
+                        this.followed = false;
+                    });
+            }
+        },
+    },
+    watch: {
+        user(val) {
+            if (val.id) {
+                this.show = true;
+            } else {
+                this.show = false;
+            }
+            this.followed = val.followed;
         },
     },
     mounted() {

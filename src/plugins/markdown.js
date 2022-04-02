@@ -23,8 +23,21 @@ const katexTag = [
     "mtr",
     "mtd",
     "msub",
+    "msup",
     "span",
     "mover",
+    "munder",
+    "munderover",
+    "munderm",
+    "mrow",
+    "columnspacing",
+    "rowspacing",
+    "columnalign",
+    "rowalign",
+    "columnwidth",
+    "rowlines",
+    "columnlines",
+    "mpadded",
 ];
 const katexAttr = [
     "xmlns",
@@ -35,6 +48,33 @@ const katexAttr = [
     "style",
     "fence",
     "accent",
+    "scriptlevel",
+    "mathcolor",
+    "mathbackground",
+    "mathsize",
+    "width",
+    "height",
+    "depth",
+    "lspace",
+    "voffset",
+    "hoffset",
+    "mathvariant",
+    "displaystyle",
+    "scriptsizemultiplier",
+    "scriptminsize",
+    "infixlinebreakstyle",
+    "linebreakmultchar",
+    "lineleading",
+    "linebreakstyle",
+    "indentalign",
+    "indentshift",
+    "indenttarget",
+    "indentalignfirst",
+    "indentshiftfirst",
+    "indentalignlast",
+    "indentshiftlast",
+    "eolhstyle",
+    "stretchy",
 ];
 const cssSize = [/^[-+]?[0-9]*\.?[0-9]+(?:px|em|rem|%)$/];
 
@@ -55,6 +95,10 @@ let sanitizeData = {
         "*": {
             width: cssSize,
             height: cssSize,
+            "max-width": cssSize,
+            "max-height": cssSize,
+            "min-width": cssSize,
+            "min-height": cssSize,
             color: [
                 /^#(0x)?[0-9a-f]+$/i,
                 /^rgb\(\s*(\d)\s*,\s*(\d)\s*,\s*(\d)\s*\)$/,
@@ -88,6 +132,7 @@ let sanitizeData = {
 };
 for (let tag of katexTag) {
     sanitizeData.allowedAttributes[tag] = katexAttr;
+    // sanitizeData.allowedAttributes[tag] = ["*"];
 }
 
 const cleanMd = text => sanitizeHtml(text, sanitizeData);

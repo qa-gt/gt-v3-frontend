@@ -96,7 +96,7 @@ export default {
     },
     components: {
         gtUser,
-        gtMdEditor
+        gtMdEditor,
     },
     data() {
         return {
@@ -118,6 +118,11 @@ export default {
             ) {
                 ElMessage.error("标题或正文不能为空");
                 return;
+            } else if (this.atc.content.length > 10000) {
+                ElMessage.error(
+                    "正文内容不能超过10000字符！如果确有需要请与管理员联系申请。"
+                );
+                return;
             }
 
             await this.$recaptchaLoaded();
@@ -129,15 +134,23 @@ export default {
             atc.recaptcha = token;
 
             if (this.atc.exist) {
-                this.$axios.patch(`/article/${atc.id}/`, atc).then(res => {
-                    ElMessage.success("修改成功!");
-                    this.$router.push(`/article/${res.id}`);
-                }).catch(err => err);
+                this.$axios
+                    .patch(`/article/${atc.id}/`, atc)
+                    .then(res => {
+                        ElMessage.success("修改成功！");
+                        this.$router.push(`/article/${res.id}`);
+                    })
+                    .catch(err => err);
             } else {
-                this.$axios.post("/article/", atc).then(res => {
-                    ElMessage.success("提交成功!");
-                    this.$router.push(`/article/${res.id}`);
-                }).catch(err => err);
+                console.log(atc);
+                this.$axios
+                    .post("/article/", atc)
+                    .then(res => {
+                        ElMessage.success("提交成功！");
+                        console.log(res);
+                        this.$router.push(`/article/${res.id}`);
+                    })
+                    .catch(err => err);
             }
         },
         async uploadImage(files, callback) {
@@ -159,7 +172,7 @@ export default {
                     .post("/utils/upload_key")
                     .then(res => res.data);
                 if (!res.Credentials) {
-                    ElMessage.error("上传未授权!");
+                    ElMessage.error("上传未授权！");
                     return;
                 }
                 this.$store.commit("setUploadKey", res);
@@ -185,11 +198,11 @@ export default {
                 });
             s3Upload.send(err => {
                 if (err) {
-                    ElMessage.error("上传失败!");
+                    ElMessage.error("上传失败！");
                     return;
                 } else {
                     callback([`https://gtcdn.yxzl.top/${fileKey}/30`]);
-                    ElMessage.success("上传成功!");
+                    ElMessage.success("上传成功！");
                 }
             });
         },
@@ -198,7 +211,7 @@ export default {
             ElMessage.info("已取消");
         },
         save() {
-            ElMessage.info("草稿保存功能正在开发中, 敬请期待!");
+            ElMessage.info("草稿保存功能正在开发中, 敬请期待！");
         },
     },
     created() {
