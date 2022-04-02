@@ -125,6 +125,7 @@
 import { ElMessage, ElMessageBox } from "element-plus";
 import { mapState, mapGetters } from "vuex";
 import logoLr from "@/assets/img/logo-lr.png";
+import "@/assets/js/dev-guard";
 
 export default {
     data() {
@@ -209,6 +210,7 @@ export default {
     },
     created() {
         document.firstElementChild.className = this.theme;
+        if (import.meta.env.DEV) window.STOP_DEV_GUARD = true;
         this.$axios.get("https://yiyan.yixiangzhilv.com/get").then(res => {
             if (res.from_who && res.from) {
                 res.from_show = `${res.from} · ${res.from_who}`;
