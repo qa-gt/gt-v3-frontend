@@ -142,12 +142,10 @@ export default {
                     })
                     .catch(err => err);
             } else {
-                console.log(atc);
                 this.$axios
                     .post("/article/", atc)
                     .then(res => {
                         ElMessage.success("提交成功！");
-                        console.log(res);
                         this.$router.push(`/article/${res.id}`);
                     })
                     .catch(err => err);
@@ -193,9 +191,7 @@ export default {
                     Body: file,
                     ContentType: file.type,
                 })
-                .on("httpUploadProgress", evt => {
-                    console.log(evt);
-                });
+                .on("httpUploadProgress", evt => {});
             s3Upload.send(err => {
                 if (err) {
                     ElMessage.error("上传失败！");
@@ -228,7 +224,6 @@ export default {
                 .catch(err => err);
         }
         this.$axios.get("/topic/", { params: { min_state: 0 } }).then(data => {
-            // this.topics = data.results;
             this.topics = data;
         });
     },

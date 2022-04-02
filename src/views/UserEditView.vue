@@ -253,12 +253,10 @@ export default {
             this.$router.go(-1);
         },
         confirmYunxiao() {
-            console.log(this.yunxiaoInfo);
             this.$axios
                 .post("/user/yunxiao_auth/", this.yunxiaoInfo)
                 .then(res => {
                     ElMessage.success("提交成功");
-                    console.log(res);
                     this.$store.commit("setUser", res.user);
                     this.$store.commit("setUser", res.user);
                 });

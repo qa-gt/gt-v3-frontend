@@ -143,14 +143,12 @@ const extMd = (text, writing = false) => {
         text = text.replaceAll(
             /!!!MUSIC-(WYY|QQ)-(ID|NAME):(.*?)!!!/g,
             match => {
-                console.log(match);
                 return `${match}&emsp;<small style="color: rgb(200, 200, 200)">为减小服务器压力，编辑时音乐不会渲染</small>`;
             }
         );
         text = text.replace(
             /!!!(AUDIO|VIDEO|BILIBILI):(.*?)!!!/g,
             (match, p1, p2) => {
-                console.log(typeof p1, nameMap, nameMap.p1);
                 return `${match}&emsp;<small style="color: rgb(200, 200, 200)">为减小服务器压力，编辑时${nameMap[p1]}不会渲染</small>`;
             }
         );
