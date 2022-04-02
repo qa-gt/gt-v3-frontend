@@ -183,7 +183,7 @@ export default {
                         page: this.pageInfo.num,
                         topic: topic,
                         search: this.searchText,
-                        ordering: "-state",
+                        ordering: "-state,-create_time",
                     },
                 })
                 .then(data => {
