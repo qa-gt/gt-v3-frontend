@@ -17,12 +17,18 @@
                     <el-collapse-item class="articleInfo">
                         <template #title>
                             <h2 class="overflow" style="float: left">
+                                <template v-if="atc.top">【置顶】</template>
                                 {{ atc.title }}
                             </h2>
                         </template>
-                        <p>标&emsp;&emsp;题&emsp;{{ atc.title }}</p>
                         <p>
-                            话&emsp;&emsp;题&emsp;{{ atc.topic.name }}
+                            标&emsp;&emsp;题&emsp;
+                            <template v-if="atc.top">【置顶】</template>
+                            {{ atc.title }}
+                        </p>
+                        <p>
+                            话&emsp;&emsp;题&emsp;
+                            {{ atc.topic.name }}
                             <el-button
                                 type="primary"
                                 size="small"
@@ -37,9 +43,13 @@
                                 <div>&ensp;修改文章</div>
                             </el-button>
                         </p>
-                        <p>作&emsp;&emsp;者&emsp;{{ atc.author.username }}</p>
                         <p>
-                            发布时间&emsp;{{ atc.create_time }}
+                            作&emsp;&emsp;者&emsp;
+                            {{ atc.author.username }}
+                        </p>
+                        <p>
+                            发布时间&emsp;
+                            {{ atc.create_time }}
                             <el-popconfirm
                                 confirm-button-text="确定删除"
                                 cancel-button-text="我再想想"
@@ -62,10 +72,17 @@
                                 </template>
                             </el-popconfirm>
                         </p>
-                        <p>更新时间&emsp;{{ atc.update_time }}</p>
-                        <p>阅读人数&emsp;{{ atc.read_count }}</p>
                         <p>
-                            文章&ensp;ID&ensp;&emsp;{{ atc.id }}
+                            更新时间&emsp;
+                            {{ atc.update_time }}
+                        </p>
+                        <p>
+                            阅读人数&emsp;
+                            {{ atc.read_count }}
+                        </p>
+                        <p>
+                            文章&emsp;ID&emsp;
+                            {{ atc.id }}
                             <el-button
                                 type="danger"
                                 size="small"
@@ -81,10 +98,7 @@
                     </el-collapse-item>
                 </el-collapse>
                 <el-divider style="margin-top: 10px" />
-                <gt-md-editor
-                    :modelValue="atc.content"
-                    :previewOnly="true"
-                />
+                <gt-md-editor :modelValue="atc.content" :previewOnly="true" />
             </el-card>
             <br /><br />
             <el-card shadow="hover" class="comments-card">
@@ -156,7 +170,9 @@
                 <p style="font-weight: bold; font-size: 1.1rem">吃瓜</p>
                 <el-row>
                     <div class="info-2">
-                        {{ atcLike.map(item => item.user.username).join(", ") }}
+                        {{
+                            atcLike.map((item) => item.user.username).join(", ")
+                        }}
                     </div>
                 </el-row>
                 <el-divider />
@@ -189,7 +205,6 @@
                                         : '20px',
                                 }"
                             >
-
                                 <div class="comment-title">
                                     <span class="comment comment-user">
                                         {{ item.author.username }}
@@ -222,13 +237,20 @@
                                                             replyCmt(item)
                                                         "
                                                     >
-                                                        <i class="fal fa-reply"></i>
+                                                        <i
+                                                            class="fal fa-reply"
+                                                        ></i>
                                                         &ensp;回&ensp;复&ensp;
                                                     </el-dropdown-item>
                                                     <el-dropdown-item
                                                         @click="report"
                                                     >
-                                                        <i class="fal fa-exclamation-circle"></i>
+                                                        <i
+                                                            class="
+                                                                fal
+                                                                fa-exclamation-circle
+                                                            "
+                                                        ></i>
                                                         &ensp;举&ensp;报&ensp;
                                                     </el-dropdown-item>
                                                 </el-dropdown-menu>
@@ -326,7 +348,6 @@ export default {
                 .then(res => {
                     res.create_time = this.$moment(res.create_time).fromNow();
                     res.update_time = this.$moment(res.update_time).fromNow();
-                    res.author.yunxiao = res.author.yunxiao;
                     this.atc = res;
                 })
                 .then(() => setTimeout(loading.close, 100))
@@ -379,16 +400,21 @@ export default {
             }
             ElMessage.warning("举报功能暂未开通");
         },
-        commentSubmit() {
+        async commentSubmit() {
             if (this.comment.trim() === "") {
                 ElMessage.error("评论不能为空!");
                 return;
             }
+
+            await this.$recaptchaLoaded();
+            const token = await this.$recaptcha("write");
+            
             this.$axios
                 .post("/comment/", {
                     article: this.$route.params.aid,
                     content: this.comment,
                     reply: (this.reply.status && this.reply.id) || "",
+                    recaptcha: token
                 })
                 .then(() => {
                     ElMessage.success("评论成功!");

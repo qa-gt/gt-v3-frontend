@@ -111,7 +111,7 @@ export default {
         };
     },
     methods: {
-        doSubmit() {
+        async doSubmit() {
             if (
                 this.atc.title.trim() === "" ||
                 this.atc.content.trim() === ""
@@ -119,18 +119,21 @@ export default {
                 ElMessage.error("标题或正文不能为空");
                 return;
             }
+
+            await this.$recaptchaLoaded();
+            const token = await this.$recaptcha("write");
+
+            let atc = this.atc;
+            atc._topic = atc.topic;
+            delete atc.topic;
+            atc.recaptcha = token;
+
             if (this.atc.exist) {
-                let atc = this.atc;
-                atc._topic = atc.topic;
-                delete atc.topic;
                 this.$axios.patch(`/article/${atc.id}/`, atc).then(res => {
                     ElMessage.success("修改成功!");
                     this.$router.push(`/article/${res.id}`);
                 }).catch(err => err);
             } else {
-                let atc = this.atc;
-                atc._topic = atc.topic;
-                delete atc.topic;
                 this.$axios.post("/article/", atc).then(res => {
                     ElMessage.success("提交成功!");
                     this.$router.push(`/article/${res.id}`);

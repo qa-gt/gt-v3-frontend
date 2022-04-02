@@ -88,6 +88,7 @@
                             -o-text-overflow: ellipsis;
                         "
                     >
+                        <template v-if="item.top">【置顶】</template>
                         {{ item.title }}
                     </div>
                 </template>
@@ -177,10 +178,11 @@ export default {
             this.$axios
                 .get("/article/", {
                     params: {
-                        min_state: 0,
+                        state__in: topic === "" ? "3,0" : "3,2,0",
                         page: this.pageInfo.num,
                         topic: topic,
                         search: this.searchText,
+                        ordering: "-state",
                     },
                 })
                 .then(data => {
