@@ -70,7 +70,7 @@
                         />
                     </el-form-item>
                     <el-form-item label="头像">
-                        <el-input v-model="form.portrait" />
+                        <el-input v-model="form.portrait" maxlength="200"/>
                     </el-form-item>
                     <br />
                     <el-form-item>
