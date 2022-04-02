@@ -60,6 +60,7 @@
                             placeholder=""
                             v-model="form.email"
                             maxlength="70"
+                            show-word-limit
                         />
                     </el-form-item>
                     <el-form-item label="pushplus token">
@@ -70,7 +71,11 @@
                         />
                     </el-form-item>
                     <el-form-item label="头像">
-                        <el-input v-model="form.portrait" maxlength="200"/>
+                        <el-input
+                            v-model="form.portrait"
+                            maxlength="200"
+                            show-word-limit
+                        />
                     </el-form-item>
                     <br />
                     <el-form-item>

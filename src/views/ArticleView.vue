@@ -175,9 +175,7 @@
                 <p style="font-weight: bold; font-size: 1.1rem">吃瓜</p>
                 <el-row>
                     <div class="info-2">
-                        {{
-                            atcLike.map((item) => item.user.username).join(", ")
-                        }}
+                        {{ atcLike.map(item => item.user.username).join(", ") }}
                     </div>
                 </el-row>
                 <el-divider />
@@ -251,10 +249,7 @@
                                                         @click="report"
                                                     >
                                                         <i
-                                                            class="
-                                                                fal
-                                                                fa-exclamation-circle
-                                                            "
+                                                            class="fal fa-exclamation-circle"
                                                         ></i>
                                                         &ensp;举&ensp;报&ensp;
                                                     </el-dropdown-item>
@@ -413,13 +408,13 @@ export default {
 
             await this.$recaptchaLoaded();
             const token = await this.$recaptcha("write");
-            
+
             this.$axios
                 .post("/comment/", {
                     article: this.$route.params.aid,
                     content: this.comment,
                     reply: (this.reply.status && this.reply.id) || "",
-                    recaptcha: token
+                    recaptcha: token,
                 })
                 .then(() => {
                     ElMessage.success(

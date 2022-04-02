@@ -184,7 +184,10 @@ export default {
                     Bucket: bucket.s3Bucket,
                 },
             });
-            const fileKey = res.scope.replace("*", file.name);
+            const fileKey = res.scope.replace(
+                "*",
+                String(new Date().getTime()) + file.name
+            );
             let s3Upload = s3
                 .upload({
                     Key: fileKey,
