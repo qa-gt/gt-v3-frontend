@@ -92,6 +92,7 @@
             </el-popconfirm>
           </el-form-item>
         </el-form>
+
         <el-divider />
 
         <h2>实名认证</h2>
@@ -100,28 +101,30 @@
           <div v-if="user.yunxiao !== null" style="margin-bottom: 20px">
             实名信息：已认证 · {{ user.yunxiao || "已隐藏" }}
           </div>
-          <div
-            style="color: #c11700; margin-bottom: 20px"
-            v-if="user.yunxiao === null"
-          >
-            此实名信息提交后将不可更改（展示状态除外），请慎重填写！
-          </div>
-          <el-form-item label="爱云校账号" v-if="user.yunxiao === null">
-            <el-input
-              v-model="yunxiaoInfo.student_id"
-              maxlength="30"
-              placeholder="冒充他人认证可能会被封号"
-            />
-          </el-form-item>
-          <el-form-item label="爱云校密码" v-if="user.yunxiao === null">
-            <el-input
-              v-model="yunxiaoInfo.password"
-              type="password"
-              maxlength="50"
-              show-password
-              placeholder="仅用于验证, 不会被保存"
-            />
-          </el-form-item>
+          <template v-else>
+            <div
+              style="color: #c11700; margin-bottom: 20px"
+              v-if="user.yunxiao === null"
+            >
+              此实名信息提交后将不可更改（展示状态除外），请慎重填写！
+            </div>
+            <el-form-item label="爱云校账号">
+              <el-input
+                v-model="yunxiaoInfo.student_id"
+                maxlength="30"
+                placeholder="冒充他人认证可能会被封号"
+              />
+            </el-form-item>
+            <el-form-item label="爱云校密码">
+              <el-input
+                v-model="yunxiaoInfo.password"
+                type="password"
+                maxlength="50"
+                show-password
+                placeholder="仅用于验证, 不会被保存"
+              />
+            </el-form-item>
+          </template>
           <el-form-item label="是否公开展示">
             <el-switch
               v-model="yunxiaoInfo.show"
@@ -153,6 +156,34 @@
               更新实名信息
             </el-button>
           </el-form-item>
+        </el-form>
+
+        <el-divider />
+
+        <h2>微信认证</h2>
+        {{ weChat }}
+        <el-form label-position="top" label-width="120px">
+          <div v-if="user.wechat !== null" style="margin-bottom: 20px">
+            微信状态：已认证
+          </div>
+          <template v-else>
+            <div
+              style="color: #c11700; margin-bottom: 20px"
+            >
+              此认证信息提交后将不可更改！
+            </div>
+            <el-form-item>
+              <qrcode-vue :value="wechatQrCode" :size="250" level="H" v-if="wechatQrCode" />
+            </el-form-item>
+            <el-form-item>
+              <el-button
+                type="primary"
+                @click="getWeChatCode"
+              >
+                开始认证
+            </el-button>
+            </el-form-item>
+          </template>
         </el-form>
       </el-card>
     </el-col>
@@ -188,6 +219,7 @@
 <script>
 import { mapState } from "vuex";
 import { ElMessage } from "element-plus";
+import QrcodeVue from 'qrcode.vue';
 import gtUser from "@/components/gtUser.vue";
 
 export default {
@@ -223,6 +255,8 @@ export default {
         password: "",
         show: "true",
       },
+      wechatQrCode: '',
+      wechatChecker: undefined,
       disabled: {
         save: true,
       },
@@ -230,6 +264,7 @@ export default {
   },
   components: {
     gtUser,
+    QrcodeVue
   },
   methods: {
     confirm() {
@@ -251,11 +286,34 @@ export default {
       this.$router.go(-1);
     },
     confirmYunxiao() {
-      this.$axios.post("/user/yunxiao_auth/", this.yunxiaoInfo).then((res) => {
-        ElMessage.success("提交成功");
-        this.$store.commit("setUser", res.user);
-        this.$store.commit("setUser", res.user);
-      });
+      this.$axios.post("/user/yunxiao_auth/", this.yunxiaoInfo)
+        .then(res => {
+          this.$store.commit("setUser", res.user);
+          ElMessage.success("提交成功");
+        });
+    },
+    async getWeChatCode(){
+      clearInterval(this.wechatChecker);
+      const res = await this.$axios.get("/user/wechat_auth/", {
+        params: {
+          qrcode: true
+        }
+      }, this.yunxiaoInfo)
+      this.wechatQrCode = res.data.qrCode;
+      this.wechatChecker = setInterval(()=> {
+        this.$axios.get("/user/wechat_auth/", {
+          params: {
+            tempUID: res.data.tempUserId
+          }
+        }, this.yunxiaoInfo)
+          .then(res => {
+            if (res.detail === 'success') {
+              clearInterval(this.wechatChecker);
+              this.$store.commit("setUser", res.user);
+              ElMessage.success("提交成功");
+            }
+          })
+        }, 2000);
     },
   },
   created() {
