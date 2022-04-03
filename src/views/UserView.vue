@@ -193,7 +193,7 @@
             />
             <el-pagination
                 layout="prev, pager, next"
-                v-model="pageInfo.num"
+                v-model:current-page="pageInfo.num"
                 :total="pageInfo.total"
                 :page-size="pageInfo.size"
                 :pager-count="5"
