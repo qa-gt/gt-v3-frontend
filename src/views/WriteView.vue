@@ -54,7 +54,7 @@
                         </el-col>
                     </el-row>
                     <el-form-item>
-                        <el-button type="primary" @click="doSubmit">
+                        <el-button type="primary" @click="doSubmit" :disabled="disabled.submit">
                             <i class="fal fa-paper-plane" />
                             &emsp;提&ensp;交&ensp;
                         </el-button>
@@ -108,10 +108,12 @@ export default {
                 topic: "",
             },
             topics: [],
+            disabled: { submit: false }
         };
     },
     methods: {
         async doSubmit() {
+            this.disabled.submit = true;
             if (
                 this.atc.title.trim() === "" ||
                 this.atc.content.trim() === ""
@@ -150,6 +152,7 @@ export default {
                     })
                     .catch(err => err);
             }
+            this.disabled.submit = false;
         },
         async uploadImage(files, callback) {
             const file = files[0];
