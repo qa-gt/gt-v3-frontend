@@ -161,7 +161,7 @@
                                     <el-dropdown-item @click="collect">
                                         <i class="fal fa-star"></i>
                                         <span v-if="!atc.collected">
-                                            &ensp;吃&ensp;瓜&ensp;
+                                            &ensp;收&ensp;藏&ensp;
                                         </span>
                                         <span v-else>
                                             &ensp;取&ensp;消&ensp;
