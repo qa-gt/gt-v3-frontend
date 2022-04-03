@@ -132,6 +132,7 @@
                         style="padding: 10px; margin-right: 5px"
                         v-show="showComment"
                         @click="commentSubmit"
+                        :disabled="!comment || disabled.comment"
                     >
                         发表<span v-if="!reply.status">评论</span>
                         <span v-else>回复</span>
@@ -315,6 +316,7 @@ export default {
             comment: "",
             reply: { status: false, id: 0, username: "" },
             pageInfo: { total: 0, num: 1, size: 20, loading: false },
+            disabled: { comment: false },
         };
     },
     computed: {
@@ -405,7 +407,7 @@ export default {
                 ElMessage.error("评论不能为空！");
                 return;
             }
-
+            this.disabled.comment = true;
             await this.$recaptchaLoaded();
             const token = await this.$recaptcha("write");
 
@@ -426,7 +428,10 @@ export default {
                         this.writeComment();
                     }, 100);
                 })
-                .catch(err => err);
+                .catch(err => err)
+                .then(() => {
+                    this.disabled.comment = false;
+                });
         },
         writeComment() {
             if (!this.loggedIn) {
