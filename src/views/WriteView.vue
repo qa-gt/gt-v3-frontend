@@ -54,7 +54,7 @@
                         </el-col>
                     </el-row>
                     <el-form-item>
-                        <el-button type="primary" @click="doSubmit">
+                        <el-button type="primary" @click="doSubmit" :disabled="disabled.submit">
                             <i class="fal fa-paper-plane" />
                             &emsp;提&ensp;交&ensp;
                         </el-button>
@@ -108,20 +108,24 @@ export default {
                 topic: "",
             },
             topics: [],
+            disabled: { submit: false }
         };
     },
     methods: {
         async doSubmit() {
+            this.disabled.submit = true;
             if (
                 this.atc.title.trim() === "" ||
                 this.atc.content.trim() === ""
             ) {
                 ElMessage.error("标题或正文不能为空");
+                this.disabled.submit = false;
                 return;
             } else if (this.atc.content.length > 10000) {
                 ElMessage.error(
                     "正文内容不能超过10000字符！如果确有需要请与管理员联系申请。"
                 );
+                this.disabled.submit = false;
                 return;
             }
 
@@ -141,6 +145,7 @@ export default {
                         this.$router.push(`/article/${res.id}`);
                     })
                     .catch(err => err);
+                    this.disabled.submit = false;
             } else {
                 this.$axios
                     .post("/article/", atc)
@@ -149,7 +154,11 @@ export default {
                         this.$router.push(`/article/${res.id}`);
                     })
                     .catch(err => err);
+                    this.disabled.submit = false;
             }
+            
+            //setTimeout(() => this.disabled.submit = false, 3000);
+            
         },
         async uploadImage(files, callback) {
             const file = files[0];
