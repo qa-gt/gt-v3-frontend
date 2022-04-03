@@ -163,7 +163,7 @@
         <h2>微信认证</h2>
         {{ weChat }}
         <el-form label-position="top" label-width="120px">
-          <div v-if="user.wechat !== null" style="margin-bottom: 20px">
+          <div v-if="user.wechat" style="margin-bottom: 20px">
             微信状态：已认证
           </div>
           <template v-else>
