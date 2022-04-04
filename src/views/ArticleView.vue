@@ -176,7 +176,22 @@
                 <p style="font-weight: bold; font-size: 1.1rem">吃瓜</p>
                 <el-row>
                     <div class="info-2">
-                        {{ atcLike.map(item => item.user.username).join(", ") }}
+                        <span v-for="item in atcLike" :key="item.user.id">
+                            <span
+                                @click="
+                                    this.$router.push(`/user/${item.user.id}`)
+                                "
+                                style="cursor: pointer"
+                                >{{ item.user.username }}</span
+                            ><span
+                                v-if="
+                                    item.user.id !==
+                                    atcLike[atcLike.length - 1].user.id
+                                "
+                                >,&ensp;</span
+                            >
+                        </span>
+                        <!-- {{ atcLike.map(item => item.user.username).join(", ") }} -->
                     </div>
                 </el-row>
                 <el-divider />
@@ -197,7 +212,10 @@
                         >
                             <img
                                 :src="item.author.portrait"
-                                style="width: 100%"
+                                style="cursor: pointer; width: 100%"
+                                @click="
+                                    this.$router.push(`/user/${item.author.id}`)
+                                "
                             />
                         </el-col>
                         <el-col :xs="20" :sm="21" :md="22" :lg="23" :xl="23">
@@ -210,7 +228,15 @@
                                 }"
                             >
                                 <div class="comment-title">
-                                    <span class="comment comment-user">
+                                    <span
+                                        class="comment comment-user"
+                                        style="cursor: pointer"
+                                        @click="
+                                            this.$router.push(
+                                                `/user/${item.author.id}`
+                                            )
+                                        "
+                                    >
                                         {{ item.author.username }}
                                     </span>
                                     <span
@@ -218,7 +244,16 @@
                                         v-if="item.reply"
                                     >
                                         &ensp;回复&ensp;
-                                        {{ item.reply.author.username }}
+                                        <span
+                                            style="cursor: pointer"
+                                            @click="
+                                                this.$router.push(
+                                                    `/user/${item.reply.author.id}`
+                                                )
+                                            "
+                                        >
+                                            {{ item.reply.author.username }}
+                                        </span>
                                     </span>
                                     <span class="comment comment-time">
                                         {{ $moment(item.time).fromNow() }}
