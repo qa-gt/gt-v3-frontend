@@ -28,9 +28,6 @@
                             >修改密码</el-button
                         >
                     </el-form-item>
-                    <!-- <el-form-item label="真实姓名">
-            <el-input placeholder="请输入" v-model="form.name" maxlength="5" />
-          </el-form-item> -->
                     <el-form-item label="年级">
                         <el-select
                             v-model="form.grade"
