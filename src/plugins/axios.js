@@ -4,14 +4,14 @@ import { store } from "@/store";
 import { ElMessage } from "element-plus";
 import "@/assets/js/go";
 import WasmLoader from "@/assets/js/wasm-loader";
-import WebGuard from  "@/assets/wasm/guard.wasm?url";
+import WebGuard from "@/assets/wasm/guard.wasm?url";
 
 const go = new window.Go();
 
 (async () => {
     const wasmModule = await WasmLoader(WebGuard, go.importObject);
     go.run(wasmModule.instance);
-})()
+})();
 
 export const Axios = axios.create({
     baseURL: import.meta.env.PROD ? "https://gtapi.yxzl.top" : "/api",
@@ -69,10 +69,9 @@ Axios.interceptors.response.use(
             ElMessage.error("403错误: 身份校验失败");
             return Promise.reject("身份校验失败");
         }
-        const reason = error.response.data.detail ?? error.response.data[0]
+        const reason = error.response.data.detail ?? error.response.data[0];
         if (error.response.status === 400) {
-            if (reason)
-                ElMessage.error(reason);
+            if (reason) ElMessage.error(reason);
             return Promise.reject(reason);
         } else if (error.response.status === 500) {
             ElMessage.error("服务器错误");

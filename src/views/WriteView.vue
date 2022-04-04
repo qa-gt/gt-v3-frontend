@@ -54,7 +54,11 @@
                         </el-col>
                     </el-row>
                     <el-form-item>
-                        <el-button type="primary" @click="doSubmit" :disabled="disabled.submit">
+                        <el-button
+                            type="primary"
+                            @click="doSubmit"
+                            :disabled="disabled.submit"
+                        >
                             <i class="fal fa-paper-plane" />
                             &emsp;提&ensp;交&ensp;
                         </el-button>
@@ -108,7 +112,7 @@ export default {
                 topic: "",
             },
             topics: [],
-            disabled: { submit: false }
+            disabled: { submit: false },
         };
     },
     methods: {
@@ -144,8 +148,9 @@ export default {
                         ElMessage.success("修改成功！");
                         this.$router.push(`/article/${res.id}`);
                     })
-                    .catch(err => err);
-                    this.disabled.submit = false;
+                    .finally(() => {
+                        this.disabled.submit = false;
+                    });
             } else {
                 this.$axios
                     .post("/article/", atc)
@@ -153,12 +158,12 @@ export default {
                         ElMessage.success("提交成功！");
                         this.$router.push(`/article/${res.id}`);
                     })
-                    .catch(err => err);
-                    this.disabled.submit = false;
+                    .finally(() => {
+                        this.disabled.submit = false;
+                    });
             }
-            
+
             //setTimeout(() => this.disabled.submit = false, 3000);
-            
         },
         async uploadImage(files, callback) {
             const file = files[0];
