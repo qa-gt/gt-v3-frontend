@@ -343,8 +343,7 @@ export default {
                     this.form = { ...this.$store.state.user };
                     ElMessage.success("保存成功");
                 })
-                .catch(err => {
-                    ElMessage.error(err);
+                .finally(() => {
                     this.disabled.save = false;
                 });
         },

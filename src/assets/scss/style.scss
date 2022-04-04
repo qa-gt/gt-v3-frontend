@@ -54,14 +54,13 @@ p {
         justify-content: flex-end;
         align-items: center;
         flex-grow: 1;
-        
-        > .el-button{
+
+        > .el-button {
             font-size: 1.4rem;
             margin-left: 2.5px;
             margin-right: 2.5px;
             color: black;
         }
-
 
         .el-dropdown {
             font-size: 1.1rem;
@@ -69,7 +68,6 @@ p {
             color: black;
         }
     }
-
 }
 
 .svg {
@@ -104,4 +102,12 @@ p {
 .v-md-editor-preview audio {
     width: 100%;
     max-width: 400px;
+}
+
+.emoji {
+    display: inline-block;
+    width: 1.2rem !important;
+    height: 1.2rem !important;
+    margin: 0 3px !important;
+    border-radius: 0 !important;
 }

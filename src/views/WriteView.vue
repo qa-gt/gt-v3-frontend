@@ -162,8 +162,6 @@ export default {
                         this.disabled.submit = false;
                     });
             }
-
-            //setTimeout(() => this.disabled.submit = false, 3000);
         },
         async uploadImage(files, callback) {
             const file = files[0];

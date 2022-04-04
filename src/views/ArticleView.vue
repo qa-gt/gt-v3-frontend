@@ -428,8 +428,7 @@ export default {
                         this.writeComment();
                     }, 100);
                 })
-                .catch(err => err)
-                .then(() => {
+                .finally(() => {
                     this.disabled.comment = false;
                 });
         },
@@ -456,8 +455,7 @@ export default {
                     }
                     this.refresh();
                     ElMessage.success(res.detail);
-                })
-                .catch(err => err);
+                });
         },
         commentAnimation1(el) {
             el.style.opacity = 0;
