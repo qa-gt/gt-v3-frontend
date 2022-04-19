@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { store } from "@/store";
-import NProgress from 'nprogress';
-import 'nprogress/nprogress.css';
+import NProgress from "nprogress";
+import "nprogress/nprogress.css";
 
 const routes = [
     {
@@ -25,6 +25,9 @@ const routes = [
         path: "/article/:aid",
         name: "article",
         component: () => import("@/views/ArticleView.vue"),
+        meta: {
+            keepAlive: true,
+        },
     },
     {
         path: "/user/login",
@@ -56,6 +59,9 @@ const routes = [
         path: "/user/:uid",
         name: "user",
         component: () => import("@/views/UserView.vue"),
+        meta: {
+            keepAlive: true,
+        },
     },
     {
         path: "/user/register",
@@ -69,17 +75,23 @@ const routes = [
         path: "/404",
         name: "404",
         component: () => import("@/views/404.vue"),
+        meta: {
+            keepAlive: true,
+        },
     },
     {
         path: "/allusers",
         name: "allusers",
-        component: () => import("@/views/AllUserView.vue")
+        component: () => import("@/views/AllUserView.vue"),
+        meta: {
+            keepAlive: true,
+        },
     },
     {
         path: "/:catchAll(.*)",
         redirect: "/404",
         hidden: true,
-    }
+    },
 ];
 
 const router = createRouter({
@@ -88,13 +100,14 @@ const router = createRouter({
 });
 
 NProgress.configure({
-    showSpinner: false
+    showSpinner: false,
 });
 
 router.beforeEach((to, from, next) => {
     NProgress.start();
-    if (to.meta.requireLogin && !store.getters.loggedIn) next({ name: 'login' })
-    next()
+    if (to.meta.requireLogin && !store.getters.loggedIn)
+        next({ name: "login" });
+    next();
 });
 
 router.afterEach(() => {

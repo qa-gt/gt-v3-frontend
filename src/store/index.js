@@ -9,6 +9,8 @@ const vuexPersistState = new VuexPersistence({
         jwt: state.jwt,
         readedAtc: state.readedAtc,
         uploadKey: state.uploadKey,
+        writingAtc: state.writingAtc,
+        imageCache: state.imageCache,
     }),
 });
 
@@ -20,6 +22,8 @@ const store = createStore({
             theme: "light",
             readedAtc: [],
             uploadKey: null,
+            writingAtc: {},
+            imageCache: {},
         };
     },
     mutations: {
@@ -43,6 +47,15 @@ const store = createStore({
         setUploadKey(state, data) {
             data.expire = Date.now() + 1700 * 1000;
             state.uploadKey = data;
+        },
+        setWritingAtc(state, data) {
+            state.writingAtc = data;
+        },
+        delWritingAtc(state) {
+            state.writingAtc = {};
+        },
+        addImageCache(state, data) {
+            state.imageCache[data.key] = data.url;
         },
     },
     getters: {

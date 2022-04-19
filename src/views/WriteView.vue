@@ -63,13 +63,23 @@
                             &emsp;提&ensp;交&ensp;
                         </el-button>
                         <el-popconfirm
-                            title="确认要取消吗？本次编辑内容将不会保存。"
+                            title="确认要取消吗？"
                             confirm-button-text="确定取消"
                             cancel-button-text="再想想看"
                             @confirm="cancel"
                         >
                             <template #reference>
                                 <el-button> 取 消 </el-button>
+                            </template>
+                        </el-popconfirm>
+                        <el-popconfirm
+                            title="确认要清除吗？若有，我们将同时删除缓存"
+                            confirm-button-text="确定清除"
+                            cancel-button-text="再想想看"
+                            @confirm="clear"
+                        >
+                            <template #reference>
+                                <el-button> 清 除 </el-button>
                             </template>
                         </el-popconfirm>
                     </el-form-item>
@@ -90,10 +100,10 @@
 import { mapState } from "vuex";
 import gtUser from "@/components/gtUser.vue";
 import gtMdEditor from "@/components/mdEditor.vue";
-import { ElMessage } from "element-plus";
+import { ElMessage, ElNotification } from "element-plus";
 export default {
     computed: {
-        ...mapState(["user", "uploadKey"]),
+        ...mapState(["user", "uploadKey", "writingAtc", "imageCache"]),
         isMobile() {
             return this.$root.isMobile;
         },
@@ -109,7 +119,7 @@ export default {
                 id: "",
                 title: "",
                 content: "",
-                topic: "",
+                topic: 0,
             },
             topics: [],
             disabled: { submit: false },
@@ -165,6 +175,12 @@ export default {
         },
         async uploadImage(files, callback) {
             const file = files[0];
+            const key = file.name + file.type + file.size;
+            if (this.imageCache[key]) {
+                callback([this.imageCache[key]]);
+                ElMessage.success("已从缓存中读取！");
+                return;
+            }
             if (file.size > 1024 * 1024 * 5) {
                 ElMessage.error("图片大小不能超过5M");
                 return;
@@ -214,6 +230,11 @@ export default {
                 } else {
                     callback([`https://gtcdn.yxzl.top/${fileKey}/30`]);
                     ElMessage.success("上传成功！");
+                    this.$store.commit("addImageCache", {
+                        key: key,
+                        url: `https://gtcdn.yxzl.top/${fileKey}/30`,
+                    });
+                    console.log(this.$store.state.imageCache, this.imageCache);
                 }
             });
         },
@@ -222,7 +243,28 @@ export default {
             ElMessage.info("已取消");
         },
         save() {
-            ElMessage.info("草稿保存功能正在开发中, 敬请期待！");
+            if (this.atc.content.length > 15000) {
+                ElMessage.error("暂不支持缓存超过15000字符的文章！");
+                this.disabled.submit = false;
+                return;
+            }
+            this.$store.commit("setWritingAtc", this.atc);
+            ElNotification.success({
+                title: "草稿保存成功",
+                message:
+                    "本地缓存具有不稳定性，无痕模式、清除浏览器数据都可能造成草稿丢失，请尽快发布！",
+            });
+        },
+        clear() {
+            this.atc = {
+                exist: false,
+                id: "",
+                title: "",
+                content: "",
+                topic: 0,
+            };
+            this.$store.commit("delWritingAtc");
+            ElMessage.info("已清空");
         },
     },
     created() {
@@ -237,6 +279,9 @@ export default {
                     this.atc.exist = true;
                 })
                 .catch(err => err);
+        } else if (this.writingAtc.title || this.writingAtc.content) {
+            this.atc = this.writingAtc;
+            ElMessage.info("已加载草稿");
         }
         this.$axios.get("/topic/", { params: { min_state: 0 } }).then(data => {
             this.topics = data;
