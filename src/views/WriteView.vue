@@ -13,9 +13,9 @@
         <el-col :xs="24" :sm="18" :md="17" :lg="18" :xl="19">
             <el-card full shadow="hover">
                 <h2>编辑文章</h2>
-                <p style="color: rgb(200, 200, 200)">
+                <!-- <p style="color: rgb(200, 200, 200)">
                     若预览显示异常, 请复制源文本后刷新页面
-                </p>
+                </p> -->
                 <el-divider />
                 <el-form label-position="top">
                     <el-form-item>
