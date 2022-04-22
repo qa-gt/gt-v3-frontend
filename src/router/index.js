@@ -104,6 +104,14 @@ const routes = [
         }
     },
     {
+        path: "/gtboard",
+        name: "gtboard",
+        component: () => import("@/views/GtBoardView.vue"),
+        meta: {
+            keepAlive: true,
+        }
+    },
+    {
         path: "/:catchAll(.*)",
         redirect: "/404",
         hidden: true,

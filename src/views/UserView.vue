@@ -179,12 +179,32 @@
             >
               {{ item.formname }}
             </el-button>
-            <el-button style="margin-left: 86.5%" size="small" type="primary" plain>
-              修改表单
-            </el-button>
-            <el-button class="button" size="small" type="danger" plain>
-              删除表单
-            </el-button>
+            <div style="float: left">
+              <el-button
+                style="margin-left: 20px"
+                size="small"
+                type="primary"
+                plain
+              >
+                查看数据
+              </el-button>
+              <el-popconfirm
+                title="确定要删除此表单吗？删除后将不能恢复。"
+                confirm-button-text="确定"
+                cancel-button-text="再想想看"
+              >
+                <template #reference>
+                  <el-button
+                    style="margin-left: 20px"
+                    size="small"
+                    type="danger"
+                    plain
+                  >
+                    删除表单
+                  </el-button>
+                </template>
+              </el-popconfirm>
+            </div>
           </div>
         </el-card>
       </div>
