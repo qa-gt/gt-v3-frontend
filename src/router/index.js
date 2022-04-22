@@ -88,6 +88,22 @@ const routes = [
         },
     },
     {
+        path: "/about",
+        name: "about",
+        component: () => import("@/views/AboutView.vue"),
+        meta: {
+            keepAlive: true,
+        }
+    },
+    {
+        path: "/formbackend",
+        name: "formbackend",
+        component: () => import("@/views/FormBackendView.vue"),
+        meta: {
+            keepAlive: true,
+        }
+    },
+    {
         path: "/:catchAll(.*)",
         redirect: "/404",
         hidden: true,
