@@ -99,6 +99,7 @@
                 </el-collapse>
                 <el-divider style="margin-top: 10px" />
                 <gt-md-editor :modelValue="atc.content" :previewOnly="true" />
+                <gt-form />
             </el-card>
             <br /><br />
             <el-card shadow="hover" class="comments-card">
@@ -335,11 +336,13 @@ import { mapState, mapGetters } from "vuex";
 import gtUser from "@/components/gtUser.vue";
 import gtMdEditor from "@/components/mdEditor.vue";
 import { ElLoading } from "element-plus";
+import gtForm from "@/components/gtForm.vue";
 
 export default {
     components: {
         gtUser,
         gtMdEditor,
+        gtForm,
     },
     data() {
         return {
