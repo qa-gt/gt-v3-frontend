@@ -42,8 +42,8 @@
           <el-timeline-item
             :key="item"
             v-for="item in timelineItems"
-            :type="item.type"
-            :timestamp="item.timestamp"
+            :type="item.types"
+            :timestamp="$moment(item.time).format('LL')"
             placement="top"
           >
             <el-card>
@@ -102,15 +102,14 @@ export default {
       ],
     };
   },
-  created: {
-    about() {
+  created() {
       this.$axios
-        .get("/about")
-        .then(res => {
-                    this.timelineItems = res;
+        .get("/about/")
+        .then(data => {
+                    this.timelineItems = data;
                 })
         .catch((err) => err);
     },
-  }
+  
 };
 </script>
