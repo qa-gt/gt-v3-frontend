@@ -68,38 +68,7 @@ export default {
   data() {
     return {
       isMobile: sessionStorage.getItem("isMobile"),
-      timelineItems: [
-        {
-          timestamp: "2022年3月20日",
-          type: "success",
-          title: "QA瓜田 V2 正式上线",
-          content: "经过两周网课时间的开发，我们的功能基本完成啦！",
-        },
-        {
-          timestamp: "2022年3月20日",
-          type: "success",
-          title: "QA瓜田 V2 正式上线",
-          content: "经过两周网课时间的开发，我们的功能基本完成啦！",
-        },
-        {
-          timestamp: "2022年3月20日",
-          type: "success",
-          title: "QA瓜田 V2 正式上线",
-          content: "经过两周网课时间的开发，我们的功能基本完成啦！",
-        },
-        {
-          timestamp: "2022年3月20日",
-          type: "success",
-          title: "QA瓜田 V2 正式上线",
-          content: "经过两周网课时间的开发，我们的功能基本完成啦！",
-        },
-        {
-          timestamp: "2022年3月20日",
-          type: "success",
-          title: "QA瓜田 V2 正式上线",
-          content: "经过两周网课时间的开发，我们的功能基本完成啦！",
-        },
-      ],
+      timelineItems: [],
     };
   },
   created() {
