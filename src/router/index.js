@@ -96,6 +96,14 @@ const routes = [
         }
     },
     {
+        path: "/formbackend",
+        name: "formbackend",
+        component: () => import("@/views/FormBackendView.vue"),
+        meta: {
+            keepAlive: true,
+        }
+    },
+    {
         path: "/:catchAll(.*)",
         redirect: "/404",
         hidden: true,
