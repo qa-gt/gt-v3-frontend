@@ -12,7 +12,7 @@
   />
 </template>
 
-<script>
+<script lang="ts">
 import { defineComponent, h, PropType } from 'vue'
 
 import { Line } from 'vue-chartjs'
