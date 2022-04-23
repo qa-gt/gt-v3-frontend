@@ -6,8 +6,13 @@
     class="pack"
   >
     <el-card class="card">
-      <h3>小测一下</h3>
-      <p>aaaaaaaaaaaaaaaaaaaaaa</p>
+      <el-button type="text" >
+        <h3 style="color: black">小测一下</h3>
+        
+      </el-button>
+      <el-button type="text">
+        <p style="color: black">aaaaaaaaaaaaaaaaaaaaaa</p>
+      </el-button>
     </el-card>
   </div>
 </template>
@@ -28,14 +33,14 @@ export default {
     var i, posx, posy;
     let posx_old = 0,
       posy_old = 0;
-      console.log(this.windowWidth, this.windowHeight)
+    console.log(this.windowWidth, this.windowHeight);
     //console.log(this.screenWidth, this.screenHeight);
     for (i = 0; i < 20; i++) {
       posx = Math.round(Math.random() * this.windowWidth);
       posy = Math.round(Math.random() * this.windowHeight);
       if (posx >= this.windowWidth - 300) {
         console.log(posx);
-        let posx1 = posx
+        let posx1 = posx;
         posx = posx1 - 100;
         console.log(posx);
       }
@@ -43,7 +48,7 @@ export default {
         posx = posx + 50;
       }
       if (posy >= this.windowHeight - 200) {
-        posy = posy -  3050;
+        posy = posy - 3050;
       }
       if (posy <= 20) {
         posy = posy + 100;
