@@ -112,6 +112,14 @@ const routes = [
         }
     },
     {
+        path: "/dashboard",
+        name: "dashboard",
+        component: () => import("@/views/FormDataView.vue"),
+        meta: {
+            keepAlive: true,
+        }
+    },
+    {
         path: "/:catchAll(.*)",
         redirect: "/404",
         hidden: true,
