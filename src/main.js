@@ -11,6 +11,7 @@ import Moment from "@/plugins/moment";
 
 import "./assets/scss/style.scss";
 
+
 const app = createApp(App);
 
 app.use(ElementPlus)

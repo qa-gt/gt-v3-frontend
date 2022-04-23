@@ -120,6 +120,14 @@ const routes = [
         }
     },
     {
+        path: "/dashboardtest",
+        name: "dashboardtest",
+        component: () => import("@/views/FormDataTestView.vue"),
+        meta: {
+            keepAlive: true,
+        }
+    },
+    {
         path: "/:catchAll(.*)",
         redirect: "/404",
         hidden: true,
