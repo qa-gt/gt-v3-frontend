@@ -7,17 +7,24 @@
       :plugins="plugins"
     />
   </el-card>
+  <el-card>
+    <pie-chart :chartData="linechartData"
+      :height="height"
+      />
+  </el-card>  
 </template>
 
 <script>
 import BarChart from "@/components/BarChart.vue";
 import LineChart from "@/components/LineChart.vue";
+import PieChart from '@/components/PieChart.vue';
 
 export default {
   name: "App",
   components: {
     BarChart,
     LineChart,
+    PieChart,
   },
   data() {
     return {
