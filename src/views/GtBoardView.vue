@@ -1,31 +1,61 @@
 <template>
   <div
     :key="pos"
-    v-for="pos in positions"
+    :index="index"
+    v-for="(pos, index) in positions"
     :style="{ '--posx': pos.posx + 'px', '--posy': pos.posy + 'px' }"
     class="pack"
   >
-    <el-card class="card">
-      <el-button type="text" >
-        <h3 style="color: black">小测一下</h3>
-        
-      </el-button>
-      <el-button type="text">
-        <p style="color: black">aaaaaaaaaaaaaaaaaaaaaa</p>
-      </el-button>
-    </el-card>
+    <Vue3DraggableResizable
+      :initW="250"
+      :initH="140"
+      v-model:x="drags[index].x"
+      v-model:y="drags[index].y"
+      v-model:w="w"
+      v-model:h="h"
+      v-model:active="active"
+      :draggable="true"
+      :resizable="false"
+      @activated="print('activated')"
+      @deactivated="print('deactivated')"
+      @drag-start="print('drag-start')"
+      @resize-start="print('resize-start')"
+      @dragging="print('dragging')"
+      @resizing="print('resizing')"
+      @drag-end="print('drag-end')"
+      @resize-end="print('resize-end')"
+    >
+      <el-card class="card">
+        <el-button type="text">
+          <h3 style="color: black">小测一下</h3>
+        </el-button>
+        <el-button type="text">
+          <p style="color: black">{{ pos }}</p>
+          
+        </el-button>
+      </el-card>
+    </Vue3DraggableResizable>
   </div>
 </template>
 
 <script>
-export default {
+import Vue3DraggableResizable from "vue3-draggable-resizable";
+import { defineComponent } from "vue";
+import { ref } from 'vue';
+export default defineComponent({
+  components: { Vue3DraggableResizable },
   data() {
     return {
       screenWidth: window.screen.availWidth, // 屏幕尺寸
       screenHeight: window.screen.availHeight,
       windowWidth: document.documentElement.clientWidth, //实时屏幕宽度
       windowHeight: document.documentElement.clientHeight,
-      positions: [],
+      positions: positions,
+      drags: [],
+      drawTargetEle: {},
+      h: 100,
+      w: 100,
+      active: false,
     };
   },
   // 钩子函数
@@ -36,38 +66,36 @@ export default {
     console.log(this.windowWidth, this.windowHeight);
     //console.log(this.screenWidth, this.screenHeight);
     for (i = 0; i < 20; i++) {
-      posx = Math.round(Math.random() * this.windowWidth);
-      posy = Math.round(Math.random() * this.windowHeight);
-      if (posx >= this.windowWidth - 300) {
-        console.log(posx);
-        let posx1 = posx;
-        posx = posx1 - 100;
-        console.log(posx);
+      posx = Math.round(Math.random() * (this.windowWidth - 300));
+      posy = Math.round(Math.random() * (this.windowHeight - 100));
+      if (posy <= 70) {
+        posy += 100;
       }
-      if (posx < 50) {
-        posx = posx + 50;
+      if (
+        (posx - posx_old) * (posx - posx_old) +
+          (posy - posy_old) * (posy - posy_old) <
+        200
+      ) {
+        posx += 150;
+        posy += 150;
       }
-      if (posy >= this.windowHeight - 200) {
-        posy = posy - 3050;
-      }
-      if (posy <= 20) {
-        posy = posy + 100;
-      }
-      for (var j = 0; j < this.positions.length; j++) {
-        if (
-          Math.abs(this.positions[j].posx - posx) <= 100 ||
-          Math.abs(this.positions[j].posy - posy) <= 100
-        ) {
-          posx = Math.round(Math.random() * this.windowWidth);
-          posy = Math.round(Math.random() * this.windowHeight);
-          break;
-        }
-      }
-      this.positions.push({ posx, posy });
+      posy_old = posy;
+      posx_old = posx;
+
+      this.drags.push({"x": 100, "y":100});
+      this.positions.push({ "posx": posx, "posy": posy });
     }
     console.log(this.positions);
+    console.log(this.drags);
   },
-};
+  methods: {
+    print(val) {
+      console.log(val);
+    },
+  },
+});
+
+let positions = ref([])
 </script>
 
 <style scoped>
@@ -79,5 +107,14 @@ export default {
   position: absolute;
   left: var(--posx) !important;
   top: var(--posy) !important;
+}
+.parent {
+  width: 200px;
+  height: 200px;
+  position: absolute;
+  top: 100px;
+  left: 100px;
+  border: 1px solid #000;
+  user-select: none;
 }
 </style>
