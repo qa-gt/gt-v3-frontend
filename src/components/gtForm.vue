@@ -50,6 +50,10 @@ export default {
                 return true;
             },
         },
+        formdata: {
+            type: Object,
+            default: () => {},
+        },
     },
     data() {
         return {
