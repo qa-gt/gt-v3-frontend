@@ -11,29 +11,94 @@
                             word-break: break-all;
                             vertical-align: middle;
                         "
+                        v-if="!in_edit"
                     >
-                        {{ form.title }}
+                        {{ formdata.title }}
+                    </div>
+                    <div
+                        style="
+                            font-size: 20px;
+                            font-weight: bold;
+                            display: inline-block;
+                            word-break: break-all;
+                            vertical-align: middle;
+                        "
+                        v-if="in_edit"
+                    >
+                        <el-input
+                            v-model="formdata.title"
+                            placeholder="表单标题"
+                        />
                     </div>
                 </template>
                 <div
                     class="question"
-                    v-for="(i, id) in form.questions"
+                    v-for="(i, id) in formdata.questions"
                     :key="id"
+                    
                 >
-                    <h4 style="margin-top: 0">{{ id + 1 }}. {{ i.title }}</h4>
-                    <div style="margin: 15px">
+                    <span v-if="in_edit" style="float: right; margin-bottom: 20px">
+                        <el-button
+                            size="small"
+                            type="primary"
+                            plain
+                            @click="settings"
+                        >
+                            题目设置
+                        </el-button>
+                        <el-button
+                            size="small"
+                            type="danger"
+                            plain
+                            @click="remove"
+                        >
+                            删除该题
+                        </el-button>
+                    </span>
+                    <div v-if="!in_edit">
+                        <h4 style="margin-top: 0">
+                            {{ id + 1 }}. {{ i.title }}
+                        </h4>
+                    </div>
+                    <span v-if="in_edit">
+                        <span> {{ id + 1 }}. </span>
+                        <el-input
+                            style="margin-top: 0"
+                            v-model="formdata.questions[id].title"
+                            placeholder="请输入题目"
+                        />
+                    </span>
+                    <div style="margin: 15px" v-if="!in_edit">
                         <el-radio
-                            v-for="j in i.choices"
+                            v-for="(j, index) in i.choices"
                             :key="j.id"
                             :label="j.id"
                             v-model="i.choice"
                             size="large"
                             style="display: block; width: 100%; margin: -10px 0"
                         >
-                            {{ j.title }}
+                            {{ i.choices[index].title }}
+                        </el-radio>
+                    </div>
+                    <div style="margin: 15px" v-if="in_edit">
+                        <el-radio
+                            v-for="(j, index) in i.choices"
+                            :key="j.id"
+                            :label="j.id"
+                            v-model="i.choice"
+                            size="large"
+                            style="display: block; width: 100%; margin: -10px 0"
+                        >
+                            <el-input
+                                placeholder="请输入选项内容"
+                                v-model="
+                                    formdata.questions[id].choices[index].title
+                                "
+                            />
                         </el-radio>
                     </div>
                 </div>
+                <!-- {{ formdata.end_time }} -->
                 <el-button type="primary"> &ensp;提&emsp;交&ensp; </el-button>
             </el-card>
         </el-col>
@@ -52,12 +117,16 @@ export default {
         },
         formdata: {
             type: Object,
-            default: () => {},
+            default: {},
+        },
+        in_edit: {
+            type: Boolean,
+            default: false,
         },
     },
     data() {
         return {
-            form: {
+            form1: {
                 id: 2,
                 questions: [
                     {
