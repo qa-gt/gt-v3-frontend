@@ -1,4 +1,17 @@
 <template>
+    <!-- <el-dialog v-model="dialogVisible" title="题目设置" width="30%" draggable>
+        <el-form>
+            <el-form-item lable="题目个数">
+                <el-input-number v-model="questionnumbber"> </el-input-number>
+            </el-form-item>
+        </el-form>
+        <template #footer>
+            <span class="dialog-footer">
+                <el-button @click="dialogVisible = false">Cancel</el-button>
+                <el-button type="primary" @click="confirmed">确认</el-button>
+            </span>
+        </template>
+    </el-dialog> -->
     <el-row justify="center" class="gt-form">
         <el-col :xs="23" :sm="16" :md="14" :lg="12" :xl="10">
             <el-card>
@@ -35,22 +48,16 @@
                     class="question"
                     v-for="(i, id) in formdata.questions"
                     :key="id"
-                    
                 >
-                    <span v-if="in_edit" style="float: right; margin-bottom: 20px">
-                        <el-button
-                            size="small"
-                            type="primary"
-                            plain
-                            @click="settings"
-                        >
-                            题目设置
-                        </el-button>
+                    <span
+                        v-if="in_edit"
+                        style="float: right; margin-bottom: 20px"
+                    >
                         <el-button
                             size="small"
                             type="danger"
                             plain
-                            @click="remove"
+                            @click="del_que(id); print('del')"
                         >
                             删除该题
                         </el-button>
@@ -94,6 +101,7 @@
                                 v-model="
                                     formdata.questions[id].choices[index].title
                                 "
+                                size="small"
                             />
                         </el-radio>
                     </div>
@@ -106,6 +114,7 @@
 </template>
 
 <script>
+import { ElMessage } from "element-plus";
 export default {
     name: "gtForm",
     props: {
@@ -124,8 +133,11 @@ export default {
             default: false,
         },
     },
+
     data() {
         return {
+            questionnumber: 4,
+            dialogVisible: false, // 设置表单设置选项卡初始状态为不显示
             form1: {
                 id: 2,
                 questions: [
@@ -178,7 +190,18 @@ export default {
             },
         };
     },
-    methods: {},
+    methods: {
+        del_choice(id, index) {
+            let del = this.formdata.questions[id].choices.splice(index, 1);
+            ElMessage.info("已删除： ", del.title);
+        },
+        del_que(id) {
+            // this.$delete(this.formdata.questions, id); 
+            this.formdata.questions.splice(id, 1);
+            ElMessage.info("已删除： ", del.title);
+        },
+        confirmed() {},
+    },
 };
 </script>
 
