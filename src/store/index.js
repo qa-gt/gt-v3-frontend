@@ -11,6 +11,7 @@ const vuexPersistState = new VuexPersistence({
         uploadKey: state.uploadKey,
         writingAtc: state.writingAtc,
         imageCache: state.imageCache,
+        cards: state.cards,
     }),
 });
 
@@ -24,6 +25,7 @@ const store = createStore({
             uploadKey: null,
             writingAtc: {},
             imageCache: {},
+            cards: [],
         };
     },
     mutations: {
@@ -56,6 +58,14 @@ const store = createStore({
         },
         addImageCache(state, data) {
             state.imageCache[data.key] = data.url;
+        },
+        saveCards(state, data) {
+            let cards = data;
+            state.cards = [];
+            for (let i = 0; i < cards.length; i++) {
+                cards[i].show = 0;
+                state.cards.push(cards[i]);
+            }
         },
     },
     getters: {
