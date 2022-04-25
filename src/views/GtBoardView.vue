@@ -72,20 +72,20 @@ export default defineComponent({
             posy_old = 0;
         console.log(this.windowWidth, this.windowHeight);
         //console.log(this.screenWidth, this.screenHeight);
-        for (i = 0; i < 20; i++) {
+        for (i = 0; i < 10; i++) {
             posx = Math.round(Math.random() * (this.windowWidth - 500));
             posy = Math.round(Math.random() * (this.windowHeight - 500));
-            if (posy <= 70) {
-                posy += 100;
-            }
-            if (
-                (posx - posx_old) * (posx - posx_old) +
-                    (posy - posy_old) * (posy - posy_old) <
-                200
-            ) {
-                posx += 150;
-                posy += 150;
-            }
+            // if (posy <= 70) {
+            //     posy += 100;
+            // }
+            // if (
+            //     (posx - posx_old) * (posx - posx_old) +
+            //         (posy - posy_old) * (posy - posy_old) <
+            //     200
+            // ) {
+            //     posx += 150;
+            //     posy += 150;
+            // }
             posy_old = posy;
             posx_old = posx;
 
