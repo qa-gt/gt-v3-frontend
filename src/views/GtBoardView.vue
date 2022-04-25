@@ -55,7 +55,7 @@ export default defineComponent({
     methods: {
         async get_content(last_t = 0) {
             let res = await this.$axios.get("/article/random/");
-            for (let i = 0; i < res; i++, this.t++) {
+            for (let i = 0; i < res.length; i++, this.t++) {
                 setTimeout(() => {
                     this.cards[i] = this.cards[i] || {};
                     this.cards[i].show = 0;
