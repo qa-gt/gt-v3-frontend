@@ -6,11 +6,12 @@
             <h3 style="margin-top: 0px">近期请求数</h3>
             <el-divider />
             <line-chart :chartData="report" :height="100" />
-            </el-card>
-            <el-card style="margin-top: 20px">
+        </el-card>
+        <el-card style="margin-top: 20px">
             <h3 style="margin-top: 0px">本次累计运行时长</h3>
             <el-divider />
-            <el-card style="margin-top: 20px">
+        </el-card>
+        <el-card style="margin-top: 20px">
             <h3 style="margin-top: 0px">本次累计运行时长</h3>
             <el-divider />
         </el-card>
