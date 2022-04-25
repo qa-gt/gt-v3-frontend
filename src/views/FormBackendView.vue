@@ -50,6 +50,16 @@
                                 style="margin-left: 1%"
                             />
                         </span>
+                        <span style="margin-left: 3%">
+                            <el-switch
+                                v-model="in_edit"
+                                active-text="编辑模式"
+                                inactive-text="预览模式"
+                                active-color="#409eff"
+                                inactive-color="#409eff"
+                                
+                            />
+                        </span>
                     </el-card>
                 </el-card>
             </div>
@@ -57,7 +67,7 @@
             <el-card>
                 <h2>表单预览 & 编辑</h2>
                 <el-divider />
-                <gt-form :formdata="form" :in_edit="true" />
+                <gt-form :formdata="form" :in_edit="in_edit" />
                 <div
                     :key="item"
                     v-for="item in formitems"
@@ -87,6 +97,7 @@ export default {
     },
     data() {
         return {
+            in_edit: true,
             form: {
                 id: 2,
                 title: "",
