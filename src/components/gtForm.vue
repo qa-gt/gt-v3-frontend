@@ -41,17 +41,18 @@
                         v-if="in_edit"
                         style="float: right; margin-bottom: 20px"
                     >
-                        <el-button
-                            size="small"
-                            type="danger"
-                            plain
-                            @click="
-                                del_que(id);
-                                print('del');
-                            "
+                        <el-popconfirm
+                            title="确定要删除本题吗？删除后将不可恢复。"
+                            confirm-button-text="确定"
+                            cancel-button-text="取消"
+                            @confirm="del_que(id)"
                         >
-                            删除该题
-                        </el-button>
+                            <template #reference>
+                                <el-button size="small" type="danger" plain>
+                                    删除该题
+                                </el-button>
+                            </template>
+                        </el-popconfirm>
                     </span>
                     <div v-if="!in_edit">
                         <h4 style="margin-top: 0">
@@ -96,15 +97,23 @@
                                 size="small"
                                 style="width: 90%; margin-right: 10px"
                             />
-                            <el-button
-                                type="danger"
-                                size="small"
-                                plain
-                                circle
-                                @click="del_choice(id, index)"
+                            <el-popconfirm
+                                title="确定要删除本选项吗？删除后将不可恢复。"
+                                confirm-button-text="确定"
+                                cancel-button-text="取消"
+                                @confirm="del_choice(id, index)"
                             >
-                                <i class="far fa-trash"></i>
-                            </el-button>
+                                <template #reference>
+                                    <el-button
+                                        type="danger"
+                                        size="small"
+                                        plain
+                                        circle
+                                    >
+                                        <i class="far fa-trash"></i>
+                                    </el-button>
+                                </template>
+                            </el-popconfirm>
                         </el-radio>
                         <el-button
                             style="width: 103.1%"
@@ -118,7 +127,9 @@
                     </div>
                 </div>
                 <!-- {{ formdata.end_time }} -->
-                <el-button type="primary"> &ensp;提&emsp;交&ensp; </el-button>
+                <el-button type="primary" v-if="!in_edit">
+                    &ensp;提&emsp;交&ensp;
+                </el-button>
             </el-card>
         </el-col>
     </el-row>
@@ -215,7 +226,7 @@ export default {
         add_choice(id) {
             let max = this.formdata.questions[id].choices.length;
             this.formdata.questions[id].choices.push({
-                id: this.max = this.max + 1 +max,
+                id: (this.max = this.max + 1 + max),
                 num: this.max,
                 title: "",
             });

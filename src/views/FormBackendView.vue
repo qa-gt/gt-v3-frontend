@@ -57,8 +57,21 @@
                                 inactive-text="预览模式"
                                 active-color="#409eff"
                                 inactive-color="#409eff"
-                                
                             />
+                        </span>
+                        <span style="margin-right: 3%; float: right">
+                            <el-popconfirm
+                                title="确定要保存吗？保存后将不可更改。"
+                                confirm-button-text="确定保存"
+                                cancel-button-text="继续编辑"
+                                @confirm="save_form"
+                            >
+                                <template #reference>
+                                    <el-button type="primary">
+                                        保存表单
+                                    </el-button>
+                                </template>
+                            </el-popconfirm>
                         </span>
                     </el-card>
                 </el-card>
