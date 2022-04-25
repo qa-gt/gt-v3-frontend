@@ -93,7 +93,7 @@ const routes = [
         component: () => import("@/views/AboutView.vue"),
         meta: {
             keepAlive: true,
-        }
+        },
     },
     {
         path: "/formbackend",
@@ -101,7 +101,7 @@ const routes = [
         component: () => import("@/views/FormBackendView.vue"),
         meta: {
             keepAlive: true,
-        }
+        },
     },
     {
         path: "/gtboard",
@@ -109,7 +109,7 @@ const routes = [
         component: () => import("@/views/GtBoardView.vue"),
         meta: {
             keepAlive: true,
-        }
+        },
     },
     {
         path: "/dashboard",
@@ -117,7 +117,23 @@ const routes = [
         component: () => import("@/views/FormDataView.vue"),
         meta: {
             keepAlive: true,
-        }
+        },
+    },
+    {
+        path: "/dashboardtest",
+        name: "dashboardtest",
+        component: () => import("@/views/FormDataTestView.vue"),
+        meta: {
+            keepAlive: true,
+        },
+    },
+    {
+        path: "/homepage",
+        name: "homepage",
+        component: () => import("@/views/HomePageView.vue"),
+        meta: {
+            keepAlive: true,
+        },
     },
     {
         path: "/:catchAll(.*)",

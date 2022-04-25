@@ -99,7 +99,7 @@
                 </el-collapse>
                 <el-divider style="margin-top: 10px" />
                 <gt-md-editor :modelValue="atc.content" :previewOnly="true" />
-                <gt-form />
+                <gt-form :formdata="form" />
             </el-card>
             <br /><br />
             <el-card shadow="hover" class="comments-card">
@@ -355,6 +355,56 @@ export default {
             reply: { status: false, id: 0, username: "" },
             pageInfo: { total: 0, num: 1, size: 20, loading: false },
             disabled: { comment: false },
+            form: {
+                id: 2,
+                title: "性别选择",
+                create_time: "2022-04-21T21:43:49.791713+08:00",
+                end_time: null,
+                questions: [
+                    {
+                        id: 4,
+                        title: "请选择你的性别1",
+                        type: 1,
+                        choices: [
+                            {
+                                id: 3,
+                                num: 1,
+                                title: "男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男",
+                                // title: "男",
+                            },
+                            {
+                                id: 4,
+                                num: 2,
+                                title: "女",
+                            },
+                        ],
+                        choice: 0,
+                    },
+                    {
+                        id: 5,
+                        title: "请选择你的性别2",
+                        type: 1,
+                        choices: [
+                            {
+                                id: 3,
+                                num: 1,
+                                title: "男",
+                            },
+                            {
+                                id: 4,
+                                num: 2,
+                                title: "女",
+                            },
+                        ],
+                        choice: 0,
+                    },
+                ],
+                creator: {
+                    id: 3,
+                    username: "dw",
+                    portrait: "",
+                },
+            },
         };
     },
     computed: {
@@ -372,32 +422,32 @@ export default {
                         page: this.pageInfo.num,
                     },
                 })
-                .then(res => {
+                .then((res) => {
                     this.pageInfo.total = res.count;
                     this.atcComment = res.results;
                 })
                 .then(() => {
                     this.pageInfo.loading = false;
                 })
-                .catch(err => err);
+                .catch((err) => err);
         },
         init() {
             const loading = ElLoading.service({ fullscreen: true });
             this.$axios
                 .get(`/article/${this.$route.params.aid}/`)
-                .then(res => {
+                .then((res) => {
                     res.create_time = this.$moment(res.create_time).fromNow();
                     res.update_time = this.$moment(res.update_time).fromNow();
                     this.atc = res;
                 })
                 .then(() => setTimeout(loading.close, 100))
-                .catch(err => err);
+                .catch((err) => err);
             this.$axios
                 .get("/like/", { params: { article: this.$route.params.aid } })
-                .then(res => {
+                .then((res) => {
                     this.atcLike = res;
                     this.liked = this.atcLike.some(
-                        item => item.user.id === this.user.id
+                        (item) => item.user.id === this.user.id
                     );
                 });
             this.getCmts();
@@ -407,17 +457,17 @@ export default {
                     .then(() => {
                         this.atc.read_count += 1;
                     })
-                    .catch(err => err);
+                    .catch((err) => err);
                 this.$store.commit("addReadedAtc", this.$route.params.aid);
             }
         },
         refresh() {
             this.$axios
                 .get("/like/", { params: { article: this.$route.params.aid } })
-                .then(res => {
+                .then((res) => {
                     this.atcLike = res;
                 })
-                .catch(err => err);
+                .catch((err) => err);
             this.getCmts();
         },
         replyCmt(cmt) {
@@ -485,7 +535,7 @@ export default {
             }
             this.$axios
                 .post("/like/", { article: this.$route.params.aid })
-                .then(res => {
+                .then((res) => {
                     if (res.opt === "add") {
                         this.liked = true;
                     } else if (res.opt === "cancel") {
@@ -520,19 +570,19 @@ export default {
                     .post("/collect/", {
                         article: this.$route.params.aid,
                     })
-                    .then(res => {
+                    .then((res) => {
                         ElMessage.success(res.detail);
                     })
-                    .catch(err => err);
+                    .catch((err) => err);
             } else {
                 this.$axios
                     .delete(`/collect/0/`, {
                         params: { article: this.$route.params.aid },
                     })
-                    .then(res => {
+                    .then((res) => {
                         ElMessage.success(res.detail);
                     })
-                    .catch(err => err);
+                    .catch((err) => err);
             }
         },
         deleteArticle() {

@@ -3,7 +3,11 @@
         v-for="(pos, index) in positions"
         :key="pos"
         :index="index"
-        :style="{ '--posx': pos.posx + 'px', '--posy': pos.posy + 'px' }"
+        :style="{
+            '--posx': pos.posx + 'px',
+            '--posy': pos.posy + 'px',
+            '--z-index': z_index[index].z,
+        }"
         class="pack gtcards"
     >
         <Vue3DraggableResizable
@@ -24,12 +28,16 @@
             @resizing="print('resizing')"
             @drag-end="print('drag-end')"
             @resize-end="print('resize-end')"
+            @mousedown="
+                max += 1;
+                z_index[index].z = max;
+            "
         >
             <el-card class="card">
                 <el-button type="text">
                     <h3 style="color: black">小测一下</h3>
                 </el-button>
-                <p>1232323434</p>
+                <p>{{ z_index[index].z }}, {{ max }}</p>
                 <el-button type="text">
                     <p style="color: black">{{ pos }}</p>
                 </el-button>
@@ -56,6 +64,8 @@ export default defineComponent({
             h: 100,
             w: 100,
             active: false,
+            z_index: [],
+            max: 19,
         };
     },
     // 钩子函数
@@ -91,6 +101,7 @@ export default defineComponent({
 
             this.drags.push({ x: 100, y: 100 });
             this.positions.push({ posx: posx, posy: posy });
+            this.z_index.push({ z: i });
         }
         console.log(this.positions);
         console.log(this.drags);
@@ -128,6 +139,7 @@ let positions = ref([]);
     position: absolute;
     left: var(--posx) !important;
     top: var(--posy) !important;
+    z-index: var(--z-index);
 }
 .parent {
     width: 200px;
