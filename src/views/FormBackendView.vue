@@ -50,6 +50,29 @@
                                 style="margin-left: 1%"
                             />
                         </span>
+                        <span style="margin-left: 3%">
+                            <el-switch
+                                v-model="in_edit"
+                                active-text="编辑模式"
+                                inactive-text="预览模式"
+                                active-color="#409eff"
+                                inactive-color="#409eff"
+                            />
+                        </span>
+                        <span style="margin-right: 3%; float: right">
+                            <el-popconfirm
+                                title="确定要保存吗？保存后将不可更改。"
+                                confirm-button-text="确定保存"
+                                cancel-button-text="继续编辑"
+                                @confirm="save_form"
+                            >
+                                <template #reference>
+                                    <el-button type="primary">
+                                        保存表单
+                                    </el-button>
+                                </template>
+                            </el-popconfirm>
+                        </span>
                     </el-card>
                 </el-card>
             </div>
@@ -57,7 +80,7 @@
             <el-card>
                 <h2>表单预览 & 编辑</h2>
                 <el-divider />
-                <gt-form :formdata="form" :in_edit="true" />
+                <gt-form :formdata="form" :in_edit="in_edit" />
                 <div
                     :key="item"
                     v-for="item in formitems"
@@ -87,6 +110,7 @@ export default {
     },
     data() {
         return {
+            in_edit: true,
             form: {
                 id: 2,
                 title: "",

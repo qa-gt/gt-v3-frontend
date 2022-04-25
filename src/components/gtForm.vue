@@ -1,17 +1,4 @@
 <template>
-    <!-- <el-dialog v-model="dialogVisible" title="题目设置" width="30%" draggable>
-        <el-form>
-            <el-form-item lable="题目个数">
-                <el-input-number v-model="questionnumbber"> </el-input-number>
-            </el-form-item>
-        </el-form>
-        <template #footer>
-            <span class="dialog-footer">
-                <el-button @click="dialogVisible = false">Cancel</el-button>
-                <el-button type="primary" @click="confirmed">确认</el-button>
-            </span>
-        </template>
-    </el-dialog> -->
     <el-row justify="center" class="gt-form">
         <el-col :xs="23" :sm="16" :md="14" :lg="12" :xl="10">
             <el-card>
@@ -41,6 +28,7 @@
                         <el-input
                             v-model="formdata.title"
                             placeholder="表单标题"
+                            clearable
                         />
                     </div>
                 </template>
@@ -53,14 +41,18 @@
                         v-if="in_edit"
                         style="float: right; margin-bottom: 20px"
                     >
-                        <el-button
-                            size="small"
-                            type="danger"
-                            plain
-                            @click="del_que(id); print('del')"
+                        <el-popconfirm
+                            title="确定要删除本题吗？删除后将不可恢复。"
+                            confirm-button-text="确定"
+                            cancel-button-text="取消"
+                            @confirm="del_que(id)"
                         >
-                            删除该题
-                        </el-button>
+                            <template #reference>
+                                <el-button size="small" type="danger" plain>
+                                    删除该题
+                                </el-button>
+                            </template>
+                        </el-popconfirm>
                     </span>
                     <div v-if="!in_edit">
                         <h4 style="margin-top: 0">
@@ -93,6 +85,7 @@
                             :key="j.id"
                             :label="j.id"
                             v-model="i.choice"
+                            :disabled="in_edit"
                             size="large"
                             style="display: block; width: 100%; margin: -10px 0"
                         >
@@ -102,12 +95,41 @@
                                     formdata.questions[id].choices[index].title
                                 "
                                 size="small"
+                                style="width: 90%; margin-right: 10px"
                             />
+                            <el-popconfirm
+                                title="确定要删除本选项吗？删除后将不可恢复。"
+                                confirm-button-text="确定"
+                                cancel-button-text="取消"
+                                @confirm="del_choice(id, index)"
+                            >
+                                <template #reference>
+                                    <el-button
+                                        type="danger"
+                                        size="small"
+                                        plain
+                                        circle
+                                    >
+                                        <i class="far fa-trash"></i>
+                                    </el-button>
+                                </template>
+                            </el-popconfirm>
                         </el-radio>
+                        <el-button
+                            style="width: 103.1%"
+                            type="primary"
+                            size="small"
+                            plain
+                            @click="add_choice(id)"
+                        >
+                            + 添加选项
+                        </el-button>
                     </div>
                 </div>
                 <!-- {{ formdata.end_time }} -->
-                <el-button type="primary"> &ensp;提&emsp;交&ensp; </el-button>
+                <el-button type="primary" v-if="!in_edit">
+                    &ensp;提&emsp;交&ensp;
+                </el-button>
             </el-card>
         </el-col>
     </el-row>
@@ -136,6 +158,7 @@ export default {
 
     data() {
         return {
+            max: 4,
             questionnumber: 4,
             dialogVisible: false, // 设置表单设置选项卡初始状态为不显示
             form1: {
@@ -192,13 +215,22 @@ export default {
     },
     methods: {
         del_choice(id, index) {
-            let del = this.formdata.questions[id].choices.splice(index, 1);
-            ElMessage.info("已删除： ", del.title);
+            this.formdata.questions[id].choices.splice(index, 1);
+            ElMessage.info("已删除");
         },
         del_que(id) {
-            // this.$delete(this.formdata.questions, id); 
+            // this.$delete(this.formdata.questions, id);
             this.formdata.questions.splice(id, 1);
-            ElMessage.info("已删除： ", del.title);
+            ElMessage.info("已删除");
+        },
+        add_choice(id) {
+            let max = this.formdata.questions[id].choices.length;
+            this.formdata.questions[id].choices.push({
+                id: (this.max = this.max + 1 + max),
+                num: this.max,
+                title: "",
+            });
+            ElMessage.success("添加成功");
         },
         confirmed() {},
     },
