@@ -14,10 +14,9 @@ import "./assets/scss/style.scss";
 
 const app = createApp(App);
 
-app.use(ElementPlus)
-    .use(ElementPlus, {
-        locale: zhCn,
-    })
+app.use(ElementPlus, {
+    locale: zhCn,
+})
     .use(router)
     .use(store)
     .use(Axios)
