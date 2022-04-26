@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="!isMobile">
         <div
             v-for="card in cards"
             :key="card"
@@ -26,7 +26,7 @@
             </Vue3DraggableResizable>
         </div>
     </div>
-    <!-- <div v-else>
+    <div v-else>
         <div v-for="(card, index) in cards" :key="index">
             <el-row
                 v-if="index % 2 === 0"
@@ -38,13 +38,10 @@
                         :style="{ 'z-index': card.z, opacity: card.show }"
                         style="transition: all 0.5s"
                     >
-                        <el-button type="text">
-                            <h3 style="color: black">小测一下</h3>
-                        </el-button>
-                        <p>{{ card.z }}, {{ max }}</p>
-                        <el-button type="text">
-                            <p style="color: black">{{ card }}</p>
-                        </el-button>
+                        <h3 style="color: black">
+                            {{ card["content"]["title"] }}
+                        </h3>
+                        <!-- <el-button type="text"> </el-button> -->
                     </el-card>
                 </el-col>
                 <el-col
@@ -59,23 +56,20 @@
                         }"
                         style="transition: all 0.5s"
                     >
-                        <el-button type="text">
-                            <h3 style="color: black">小测一下</h3>
-                        </el-button>
-                        <p>{{ card.z }}, {{ max }}</p>
-                        <el-button type="text">
-                            <p style="color: black">{{ card }}</p>
-                        </el-button>
+                        <h3 style="color: black">
+                            {{ card["content"]["title"] }}
+                        </h3>
+                        <!-- <el-button type="text"> </el-button> -->
                     </el-card>
                 </el-col>
             </el-row>
         </div>
-    </div> -->
+    </div>
     <el-button
         style="position: absolute; bottom: 50px; right: 25px"
         @click="save"
     >
-        123
+        <i class="fas fa-save" />
     </el-button>
 </template>
 
@@ -83,7 +77,6 @@
 import Vue3DraggableResizable from "vue3-draggable-resizable";
 import { defineComponent } from "vue";
 import { ElMessageBox } from "element-plus";
-import { mapState } from "vuex";
 const maxWidth = document.documentElement.clientWidth * 0.8,
     maxHeight = document.documentElement.clientHeight * 0.5;
 export default defineComponent({

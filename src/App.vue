@@ -258,6 +258,7 @@ export default {
 .footer-yiyan {
     color: rgb(190, 190, 190);
     display: inline;
+    float: left;
 }
 
 .footer-beian {
