@@ -1,35 +1,121 @@
-<template>
+<template id="main">
     <div class="title">
-        <img
-            src="https://lynwancdn.yixiangzhilv.com/images/bg1.gif"
-            alt="bgGif"
-        />
-        <p id="wzhlyn">QA瓜田</p>
+        <img src="//api.yixiangzhilv.com/utils/wallpaper" />
+
+        <transition
+            v-on:before-enter="commentAnimation1"
+            v-on:enter="commentAnimation2"
+            v-on:leave="commentAnimation3"
+            v-show="title"
+            style="position: absolute; overflow: hidden"
+        >
+            <p id="wzhlyn">QA瓜田</p>
+        </transition>
+
+        <!--  -->
     </div>
-    <transition
-        v-on:before-enter="commentAnimation1"
-        v-on:enter="commentAnimation2"
-        v-on:leave="commentAnimation3"
-        v-show="abc"
-        style="position: absolute; overflow: hidden"
-    >
-        <div style="display: box; width: 98%; text-align: center">
-            <h1></h1>
-        </div>
-    </transition>
+    <div style="margin-left: 20%">
+        <transition
+            v-on:before-enter="buttonAnimation1"
+            v-on:enter="buttonAnimation2"
+            v-on:leave="buttonAnimation3"
+            v-show="button1"
+            style="position: absolute; overflow: hidden; margin-right: 90px"
+        >
+            <el-button
+                style="z-index: 10002"
+                @click="$router.push({ name: 'index' })"
+            >
+                论坛本坛
+            </el-button>
+        </transition>
+    </div>
+    <div style="margin-left: 40%">
+        <transition
+            v-on:before-enter="buttonAnimation1"
+            v-on:enter="buttonAnimation2"
+            v-on:leave="buttonAnimation3"
+            v-show="button2"
+            style="position: absolute; overflow: hidden"
+        >
+            <el-button
+                style="z-index: 10003"
+                @click="$router.push({ name: 'datareports' })"
+            >
+                数据报表
+            </el-button>
+        </transition>
+    </div>
+    <div style="margin-left: 60%">
+        <transition
+            v-on:before-enter="buttonAnimation1"
+            v-on:enter="buttonAnimation2"
+            v-on:leave="buttonAnimation3"
+            v-show="button3"
+            style="position: absolute; overflow: hidden"
+        >
+            <el-button
+                style="z-index: 10004"
+                @click="$router.push({ name: 'calendar' })"
+            >
+                QA校历
+            </el-button>
+        </transition>
+    </div>
+    <div style="margin-left: 80%">
+        <transition
+            v-on:before-enter="buttonAnimation1"
+            v-on:enter="buttonAnimation2"
+            v-on:leave="buttonAnimation3"
+            v-show="button4"
+            style="position: absolute; overflow: hidden"
+        >
+            <el-button
+                style="z-index: 10005"
+                @click="$router.push({ name: 'about' })"
+            >
+                关于瓜田
+            </el-button>
+        </transition>
+    </div>
+
+    
 </template>
 
 <script>
 import Velocity from "velocity-animate";
+// import VueParticles from 'vue-particles';
 
 export default {
     mounted() {
         setTimeout(() => {
-            this.abc = 1;
+            this.title = 1;
         }, 500);
+        setTimeout(() => {
+            this.button1 = 1;
+        }, 700);
+        setTimeout(() => {
+            this.button2 = 1;
+        }, 900);
+        setTimeout(() => {
+            this.button3 = 1;
+        }, 1100);
+        setTimeout(() => {
+            this.button4 = 1;
+        }, 1300);
+        setTimeout(() => {
+            this.button5 = 1;
+        }, 1500);
     },
     data() {
-        return { abc: 0 };
+        return {
+            title: 0,
+            button1: 0,
+            button2: 0,
+            button3: 0,
+            button4: 0,
+            button5: 0,
+        };
     },
     methods: {
         commentAnimation1(el) {
@@ -40,7 +126,7 @@ export default {
         commentAnimation2(el, done) {
             Velocity(
                 el,
-                { opacity: 1, top: ["40%", [120, 17]] },
+                { opacity: 1, top: ["30%", [120, 17]] },
                 {
                     duration: 1300,
                     complete: () => {
@@ -51,6 +137,31 @@ export default {
             );
         },
         commentAnimation3(el, done) {
+            Velocity(
+                el,
+                { opacity: 0, y: -1000 },
+                { duration: 300, complete: done }
+            );
+        },
+        buttonAnimation1(el) {
+            document.body.style.overflow = "hidden";
+            el.style.opacity = 0;
+            el.style.top = "100%";
+        },
+        buttonAnimation2(el, done) {
+            Velocity(
+                el,
+                { opacity: 1, top: ["60%", [120, 17]] },
+                {
+                    duration: 1300,
+                    complete: () => {
+                        document.body.style.overflow = "auto";
+                        done();
+                    },
+                }
+            );
+        },
+        buttonAnimation3(el, done) {
             Velocity(
                 el,
                 { opacity: 0, y: -1000 },
@@ -102,5 +213,13 @@ export default {
     -moz-transform: translateY(-50%);
     -ms-transform: translateY(-50%);
     -o-transform: translateY(-50%);
+}
+
+#main {
+    background: url("@/assets/img/main.jpg");
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    background-size: 100% 100%;
 }
 </style>
