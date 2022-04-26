@@ -36,20 +36,11 @@
                             v-for="(item, index) in dayEvents(data.day)"
                             :key="index"
                         >
-                            <!-- {{ item }}
-                            <div v-if="!type || !res">
-                                <el-tag
-                                    v-for="(tags, i) in res"
-                                    :key="i"
-                                    :type="type[i]"
-                                >
-                                {{i}}
-                                {{res}}
-                                
-                                    {{ tags.res[index] }}
+                            <div v-if="item">
+                                <el-tag :type="item.type">
+                                    {{ item.content }}
                                 </el-tag>
-                            </div> -->
-                            123, {{ item }}, {{ index }}
+                            </div>
                         </div>
                     </el-scrollbar>
                 </p>
@@ -66,21 +57,21 @@ export default {
                 day: "",
                 isSelected: false,
                 date: "",
-                events: [
-                    { date: "2022-04-26", content: "放假", type: "info" },
-                    { date: "2022-04-26", content: "放假", type: "success" },
-                    { date: "2022-04-26", content: "放假", type: "warning" },
-                    { date: "2022-04-26", content: "放假", type: "danger" },
-                ],
             },
+            events: [
+                { date: "2022-04-26", content: "放假", type: "info" },
+                { date: "2022-04-26", content: "考试", type: "success" },
+                { date: "2022-04-26", content: "上学", type: "warning" },
+                { date: "2022-04-26", content: "搞事", type: "danger" },
+            ],
         };
     },
     methods: {
         dayEvents(day) {
             let res = [];
-            const len = this.data.events.length;
+            const len = this.events.length;
             for (let i = 0; i < len; i++) {
-                if (this.data.events[i].date === day) {
+                if (this.events[i].date === day) {
                     res.push(this.events[i]);
                 }
             }
