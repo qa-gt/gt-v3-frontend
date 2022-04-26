@@ -84,7 +84,7 @@
                 <div
                     :key="item"
                     v-for="item in formitems"
-                    stlye="margin-bottom: 15px"
+                    style="margin-bottom: 15px"
                 >
                     <div style="margin-bottom: 15px">
                         <el-card> </el-card>
@@ -156,7 +156,7 @@ export default {
     methods: {
         choice() {
             console.log("press");
-            ElMessage.info("Added a chioce");
+            ElMessage.info("Added a choice");
             this.form.questions.push({
                 id: 1,
                 title: "",
@@ -187,7 +187,7 @@ export default {
             console.log(this.form);
         },
         multipleChoice() {
-            ElMessage.info("Added a multiplechioce");
+            ElMessage.info("Added a multiple choice");
             this.form.questions.push({
                 id: 2,
                 title: "",

@@ -1,54 +1,61 @@
 <template>
-    <el-card align="center" style="width: 70%; margin-left: 15%">
-        <div align="center" style="margin-top: 5%">
-            <el-button type="text" @click="$router.push({name: 'index'})">
-            <el-image lazy src="src\assets\img\logo-lr.png"> </el-image>
-            </el-button>
+    <transition
+        v-on:before-enter="commentAnimation1"
+        v-on:enter="commentAnimation2"
+        v-on:leave="commentAnimation3"
+        v-show="abc"
+        style="position: absolute"
+    >
+        <div>
+            <h1>QA瓜田</h1>
         </div>
-        <h2 align="center" style="margin-bottom: 20%; margin-top: 5%">一个匿名的论坛</h2>
-        <div align="center" style="margin-bottom: 10%;" justify="space-evenly">
-            <el-button
-                type="primary"
-                plain
-                @click="$router.push({ name: 'index' })"
-                >论坛入口</el-button
-            >
-            <el-button
-                type="primary"
-                plain
-                @click="$router.push(`/user/${user.id}`)"
-                >用户界面</el-button
-            >
-            <el-button
-                type="primary"
-                plain
-                @click="$router.push({ name: 'register' })"
-                >注册账户</el-button
-            >
-            <el-button
-                type="primary"
-                plain
-                @click="$router.push({ name: 'gtboard' })"
-                >gt留言板</el-button
-            >
-            <el-button
-                type="primary"
-                plain
-                @click="$router.push({ name: 'dashboard' })"
-                >数据报表</el-button
-            >
-            <el-button
-                type="primary"
-                plain
-                @click="$router.push({ name: 'about' })"
-                >关于瓜田</el-button
-            >
-        </div>
-    </el-card>
+    </transition>
 </template>
 
 <script>
-export default {};
+import gsap from "gsap";
+import Velocity from "velocity-animate";
+
+export default {
+    mounted() {
+        setTimeout(() => {
+            console.log(124);
+            this.abc = 1;
+        }, 500);
+    },
+    data() {
+        return { abc: 0 };
+    },
+    methods: {
+        // enter() {
+        //     gsap.to("#card", {
+        //         duration: 2,
+        //         y: 500,
+        //         // opacity: 1,
+        //         // ease: "power1.Out(1.7)",
+        //     });
+        // },
+        commentAnimation1(el) {
+            el.style.opacity = 0;
+            el.style.top = 0;
+        },
+        commentAnimation2(el, done) {
+            Velocity(el, { opacity: 1, top: 500 }, { duration: 1300 });
+            done();
+        },
+        commentAnimation3(el, done) {
+            Velocity(
+                el,
+                { opacity: 0, y: -1000 },
+                { duration: 300, complete: done }
+            );
+        },
+    },
+};
 </script>
 
-<style></style>
+<style>
+#app {
+    text-align: center;
+}
+</style>
