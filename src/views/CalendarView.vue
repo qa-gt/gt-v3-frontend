@@ -1,4 +1,4 @@
-<template>
+<template class="roll" style="overflow-y: scroll; height: 400px">
     <el-drawer v-model="in_edit" title="校历编辑" direction="ltr" size="40%">
         <h2>编辑校历</h2>
         <el-divider />
@@ -16,7 +16,11 @@
             </el-form-item>
             <el-form-item label="选择事务标签">
                 <div>
-                    <el-select v-model="newEvents.type" class="m-2" placeholder="请选择">
+                    <el-select
+                        v-model="newEvents.type"
+                        class="m-2"
+                        placeholder="请选择"
+                    >
                         <el-option
                             v-for="item in types"
                             :key="item.value"
@@ -26,7 +30,13 @@
                             <el-tag :type="item.value" size="small">
                                 {{ item.label }}
                             </el-tag>
-                            <span style="margin-left: 10px; font-size: 11px; color: #5e5e5e">
+                            <span
+                                style="
+                                    margin-left: 10px;
+                                    font-size: 11px;
+                                    color: #5e5e5e;
+                                "
+                            >
                                 {{ item.description }}
                             </span>
                         </el-option>
@@ -54,9 +64,7 @@
                 />
             </el-form-item>
             <el-form-item>
-                <el-button @click="upload()">
-                    点击上传
-                </el-button>
+                <el-button @click="upload()"> 点击上传 </el-button>
             </el-form-item>
         </el-form>
     </el-drawer>
@@ -135,7 +143,7 @@
                             v-for="(item, index) in dayEvents(data.day)"
                             :key="index"
                             placement="top-start"
-                            trigger="click"
+                            trigger="hover"
                         >
                             <template #reference>
                                 <el-tag :type="item.type" class="event">
@@ -144,7 +152,7 @@
                             </template>
                             <el-popover-content>
                                 <h4 class="event-pop-title">
-                                    {{ item.content }}
+                                    {{ item.title }}
                                 </h4>
                                 <small class="event-pop-date">
                                     {{ item.date }}
@@ -178,10 +186,30 @@ export default {
         return {
             currentDate: null,
             events: [
-                { date: "2022-04-26", title: "放假", content: "放假开划", type: "info" },
-                { date: "2022-04-26", title: "考试", content: "考试开摆", type: "success" },
-                { date: "2022-04-27", title: "上学", content: "上学逃课", type: "warning" },
-                { date: "2022-04-26", title: "搞事", content: "搞事整活", type: "danger" },
+                {
+                    date: "2022-04-26 12:00:00",
+                    title: "放假",
+                    content: "放假开划",
+                    type: "info",
+                },
+                {
+                    date: "2022-04-26 12:00:00",
+                    title: "考试",
+                    content: "考试开摆",
+                    type: "success",
+                },
+                {
+                    date: "2022-04-27 12:00:00",
+                    title: "上学",
+                    content: "上学逃课",
+                    type: "warning",
+                },
+                {
+                    date: "2022-04-26 12:00:00",
+                    title: "搞事",
+                    content: "搞事整活",
+                    type: "danger",
+                },
             ],
             in_edit: false,
             shortcuts: shortcuts,
@@ -199,7 +227,7 @@ export default {
         dayEvents(day) {
             if (!day) return [];
             if (typeof day === "object") {
-                day = this.$moment(day.valueOf()).format("YYYY-MM-DD");
+                day = this.$moment(day.valueOf()).format("YYYY-MM-DD HH:MM:SS");
             }
             return this.events.filter((event) => {
                 return dayjs(event.date).isSame(day, "day");
@@ -324,5 +352,12 @@ const types = [
     color: #aeb8c6;
     display: inline-block;
     margin: 5px !important;
+}
+.roll::-webkit-scrollbar {
+    width: 0 !important;
+}
+::-webkit-scrollbar {
+    width: 0 !important;
+    height: 0;
 }
 </style>

@@ -1,6 +1,6 @@
 <template id="app">
     <div class="title">
-        <img src="https://www.yangshangzhen.com/bing/wallpaper" />
+        <img src="https://api.dujin.org/bing/1920.php" />
 
         <transition
             v-on:before-enter="commentAnimation1"
