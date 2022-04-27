@@ -1,4 +1,73 @@
-<template>
+<template class="roll" style="overflow-y: scroll; height: 400px">
+    <el-drawer v-model="in_edit" title="校历编辑" direction="ltr" size="40%">
+        <h2>编辑校历</h2>
+        <el-divider />
+        <el-form label-position="top">
+            <el-form-item label="选择事务开始时间">
+                <div class="block">
+                    <el-date-picker
+                        v-model="newEvents.date"
+                        type="datetime"
+                        placeholder="选择日期和时间"
+                        :shortcuts="shortcuts"
+                        style="width: 100%"
+                    />
+                </div>
+            </el-form-item>
+            <el-form-item label="选择事务标签">
+                <div>
+                    <el-select
+                        v-model="newEvents.type"
+                        class="m-2"
+                        placeholder="请选择"
+                    >
+                        <el-option
+                            v-for="item in types"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value"
+                        >
+                            <el-tag :type="item.value" size="small">
+                                {{ item.label }}
+                            </el-tag>
+                            <span
+                                style="
+                                    margin-left: 10px;
+                                    font-size: 11px;
+                                    color: #5e5e5e;
+                                "
+                            >
+                                {{ item.description }}
+                            </span>
+                        </el-option>
+                    </el-select>
+                </div>
+            </el-form-item>
+            <el-form-item label="事务标题">
+                <el-input
+                    v-model="newEvents.title"
+                    placeholder="请输入"
+                    maxlength="15"
+                    show-word-limit
+                    clearable="true"
+                />
+            </el-form-item>
+            <el-form-item label="事务详细内容">
+                <el-input
+                    v-model="newEvents.content"
+                    type="textarea"
+                    placeholder="请输入"
+                    maxlength="100"
+                    show-word-limit
+                    clearable="true"
+                    rows="5"
+                />
+            </el-form-item>
+            <el-form-item>
+                <el-button @click="upload()"> 点击上传 </el-button>
+            </el-form-item>
+        </el-form>
+    </el-drawer>
     <el-card style="margin-left: 3%; width: 94%; --el-card-padding: 10px">
         <el-calendar ref="calendar" style="--el-calendar-cell-width: 115px">
             <template #header="{ date }" style="margin-bottom: initial">
@@ -16,6 +85,14 @@
                 >
                     {{ date }}
                 </h3>
+                <el-button
+                    style="float: right; margin-top: 16px; margin-left: 20px"
+                    type="primary"
+                    @click="in_edit = true"
+                    v-if="isAdmin"
+                >
+                    编辑校历
+                </el-button>
                 <el-button-group
                     :style="
                         isMobile
@@ -66,16 +143,16 @@
                             v-for="(item, index) in dayEvents(data.day)"
                             :key="index"
                             placement="top-start"
-                            trigger="click"
+                            trigger="hover"
                         >
                             <template #reference>
                                 <el-tag :type="item.type" class="event">
-                                    {{ item.content }}
+                                    {{ item.title }}
                                 </el-tag>
                             </template>
                             <div>
                                 <h4 class="event-pop-title">
-                                    {{ item.content }}
+                                    {{ item.title }}
                                 </h4>
                                 <small class="event-pop-date">
                                     {{ item.date }}
@@ -109,11 +186,36 @@ export default {
         return {
             currentDate: null,
             events: [
-                { date: "2022-04-26", content: "放假", type: "info" },
-                { date: "2022-04-26", content: "考试", type: "success" },
-                { date: "2022-04-27", content: "上学", type: "warning" },
-                { date: "2022-04-26", content: "搞事", type: "danger" },
+                {
+                    date: "2022-04-26 12:00:00",
+                    title: "放假",
+                    content: "放假开划",
+                    type: "info",
+                },
+                {
+                    date: "2022-04-26 12:00:00",
+                    title: "考试",
+                    content: "考试开摆",
+                    type: "success",
+                },
+                {
+                    date: "2022-04-27 12:00:00",
+                    title: "上学",
+                    content: "上学逃课",
+                    type: "warning",
+                },
+                {
+                    date: "2022-04-26 12:00:00",
+                    title: "搞事",
+                    content: "搞事整活",
+                    type: "danger",
+                },
             ],
+            in_edit: false,
+            shortcuts: shortcuts,
+            types: types,
+            newEvents: {},
+            isAdmin: true,
         };
     },
     computed: {
@@ -125,9 +227,9 @@ export default {
         dayEvents(day) {
             if (!day) return [];
             if (typeof day === "object") {
-                day = this.$moment(day.valueOf()).format("YYYY-MM-DD");
+                day = this.$moment(day.valueOf()).format("YYYY-MM-DD HH:MM:SS");
             }
-            return this.events.filter(event => {
+            return this.events.filter((event) => {
                 return dayjs(event.date).isSame(day, "day");
             });
         },
@@ -146,6 +248,10 @@ export default {
             }
             this.$refs.calendar.pickDay(date);
         },
+        upload() {
+            this.events.push(this.newEvents);
+            this.newEvents = {};
+        },
     },
     created() {
         setInterval(
@@ -156,6 +262,63 @@ export default {
         );
     },
 };
+const shortcuts = [
+    {
+        text: "一个月后 ",
+        value: () => {
+            const date = new Date();
+            date.setTime(date.getTime() + 3600 * 1000 * 24 * 30);
+            return date;
+        },
+    },
+    {
+        text: "一周后",
+        value: () => {
+            const date = new Date();
+            date.setTime(date.getTime() + 3600 * 1000 * 24 * 7);
+            return date;
+        },
+    },
+    {
+        text: "明天 ",
+        value: () => {
+            const date = new Date();
+            date.setTime(date.getTime() + 3600 * 1000 * 24);
+            return date;
+        },
+    },
+    {
+        text: "现在",
+        value: new Date(),
+    },
+];
+const types = [
+    {
+        value: "info",
+        label: "灰色",
+        description: "不太重要的事务",
+    },
+    {
+        value: "success",
+        label: "绿色",
+        description: "已确认的事务",
+    },
+    {
+        value: "warning",
+        label: "黄色",
+        description: "较为重要的事务",
+    },
+    {
+        value: "error",
+        label: "红色",
+        description: "极为重要的事务",
+    },
+    {
+        value: "",
+        label: "蓝色",
+        description: "一般事务",
+    },
+];
 </script>
 
 <style scoped>
@@ -189,5 +352,12 @@ export default {
     color: #aeb8c6;
     display: inline-block;
     margin: 5px !important;
+}
+.roll::-webkit-scrollbar {
+    width: 0 !important;
+}
+::-webkit-scrollbar {
+    width: 0 !important;
+    height: 0;
 }
 </style>
