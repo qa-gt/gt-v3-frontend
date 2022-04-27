@@ -17,6 +17,7 @@ const routes = [
         name: "user_edit",
         component: () => import("@/views/UserEditView.vue"),
         meta: {
+            title: "个人信息编辑",
             keepAlive: true,
             requireLogin: true,
         },
@@ -26,6 +27,7 @@ const routes = [
         name: "article",
         component: () => import("@/views/ArticleView.vue"),
         meta: {
+            title: "文章详情",
             keepAlive: true,
         },
     },

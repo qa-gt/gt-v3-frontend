@@ -422,32 +422,32 @@ export default {
                         page: this.pageInfo.num,
                     },
                 })
-                .then((res) => {
+                .then(res => {
                     this.pageInfo.total = res.count;
                     this.atcComment = res.results;
                 })
                 .then(() => {
                     this.pageInfo.loading = false;
                 })
-                .catch((err) => err);
+                .catch(err => err);
         },
         init() {
             const loading = ElLoading.service({ fullscreen: true });
             this.$axios
                 .get(`/article/${this.$route.params.aid}/`)
-                .then((res) => {
+                .then(res => {
                     res.create_time = this.$moment(res.create_time).fromNow();
                     res.update_time = this.$moment(res.update_time).fromNow();
                     this.atc = res;
                 })
                 .then(() => setTimeout(loading.close, 100))
-                .catch((err) => err);
+                .catch(err => err);
             this.$axios
                 .get("/like/", { params: { article: this.$route.params.aid } })
-                .then((res) => {
+                .then(res => {
                     this.atcLike = res;
                     this.liked = this.atcLike.some(
-                        (item) => item.user.id === this.user.id
+                        item => item.user.id === this.user.id
                     );
                 });
             this.getCmts();
@@ -457,17 +457,17 @@ export default {
                     .then(() => {
                         this.atc.read_count += 1;
                     })
-                    .catch((err) => err);
+                    .catch(err => err);
                 this.$store.commit("addReadedAtc", this.$route.params.aid);
             }
         },
         refresh() {
             this.$axios
                 .get("/like/", { params: { article: this.$route.params.aid } })
-                .then((res) => {
+                .then(res => {
                     this.atcLike = res;
                 })
-                .catch((err) => err);
+                .catch(err => err);
             this.getCmts();
         },
         replyCmt(cmt) {
@@ -535,7 +535,7 @@ export default {
             }
             this.$axios
                 .post("/like/", { article: this.$route.params.aid })
-                .then((res) => {
+                .then(res => {
                     if (res.opt === "add") {
                         this.liked = true;
                     } else if (res.opt === "cancel") {
@@ -570,23 +570,28 @@ export default {
                     .post("/collect/", {
                         article: this.$route.params.aid,
                     })
-                    .then((res) => {
+                    .then(res => {
                         ElMessage.success(res.detail);
                     })
-                    .catch((err) => err);
+                    .catch(err => err);
             } else {
                 this.$axios
                     .delete(`/collect/0/`, {
                         params: { article: this.$route.params.aid },
                     })
-                    .then((res) => {
+                    .then(res => {
                         ElMessage.success(res.detail);
                     })
-                    .catch((err) => err);
+                    .catch(err => err);
             }
         },
         deleteArticle() {
-            ElMessage.warning("删除功能暂未开通");
+            this.$axios
+                .delete(`/article/${this.$route.params.aid}/`)
+                .then(res => {
+                    ElMessage.success("删除成功");
+                    this.$router.push("/");
+                });
         },
     },
     watch: {

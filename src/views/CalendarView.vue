@@ -73,7 +73,7 @@
                                     {{ item.content }}
                                 </el-tag>
                             </template>
-                            <el-popover-content>
+                            <div>
                                 <h4 class="event-pop-title">
                                     {{ item.content }}
                                 </h4>
@@ -83,7 +83,7 @@
                                 <p class="event-pop-content">
                                     {{ item.content }}
                                 </p>
-                            </el-popover-content>
+                            </div>
                         </el-popover>
                     </el-scrollbar>
                 </p>
