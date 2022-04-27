@@ -120,14 +120,6 @@ const routes = [
         },
     },
     {
-        path: "/dashboardtest",
-        name: "dashboardtest",
-        component: () => import("@/views/FormDataTestView.vue"),
-        meta: {
-            keepAlive: true,
-        },
-    },
-    {
         path: "/homepage",
         name: "homepage",
         component: () => import("@/views/HomePageView.vue"),
