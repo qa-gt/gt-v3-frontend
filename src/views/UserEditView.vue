@@ -372,23 +372,13 @@ export default {
             );
             this.wechatQrCode = res.data.qrCode;
             this.wechatChecker = setInterval(() => {
-                this.$axios
-                    .get(
-                        "/user/wechat_auth/",
-                        {
-                            params: {
-                                tempUID: res.data.tempUserId,
-                            },
-                        },
-                        this.yunxiaoInfo
-                    )
-                    .then(res => {
-                        if (res.detail === "success") {
-                            clearInterval(this.wechatChecker);
-                            this.$store.commit("setUser", res.user);
-                            ElMessage.success("提交成功");
-                        }
-                    });
+                this.$axios.get("/user/wechat_auth/").then(res => {
+                    if (res.detail === "success") {
+                        clearInterval(this.wechatChecker);
+                        this.$store.commit("setUser", res.user);
+                        ElMessage.success("绑定成功");
+                    }
+                });
             }, 2000);
         },
     },
