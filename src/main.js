@@ -9,6 +9,8 @@ import router from "@/router";
 import Axios from "@/plugins/axios";
 import Moment from "@/plugins/moment";
 import zhCn from "element-plus/es/locale/lang/zh-cn";
+import Particles from "particles.vue3";
+
 
 import "./assets/scss/style.scss";
 
@@ -17,6 +19,7 @@ const app = createApp(App);
 app.use(ElementPlus, {
     locale: zhCn,
 })
+    .use(Particles)
     .use(router)
     .use(store)
     .use(Axios)

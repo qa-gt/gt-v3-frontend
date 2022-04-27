@@ -1,6 +1,6 @@
-<template id="main">
+<template id="app">
     <div class="title">
-        <img src="//api.yixiangzhilv.com/utils/wallpaper" />
+        <!-- <img src="//api.yixiangzhilv.com/utils/wallpaper" /> -->
 
         <transition
             v-on:before-enter="commentAnimation1"
@@ -14,6 +14,94 @@
 
         <!--  -->
     </div>
+    <div>
+        <particles></particles>
+    </div>
+
+    <!--         
+        <Particles
+                id="tsparticles"
+                :particlesInit="particlesInit"
+                :particlesLoaded="particlesLoaded"
+                :options="{
+                    background: {
+                        color: {
+                            value: '#0d47a1'
+                        }
+                    },
+                    fpsLimit: 120,
+                    interactivity: {
+                        events: {
+                            onClick: {
+                                enable: true,
+                                mode: 'push'
+                            },
+                            onHover: {
+                                enable: true,
+                                mode: 'repulse'
+                            },
+                            resize: true
+                        },
+                        modes: {
+                            bubble: {
+                                distance: 400,
+                                duration: 2,
+                                opacity: 0.8,
+                                size: 40
+                            },
+                            push: {
+                                quantity: 4
+                            },
+                            repulse: {
+                                distance: 200,
+                                duration: 0.4
+                            }
+                        }
+                    },
+                    particles: {
+                        color: {
+                            value: '#ffffff'
+                        },
+                        links: {
+                            color: '#ffffff',
+                            distance: 150,
+                            enable: true,
+                            opacity: 0.5,
+                            width: 1
+                        },
+                        collisions: {
+                            enable: true
+                        },
+                        move: {
+                            direction: 'none',
+                            enable: true,
+                            outModes: {
+                                default: 'bounce'
+                            },
+                            random: false,
+                            speed: 6,
+                            straight: false
+                        },
+                        number: {
+                            density: {
+                                enable: true,
+                                area: 800
+                            },
+                            value: 80
+                        },
+                        opacity: {
+                            value: 0.5
+                        },
+                        shape: {
+                            type: 'circle'
+                        },
+                        size: {
+                            value: { min: 1, max: 5 },
+                        }
+                    },
+                    detectRetina: true
+                }"
+        /> -->
     <div style="margin-left: 20%">
         <transition
             v-on:before-enter="buttonAnimation1"
@@ -74,19 +162,103 @@
                 style="z-index: 10005"
                 @click="$router.push({ name: 'about' })"
             >
-                关于瓜田
+                关于我们
             </el-button>
         </transition>
     </div>
-
-    
 </template>
 
 <script>
 import Velocity from "velocity-animate";
-// import VueParticles from 'vue-particles';
+import Particles from "@/components/Particles.vue";
+
+//////////////////////////////
+
+// <!--引入粒子特效的相关配置-->
+const options = {
+    background: {
+        color: {
+            value: "#b8e5ff", //背景颜色
+        },
+    },
+    fpsLimit: 60,
+    interactivity: {
+        events: {
+            onClick: {
+                enable: true,
+                mode: "push", //可用的click模式有: "push", "remove", "repulse", "bubble"。
+            },
+            onHover: {
+                enable: true,
+                mode: "grab", //可用的hover模式有: "grab", "repulse", "bubble"。
+            },
+            resize: true,
+        },
+        modes: {
+            bubble: {
+                distance: 400,
+                duration: 2,
+                opacity: 0.8,
+                size: 40,
+            },
+            push: {
+                quantity: 4,
+            },
+            repulse: {
+                distance: 200,
+                duration: 0.4,
+            },
+        },
+    },
+    particles: {
+        color: {
+            value: "#ffffff",
+        },
+        links: {
+            color: "#ffffff", //'#dedede'。线条颜色。
+            distance: 150, //线条长度
+            enable: true, //是否有线条
+            opacity: 0.5, //线条透明度。
+            width: 1, //线条宽度。
+        },
+        collisions: {
+            enable: false,
+        },
+        move: {
+            direction: "none",
+            enable: true,
+            outMode: "bounce",
+            random: false,
+            speed: 4, //粒子运动速度。
+            straight: false,
+        },
+        number: {
+            density: {
+                enable: true,
+                area: 800,
+            },
+            value: 80, //粒子数量。
+        },
+        opacity: {
+            value: 0.5, //粒子透明度。
+        },
+        shape: {
+            type: "circle", //可用的粒子外观类型有："circle","edge","triangle", "polygon","star"
+        },
+        size: {
+            random: true,
+            value: 5,
+        },
+    },
+    detectRetina: true,
+};
+
+/////////////////////////////
 
 export default {
+    components: {
+        particles: Particles,
+    },
     mounted() {
         setTimeout(() => {
             this.title = 1;
@@ -115,6 +287,7 @@ export default {
             button3: 0,
             button4: 0,
             button5: 0,
+            options: options,
         };
     },
     methods: {

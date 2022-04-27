@@ -1659,6 +1659,11 @@ core-js-compat@^3.20.2, core-js-compat@^3.21.0:
     browserslist "^4.19.1"
     semver "7.0.0"
 
+core-js@^3.20.1:
+  version "3.22.2"
+  resolved "https://registry.npmmirror.com/core-js/-/core-js-3.22.2.tgz#3ea0a245b0895fa39d1faa15fe75d91ade504a01"
+  integrity sha512-Z5I2vzDnEIqO2YhELVMFcL1An2CIsFe9Q7byZhs8c/QxummxZlAHw33TUHbIte987LkisOgL0LwQ1P9D6VISnA==
+
 core-js@^3.21.0, core-js@^3.21.1:
   version "3.21.1"
   resolved "https://registry.npmmirror.com/core-js/-/core-js-3.21.1.tgz"
@@ -3428,6 +3433,29 @@ parse-srcset@^1.0.2:
   resolved "https://registry.npmmirror.com/parse-srcset/-/parse-srcset-1.0.2.tgz"
   integrity sha512-/2qh0lav6CmI15FzA3i/2Bzk2zCgQhGMkvhOhKNcBVQ1ldgpbfiNTVslmooUmWJcADi1f1kIeynbDRVzNlfR6Q==
 
+particles.js@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.npmmirror.com/particles.js/-/particles.js-2.0.0.tgz#21386c4328d6c7f96780a201e96eedfc09c736f6"
+  integrity sha512-8e0JIqkRbMMPlFBnF9f+92hX1s07jdkd3tqB8uHE9L+cwGGjIYjQM7QLgt0FQ5MZp6SFFYYDm/Y48pqK3ZvJOQ==
+
+particles.vue3@^2.0.6:
+  version "2.0.6"
+  resolved "https://registry.npmmirror.com/particles.vue3/-/particles.vue3-2.0.6.tgz#073deb5d704331109ff2f22af7a58ae82d3ba0cf"
+  integrity sha512-jSwLOvmOFmdwJyP4zfqzM/fL64Akbefdff5sQ7hnf1InAmv9b2QdswncR3DO2sP8KzhlhkFdenuROs0cZLRQVA==
+  dependencies:
+    core-js "^3.20.1"
+    tsparticles-engine "^2.0.6"
+    vue-class-component "^8.0.0-rc.1"
+
+particles.vue@^3.0.6:
+  version "3.0.6"
+  resolved "https://registry.npmmirror.com/particles.vue/-/particles.vue-3.0.6.tgz#8f7752b79365740bf17ca6a879daf6ee76f11518"
+  integrity sha512-ZyEdB5/WgyXDgRuwCb5od1B4JaYF9bcJiRXlch25v/ACk1LEno4FQ6dc2IkQTNgGCHYNh6OW+TgcJMlQiEuZyA==
+  dependencies:
+    tsparticles-engine "^2.0.6"
+    vue-class-component "<8"
+    vue-property-decorator "<10"
+
 path-exists@^4.0.0:
   version "4.0.0"
   resolved "https://registry.npmmirror.com/path-exists/-/path-exists-4.0.0.tgz"
@@ -4127,6 +4155,11 @@ trim-newlines@^3.0.0:
   dependencies:
     glob "^7.1.2"
 
+tsparticles-engine@^2.0.6:
+  version "2.0.6"
+  resolved "https://registry.npmmirror.com/tsparticles-engine/-/tsparticles-engine-2.0.6.tgz#27e85d8d014a2d9435ffc9a2c7efd570baf6dc64"
+  integrity sha512-qsAMp68No1ncbFQbyjILrVtS9LeNTtBmxPa91COvHq4iLELReUjVxXTWfLWi0+xczTbdpNPRPx92r0V3xlqeHw==
+
 tunnel-agent@^0.6.0:
   version "0.6.0"
   resolved "https://registry.npmmirror.com/tunnel-agent/-/tunnel-agent-0.6.0.tgz"
@@ -4325,6 +4358,16 @@ vue-chartjs@^4.0.6:
   resolved "https://registry.yarnpkg.com/vue-chartjs/-/vue-chartjs-4.0.6.tgz#e91ecb5d82d98540a18e3413617144fd9e97fdd5"
   integrity sha512-yesTzVt+uLwdwyUOms7vJstEsyJDxw02m6Mn5MTT62GiRvQBT/CpDl6cxyBkm4vNz6jyRL/ztQpIsyh/LWNvkw==
 
+vue-class-component@<8:
+  version "7.2.6"
+  resolved "https://registry.npmmirror.com/vue-class-component/-/vue-class-component-7.2.6.tgz#8471e037b8e4762f5a464686e19e5afc708502e4"
+  integrity sha512-+eaQXVrAm/LldalI272PpDe3+i4mPis0ORiMYxF6Ae4hyuCh15W8Idet7wPUEs4N4YptgFHGys4UrgNQOMyO6w==
+
+vue-class-component@^8.0.0-rc.1:
+  version "8.0.0-rc.1"
+  resolved "https://registry.npmmirror.com/vue-class-component/-/vue-class-component-8.0.0-rc.1.tgz#db692cd97656eb9a08206c03d0b7398cdb1d9420"
+  integrity sha512-w1nMzsT/UdbDAXKqhwTmSoyuJzUXKrxLE77PCFVuC6syr8acdFDAq116xgvZh9UCuV0h+rlCtxXolr3Hi3HyPQ==
+
 vue-demi@*:
   version "0.12.4"
   resolved "https://registry.npmmirror.com/vue-demi/-/vue-demi-0.12.4.tgz"
@@ -4349,6 +4392,19 @@ vue-eslint-parser@^8.0.1:
     esquery "^1.4.0"
     lodash "^4.17.21"
     semver "^7.3.5"
+
+vue-particles@^1.0.9:
+  version "1.0.9"
+  resolved "https://registry.npmmirror.com/vue-particles/-/vue-particles-1.0.9.tgz#29d9cc2be0157df1c0a87ec3b96c96f33279526e"
+  integrity sha512-9MUkX6Sq1x7guUHoN4Br4Dwtb+gY1t+uJMg0wxJtKKOURe/zS+8PsKwMhspCfl4ch3EM5nrwhASVX2UizKb41w==
+  dependencies:
+    particles.js "^2.0.0"
+    vue "^2.2.6"
+
+vue-property-decorator@<10:
+  version "9.1.2"
+  resolved "https://registry.npmmirror.com/vue-property-decorator/-/vue-property-decorator-9.1.2.tgz#266a2eac61ba6527e2e68a6933cfb98fddab5457"
+  integrity sha512-xYA8MkZynPBGd/w5QFJ2d/NM0z/YeegMqYTphy7NJQXbZcuU6FC6AOdUAcy4SXP+YnkerC6AfH+ldg7PDk9ESQ==
 
 vue-recaptcha-v3@^2.0.1:
   version "2.0.1"
@@ -4376,6 +4432,11 @@ vue3-draggable-resizable@^1.6.1:
   version "1.6.1"
   resolved "https://registry.yarnpkg.com/vue3-draggable-resizable/-/vue3-draggable-resizable-1.6.1.tgz#30504ef42444fa2c058f66e8f707b93b078e4723"
   integrity sha512-4QQqy2LfNG2Mf4RdAt3WblZKDFAyVOdM7FqpgCQP+rvQ1AAMMLLRiVRM3P+D1JVlh3D65OWpvIrOxnxrPnV1CQ==
+
+vue@^2.2.6:
+  version "2.6.14"
+  resolved "https://registry.npmmirror.com/vue/-/vue-2.6.14.tgz#e51aa5250250d569a3fbad3a8a5a687d6036e235"
+  integrity sha512-x2284lgYvjOMj3Za7kqzRcUSxBboHqtgRE2zlos1qWaOye5yUmHn42LB1250NJBLRwEcdrB0JRwyPTEPhfQjiQ==
 
 vue@^3.2.31:
   version "3.2.31"
