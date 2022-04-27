@@ -1,6 +1,6 @@
 <template id="app">
     <div class="title">
-        <!-- <img src="//api.yixiangzhilv.com/utils/wallpaper" /> -->
+        <img src="https://www.yangshangzhen.com/bing/wallpaper" />
 
         <transition
             v-on:before-enter="commentAnimation1"
@@ -15,93 +15,8 @@
         <!--  -->
     </div>
     <div>
-        <particles></particles>
+        <particles style="z-index: 15 !important"></particles>
     </div>
-
-    <!--         
-        <Particles
-                id="tsparticles"
-                :particlesInit="particlesInit"
-                :particlesLoaded="particlesLoaded"
-                :options="{
-                    background: {
-                        color: {
-                            value: '#0d47a1'
-                        }
-                    },
-                    fpsLimit: 120,
-                    interactivity: {
-                        events: {
-                            onClick: {
-                                enable: true,
-                                mode: 'push'
-                            },
-                            onHover: {
-                                enable: true,
-                                mode: 'repulse'
-                            },
-                            resize: true
-                        },
-                        modes: {
-                            bubble: {
-                                distance: 400,
-                                duration: 2,
-                                opacity: 0.8,
-                                size: 40
-                            },
-                            push: {
-                                quantity: 4
-                            },
-                            repulse: {
-                                distance: 200,
-                                duration: 0.4
-                            }
-                        }
-                    },
-                    particles: {
-                        color: {
-                            value: '#ffffff'
-                        },
-                        links: {
-                            color: '#ffffff',
-                            distance: 150,
-                            enable: true,
-                            opacity: 0.5,
-                            width: 1
-                        },
-                        collisions: {
-                            enable: true
-                        },
-                        move: {
-                            direction: 'none',
-                            enable: true,
-                            outModes: {
-                                default: 'bounce'
-                            },
-                            random: false,
-                            speed: 6,
-                            straight: false
-                        },
-                        number: {
-                            density: {
-                                enable: true,
-                                area: 800
-                            },
-                            value: 80
-                        },
-                        opacity: {
-                            value: 0.5
-                        },
-                        shape: {
-                            type: 'circle'
-                        },
-                        size: {
-                            value: { min: 1, max: 5 },
-                        }
-                    },
-                    detectRetina: true
-                }"
-        /> -->
     <div style="margin-left: 20%">
         <transition
             v-on:before-enter="buttonAnimation1"
@@ -181,7 +96,7 @@ const options = {
             value: "#b8e5ff", //背景颜色
         },
     },
-    fpsLimit: 60,
+    fpsLimit: 30,
     interactivity: {
         events: {
             onClick: {
@@ -356,7 +271,7 @@ export default {
 
 .title img {
     display: block;
-    filter: blur(5px);
+    /* filter: blur(5px); */
     width: 110%;
     height: 100%;
     object-fit: fill;
@@ -364,6 +279,7 @@ export default {
     top: 0;
     left: 0;
     z-index: 11 !important;
+    opacity: 1;
 }
 
 .title p {
