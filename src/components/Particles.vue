@@ -34,7 +34,7 @@ export default {
   z-index: 1;
 }
 #particles-js {
-  background-color: #2d3a4b;
+  background-color: #2d3a4b97;
   width: 100%;
   height: 100%;
 }
