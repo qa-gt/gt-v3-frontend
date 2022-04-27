@@ -21,8 +21,6 @@
     "md-editor-v3": "^1.11.3",
     "moment": "^2.29.1",
     "nprogress": "^0.2.0",
-    "particles.js": "^2.0.0",
-    "particles.vue": "^3.0.6",
     "particles.vue3": "^2.0.6",
     "prismjs": "^1.18.0",
     "qrcode.vue": "^3.3.3",
