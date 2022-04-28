@@ -1,5 +1,5 @@
 <template>
-    <tape-box message="哈哈哈哈你被骗了！">
+    <tape-box message="哈哈哈哈你被骗了！" username="yxzl">
     </tape-box>
 </template>
 

@@ -1,6 +1,6 @@
 <template>
   <div class="particles-js-box">
-    <div id="particles-js"></div>
+    <div id="particles-js" v-show="show"></div>
   </div>
 </template>
 
@@ -9,8 +9,16 @@
 import particlesJs from "./particles.js";
 import particlesConfig from "./particles.json";
 export default {
+  props: {
+    show: {
+      type: Boolean,
+      default: true,
+    }
+  },
   data() {
-    return {};
+    return {
+      // show: true
+    };
   },
   mounted() {
     this.init();
