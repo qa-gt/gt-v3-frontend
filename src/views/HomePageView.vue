@@ -15,7 +15,27 @@
         <!--  -->
     </div>
     <div>
-        <particles style="z-index: 15 !important"></particles>
+        <transition
+            v-on:before-enter="buttonAnimation1"
+            v-on:enter="buttonAnimation4"
+            v-on:leave="buttonAnimation3"
+            v-show="button1"
+            style="position: absolute; overflow: hidden; margin-right: 90px"
+        >
+            <el-button
+                @click="changeShowParticles()"
+                style="z-index: 10019; float: left"
+            >
+                <div v-show="showParticles">关闭粒子特效</div>
+                <div v-show="!showParticles">打开粒子特效</div>
+            </el-button>
+        </transition>
+    </div>
+    <div>
+        <particles
+            style="z-index: 15 !important"
+            :show="showParticles"
+        ></particles>
     </div>
     <div style="margin-left: 20%">
         <transition
@@ -86,7 +106,7 @@
 <script>
 import Velocity from "velocity-animate";
 import Particles from "@/components/Particles.vue";
-
+import { mapState } from "vuex";
 //////////////////////////////
 
 // <!--引入粒子特效的相关配置-->
@@ -152,7 +172,7 @@ const options = {
                 enable: true,
                 area: 800,
             },
-            value: 80, //粒子数量。
+            value: 60, //粒子数量。
         },
         opacity: {
             value: 0.5, //粒子透明度。
@@ -171,6 +191,12 @@ const options = {
 /////////////////////////////
 
 export default {
+    created() {
+        console.log(this.$route.path);
+    },
+    computed: {
+        ...mapState(["showParticles"]),
+    },
     components: {
         particles: Particles,
     },
@@ -206,6 +232,12 @@ export default {
         };
     },
     methods: {
+        changeShowParticles() {
+            this.$store.commit("changeShowParticles");
+            if (this.showParticles === true) {
+                location.reload();
+            }
+        },
         commentAnimation1(el) {
             document.body.style.overflow = "hidden";
             el.style.opacity = 0;
@@ -239,7 +271,20 @@ export default {
         buttonAnimation2(el, done) {
             Velocity(
                 el,
-                { opacity: 1, top: ["60%", [120, 17]] },
+                { opacity: 1, top: ["60%", [160, 17]] },
+                {
+                    duration: 1300,
+                    complete: () => {
+                        document.body.style.overflow = "auto";
+                        done();
+                    },
+                }
+            );
+        },
+        buttonAnimation4(el, done) {
+            Velocity(
+                el,
+                { opacity: 1, top: ["95%", [120, 10]] },
                 {
                     duration: 1300,
                     complete: () => {

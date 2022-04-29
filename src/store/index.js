@@ -3,7 +3,7 @@ import VuexPersistence from "vuex-persist";
 
 const vuexPersistState = new VuexPersistence({
     storage: window.localStorage,
-    reducer: state => ({
+    reducer: (state) => ({
         theme: state.theme,
         user: state.user,
         jwt: state.jwt,
@@ -12,6 +12,7 @@ const vuexPersistState = new VuexPersistence({
         writingAtc: state.writingAtc,
         imageCache: state.imageCache,
         cards: state.cards,
+        showParticles: state.showParticles,
     }),
 });
 
@@ -26,9 +27,13 @@ const store = createStore({
             writingAtc: {},
             imageCache: {},
             cards: [],
+            showParticles: null,
         };
     },
     mutations: {
+        changeShowParticles(state) {
+            state.showParticles = !state.showParticles;
+        },
         setJwt(state, data) {
             state.jwt = data;
         },
@@ -69,7 +74,7 @@ const store = createStore({
         },
     },
     getters: {
-        loggedIn: state => state.jwt !== null,
+        loggedIn: (state) => state.jwt !== null,
     },
     plugins: [vuexPersistState.plugin],
 });

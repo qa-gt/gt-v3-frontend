@@ -1,5 +1,5 @@
 <template>
-    <el-header class="header">
+    <el-header class="header" v-show="!($router.path in ['/homepage'])">
         <el-button @click="$router.push({ name: 'index' })" type="text">
             <img style="height: 50px" :src="logoLr" />
         </el-button>
