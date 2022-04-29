@@ -1,18 +1,51 @@
 <template class="roll" style="overflow-y: scroll; height: 400px">
-    <el-drawer v-model="in_edit" title="校历编辑" direction="ltr" size="40%">
+    <el-drawer
+        v-model="in_edit"
+        :with-header="false"
+        direction="ltr"
+        :size="isMobile ? '85%' : '40%'"
+    >
         <h2>编辑校历</h2>
         <el-divider />
         <el-form label-position="top">
-            <el-form-item label="选择事务开始时间">
-                <div class="block">
-                    <el-date-picker
-                        v-model="newEvents.date"
-                        type="datetime"
-                        placeholder="选择日期和时间"
-                        :shortcuts="shortcuts"
-                        style="width: 100%"
-                    />
-                </div>
+            <el-form-item label="选择时间">
+                <el-date-picker
+                    v-model="newEvents.date"
+                    type="date"
+                    placeholder="选择日期"
+                />
+            </el-form-item>
+            <el-form-item>
+                <el-radio-group v-model="newEvents.timeType">
+                    <el-radio :label="0">全天</el-radio>
+                    <el-radio :label="1">开始时间</el-radio>
+                    <el-radio :label="2">开始和结束时间</el-radio>
+                </el-radio-group>
+            </el-form-item>
+            <el-form-item v-if="newEvents.timeType">
+                <el-time-select
+                    v-model="newEvents.start"
+                    start="06:00"
+                    step="00:15"
+                    end="23:00"
+                    :max-time="
+                        newEvents.timeType === 2 ? newEvents.endTime : null
+                    "
+                    placeholder="开始时间"
+                    style="margin: 2px"
+                    :clearable="false"
+                />
+                <el-time-select
+                    v-model="newEvents.endTime"
+                    :min-time="newEvents.start"
+                    placeholder="结束时间"
+                    start="06:00"
+                    step="00:15"
+                    end="23:00"
+                    v-if="newEvents.timeType === 2"
+                    style="margin: 2px"
+                    :clearable="false"
+                />
             </el-form-item>
             <el-form-item label="选择事务标签">
                 <div>
@@ -43,13 +76,14 @@
                     </el-select>
                 </div>
             </el-form-item>
-            <el-form-item label="事务标题">
+            <el-form-item label="事务标题" prop="affairtypeid">
                 <el-input
                     v-model="newEvents.title"
                     placeholder="请输入"
                     maxlength="15"
                     show-word-limit
-                    clearable="true"
+                    :clearable="true"
+                    required="true"
                 />
             </el-form-item>
             <el-form-item label="事务详细内容">
@@ -59,12 +93,21 @@
                     placeholder="请输入"
                     maxlength="100"
                     show-word-limit
-                    clearable="true"
+                    :clearable="true"
                     rows="5"
                 />
             </el-form-item>
+            <el-form-item label="关联网址">
+                <el-input
+                    v-model="newEvents.url"
+                    placeholder="请输入"
+                    :clearable="true"
+                />
+            </el-form-item>
             <el-form-item>
-                <el-button @click="upload()"> 点击上传 </el-button>
+                <el-button @click="upload()" type="primary">
+                    点击上传
+                </el-button>
             </el-form-item>
         </el-form>
     </el-drawer>
@@ -155,7 +198,17 @@
                                     {{ item.title }}
                                 </h4>
                                 <small class="event-pop-date">
-                                    {{ item.date }}
+                                    <span v-if="item.timeType === 0">
+                                        全天
+                                    </span>
+                                    <span v-else-if="item.timeType === 1">
+                                        {{ item.start.format("HH:mm") }}开始
+                                    </span>
+                                    <span v-else-if="item.timeType === 2">
+                                        从 {{ item.start.format("HH:mm") }}
+                                        至
+                                        {{ item.end_time.format("HH:mm") }}
+                                    </span>
                                 </small>
                                 <p class="event-pop-content">
                                     {{ item.content }}
@@ -170,7 +223,7 @@
             <el-timeline-item
                 v-for="event in dayEvents(currentDate)"
                 :key="event"
-                :timestamp="event.date"
+                :timestamp="formatTimeForPhone(event)"
                 :type="event.type"
             >
                 {{ event.content }}
@@ -180,39 +233,14 @@
 </template>
 <script>
 import dayjs from "dayjs";
+import { ElMessage } from "element-plus";
 
 export default {
     data() {
         return {
             currentDate: null,
-            events: [
-                {
-                    date: "2022-04-26 12:00:00",
-                    title: "放假",
-                    content: "放假开划",
-                    type: "info",
-                },
-                {
-                    date: "2022-04-26 12:00:00",
-                    title: "考试",
-                    content: "考试开摆",
-                    type: "success",
-                },
-                {
-                    date: "2022-04-27 12:00:00",
-                    title: "上学",
-                    content: "上学逃课",
-                    type: "warning",
-                },
-                {
-                    date: "2022-04-26 12:00:00",
-                    title: "搞事",
-                    content: "搞事整活",
-                    type: "danger",
-                },
-            ],
+            events: [],
             in_edit: false,
-            shortcuts: shortcuts,
             types: types,
             newEvents: {},
             isAdmin: true,
@@ -224,14 +252,24 @@ export default {
         },
     },
     methods: {
-        dayEvents(day) {
-            if (!day) return [];
-            if (typeof day === "object") {
-                day = this.$moment(day.valueOf()).format("YYYY-MM-DD HH:MM:SS");
+        formatTimeForPhone(event) {
+            if (event.timeType === 0) {
+                return this.currentDate.format("M月D日 全天");
+            } else if (event.timeType === 1) {
+                return event.start.format("M月D日 HH:mm") + " 开始";
+            } else if (event.timeType === 2) {
+                return (
+                    event.start.format("M月D日 HH:mm") +
+                    " 至 " +
+                    event.end_time.format("HH:mm")
+                );
             }
-            return this.events.filter((event) => {
-                return dayjs(event.date).isSame(day, "day");
-            });
+        },
+        dayEvents(day) {
+            // TODO: 性能需优化，先列表排序然后按日期依次取
+            return this.events.filter(event =>
+                dayjs(event.start).isSame(day, "day")
+            );
         },
         selectDate(value) {
             let date = this.$refs.calendar.date || dayjs();
@@ -249,74 +287,101 @@ export default {
             this.$refs.calendar.pickDay(date);
         },
         upload() {
-            this.events.push(this.newEvents);
+            const fields = [
+                ["date", "日期"],
+                ["timeType", "持续时间"],
+                ["title", "标题"],
+                ["type", "标签"],
+            ];
+            let data = this.newEvents;
+            for (let i in fields) {
+                if (data[fields[i][0]] === undefined) {
+                    ElMessage.error(fields[i][1] + "不能为空");
+                    return;
+                }
+            }
+            data.start = new Date(data.start || this.currentDate).toISOString();
+            data.timeType = data.timeType || 0;
+            console.log(data);
+            this.$axios.post("/calendar_event/", data).then(res => {
+                console.log(res);
+            });
+            this.events.push(data);
             this.newEvents = {};
+        },
+        getEvents(start = this.currentDate, end = this.currentDate) {
+            let events = [
+                {
+                    start: "2022-04-26T04:00:00.000Z",
+                    title: "放假",
+                    content: "放假开划",
+                    type: "info",
+                    timeType: 1,
+                },
+                {
+                    start: "2022-04-26T04:00:00.000Z",
+                    title: "考试",
+                    content: "考试开摆",
+                    type: "success",
+                    timeType: 0,
+                },
+                {
+                    start: "2022-04-27T04:00:00.000Z",
+                    end_time: "2022-04-27T04:00:00.000Z",
+                    title: "上学",
+                    content: "上学逃课",
+                    type: "warning",
+                    timeType: 2,
+                },
+                {
+                    start: "2022-04-26T04:00:00.000Z",
+                    title: "搞事",
+                    content: "搞事整活",
+                    type: "danger",
+                    timeType: 1,
+                },
+            ];
+            for (let i = 0; i < events.length; i++) {
+                events[i].start = dayjs(events[i].start);
+                events[i].end_time = dayjs(events[i].end_time);
+            }
+
+            this.events = events;
         },
     },
     created() {
+        setTimeout(() => {
+            this.getEvents();
+        }, 1000);
         setInterval(
             () =>
                 (this.currentDate =
                     (this.$refs.calendar && this.$refs.calendar.date) || null),
             100
         );
+        // setInterval(() => console.log(this.newEvents), 1000);
     },
 };
-const shortcuts = [
-    {
-        text: "一个月后 ",
-        value: () => {
-            const date = new Date();
-            date.setTime(date.getTime() + 3600 * 1000 * 24 * 30);
-            return date;
-        },
-    },
-    {
-        text: "一周后",
-        value: () => {
-            const date = new Date();
-            date.setTime(date.getTime() + 3600 * 1000 * 24 * 7);
-            return date;
-        },
-    },
-    {
-        text: "明天 ",
-        value: () => {
-            const date = new Date();
-            date.setTime(date.getTime() + 3600 * 1000 * 24);
-            return date;
-        },
-    },
-    {
-        text: "现在",
-        value: new Date(),
-    },
-];
 const types = [
-    {
-        value: "info",
-        label: "灰色",
-        description: "不太重要的事务",
-    },
     {
         value: "success",
         label: "绿色",
-        description: "已确认的事务",
-    },
-    {
-        value: "warning",
-        label: "黄色",
-        description: "较为重要的事务",
-    },
-    {
-        value: "error",
-        label: "红色",
-        description: "极为重要的事务",
+        description: "常规事务",
     },
     {
         value: "",
         label: "蓝色",
         description: "一般事务",
+    },
+    {
+        value: "warning",
+        label: "黄色",
+        description: "重要事务",
+    },
+    {
+        value: "danger",
+        label: "红色",
+        description: "特殊事务",
     },
 ];
 </script>
@@ -351,7 +416,7 @@ const types = [
     font-size: 12px;
     color: #aeb8c6;
     display: inline-block;
-    margin: 5px !important;
+    margin: 5px 0 !important;
 }
 .roll::-webkit-scrollbar {
     width: 0 !important;
