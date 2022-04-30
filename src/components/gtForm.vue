@@ -3,6 +3,7 @@
         <el-col :xs="23" :sm="16" :md="14" :lg="12" :xl="10">
             <el-card>
                 <template #header>
+                    <!-- 表单标题部分 -->
                     <div
                         style="
                             font-size: 20px;
@@ -32,6 +33,7 @@
                         />
                     </div>
                 </template>
+                <!-- 表单题目 -->
                 <div
                     class="question"
                     v-for="(i, id) in formdata.questions"
@@ -40,7 +42,13 @@
                     <span
                         v-if="in_edit"
                         style="float: right; margin-bottom: 20px"
-                    >
+                        ><el-switch
+                            v-model="i.mustDo"
+                            size="small"
+                            active-text="必做题"
+                            inactive-text="选做题"
+                            style="margin-right: 20px"
+                        />
                         <el-popconfirm
                             title="确定要删除本题吗？删除后将不可恢复。"
                             confirm-button-text="确定"
@@ -54,11 +62,14 @@
                             </template>
                         </el-popconfirm>
                     </span>
+                    <!-- 如果 !in_edit，那么显示预览界面（题目标题） -->
                     <div v-if="!in_edit">
                         <h4 style="margin-top: 0">
-                            {{ id + 1 }}. {{ i.title }}
+                            {{ id + 1 }}. [{{ isMust(i.mustDo) }}]
+                            {{ i.title }}
                         </h4>
                     </div>
+                    <!-- 如果 in_edit，那么显示编辑界面（题目标题） -->
                     <span v-if="in_edit">
                         <span> {{ id + 1 }}. </span>
                         <el-input
@@ -67,7 +78,12 @@
                             placeholder="请输入题目"
                         />
                     </span>
-                    <div style="margin: 15px" v-if="!in_edit">
+                    <!-- 如果 !in_edit，那么显示预览界面（单选选项） -->
+                    <div
+                        style="margin: 15px"
+                        v-if="!in_edit"
+                        v-show="i.type === 1"
+                    >
                         <el-radio
                             v-for="(j, index) in i.choices"
                             :key="j.id"
@@ -79,7 +95,12 @@
                             {{ i.choices[index].title }}
                         </el-radio>
                     </div>
-                    <div style="margin: 15px" v-if="in_edit">
+                    <!-- 如果 in_edit，那么显示编辑界面（单选选项） -->
+                    <div
+                        style="margin: 15px"
+                        v-if="in_edit"
+                        v-show="i.type === 1"
+                    >
                         <el-radio
                             v-for="(j, index) in i.choices"
                             :key="j.id"
@@ -125,9 +146,78 @@
                             + 添加选项
                         </el-button>
                     </div>
+
+                    <!-- 如果 !in_edit，那么显示预览界面（多选选项） -->
+                    <div
+                        style="margin: 15px"
+                        v-if="!in_edit"
+                        v-show="i.type === 2"
+                    >
+                        <el-checkbox
+                            v-for="(j, index) in i.choices"
+                            :key="j.id"
+                            :label="j.id"
+                            v-model="i.choice"
+                            size="large"
+                            style="display: block; width: 100%; margin: -10px 0"
+                        >
+                            {{ i.choices[index].title }}
+                        </el-checkbox>
+                    </div>
+                    <!-- 如果 in_edit，那么显示编辑界面（多选选项） -->
+                    <div
+                        style="margin: 15px"
+                        v-if="in_edit"
+                        v-show="i.type === 2"
+                    >
+                        <!-- i 是当前题目，j 是当前选项 -->
+                        <el-checkbox
+                            v-for="(j, index) in i.choices"
+                            :key="j.id"
+                            :label="j.id"
+                            v-model="i.choice"
+                            :disabled="in_edit"
+                            size="large"
+                            style="display: block; width: 100%; margin: -10px 0"
+                        >
+                            <el-input
+                                placeholder="请输入选项内容"
+                                v-model="
+                                    formdata.questions[id].choices[index].title
+                                "
+                                size="small"
+                                style="width: 245%; margin-right: 10px"
+                            />
+                            <el-popconfirm
+                                title="确定要删除本选项吗？删除后将不可恢复。"
+                                confirm-button-text="确定"
+                                cancel-button-text="取消"
+                                @confirm="del_choice(id, index)"
+                            >
+                                <template #reference>
+                                    <el-button
+                                        type="danger"
+                                        size="small"
+                                        plain
+                                        circle
+                                    >
+                                        <i class="far fa-trash"></i>
+                                    </el-button>
+                                </template>
+                            </el-popconfirm>
+                        </el-checkbox>
+                        <el-button
+                            style="width: 103.1%"
+                            type="primary"
+                            size="small"
+                            plain
+                            @click="add_choice(id)"
+                        >
+                            + 添加选项
+                        </el-button>
+                    </div>
                 </div>
-                <!-- {{ formdata.end_time }} -->
-                <el-button type="primary" v-if="!in_edit">
+                <el-button type="primary" v-if="!in_edit" @click="confirmed">
                     &ensp;提&emsp;交&ensp;
                 </el-button>
             </el-card>
@@ -233,6 +323,13 @@ export default {
             ElMessage.success("添加成功");
         },
         confirmed() {},
+        isMust(mustDo) {
+            if (mustDo === true) {
+                return "必做";
+            } else if (mustDo === false) {
+                return "选做";
+            }
+        },
     },
 };
 </script>
