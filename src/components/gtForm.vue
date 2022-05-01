@@ -147,75 +147,91 @@
                         </el-button>
                     </div>
 
-                    <!-- 如果 !in_edit，那么显示预览界面（多选选项） -->
+                    <!-- 如果 !in_edit，那么显示预览界面（填空题） -->
                     <div
                         style="margin: 15px"
                         v-if="!in_edit"
-                        v-show="i.type === 2"
+                        v-show="i.type === 3"
                     >
-                        <el-checkbox
-                            v-for="(j, index) in i.choices"
-                            :key="j.id"
-                            :label="j.id"
-                            v-model="i.choice"
-                            size="large"
-                            style="display: block; width: 100%; margin: -10px 0"
+                        <el-input
+                            :type="i.options.type"
+                            :maxlength="i.options.maxlength"
+                            :minlength="i.options.minlength"
+                            :show-word-limit="i.options.show_word_limit"
+                            :placeholder="i.options.placeholder"
+                            v-model="i.message"
+                            :disabled="in_edit"
                         >
-                            {{ i.choices[index].title }}
-                        </el-checkbox>
+                        </el-input>
                     </div>
-                    <!-- 如果 in_edit，那么显示编辑界面（多选选项） -->
+                    <!-- 如果 in_edit，那么显示编辑界面（填空题） -->
                     <div
                         style="margin: 15px"
                         v-if="in_edit"
-                        v-show="i.type === 2"
+                        v-show="i.type === 3"
                     >
-                        <!-- i 是当前题目，j 是当前选项 -->
-                        <el-checkbox
-                            v-for="(j, index) in i.choices"
-                            :key="j.id"
-                            :label="j.id"
-                            v-model="i.choice"
+                        <el-input
+                            :type="i.options.type"
+                            :maxlength="i.options.maxlength"
+                            :minlength="i.options.minlength"
+                            :show-word-limit="i.options.show_word_limit"
+                            :placeholder="i.options.placeholder"
                             :disabled="in_edit"
-                            size="large"
-                            style="display: block; width: 100%; margin: -10px 0"
                         >
-                            <el-input
-                                placeholder="请输入选项内容"
-                                v-model="
-                                    formdata.questions[id].choices[index].title
-                                "
-                                size="small"
-                                style="width: 245%; margin-right: 10px"
-                            />
-                            <el-popconfirm
-                                title="确定要删除本选项吗？删除后将不可恢复。"
-                                confirm-button-text="确定"
-                                cancel-button-text="取消"
-                                @confirm="del_choice(id, index)"
-                            >
-                                <template #reference>
-                                    <el-button
-                                        type="danger"
-                                        size="small"
-                                        plain
-                                        circle
-                                    >
-                                        <i class="far fa-trash"></i>
-                                    </el-button>
-                                </template>
-                            </el-popconfirm>
-                        </el-checkbox>
-                        <el-button
-                            style="width: 103.1%"
-                            type="primary"
-                            size="small"
-                            plain
-                            @click="add_choice(id)"
-                        >
-                            + 添加选项
-                        </el-button>
+                        </el-input>
                     </div>
+                </div>
+                <!-- 如果 !in_edit，那么显示预览界面（多选选项） -->
+                <div style="margin: 15px" v-if="!in_edit && i.type === 2">
+                    <el-checkbox
+                        v-for="(j, index) in i.choices"
+                        :key="j.id"
+                        :label="j.id"
+                        v-model="i.choice"
+                        size="large"
+                        style="display: block; width: 100%; margin: -10px 0"
+                    >
+                        {{ i.choices[index].title }}
+                    </el-checkbox>
+                </div>
+                <!-- 如果 in_edit，那么显示编辑界面（多选选项） -->
+                <div style="margin: 15px" v-if="in_edit && i.type === 2">
+                    <!-- i 是当前题目，j 是当前选项 -->
+                    <el-checkbox
+                        v-for="(j, index) in i.choices"
+                        :key="j.id"
+                        :label="j.id"
+                        v-model="i.choice"
+                        :disabled="in_edit"
+                        size="large"
+                        style="display: block; width: 100%; margin: -10px 0"
+                    >
+                        <el-input
+                            placeholder="请输入选项内容"
+                            v-model="
+                                formdata.questions[id].choices[index].title
+                            "
+                            size="small"
+                            style="width: 245%; margin-right: 10px"
+                        />
+                        <el-popconfirm
+                            title="确定要删除本选项吗？删除后将不可恢复。"
+                            confirm-button-text="确定"
+                            cancel-button-text="取消"
+                            @confirm="del_choice(id, index)"
+                        >
+                            <template #reference>
+                                <el-button
+                                    type="danger"
+                                    size="small"
+                                    plain
+                                    circle
+                                >
+                                    <i class="far fa-trash"></i>
+                                </el-button>
+                            </template>
+                        </el-popconfirm>
+                    </el-checkbox>
                 </div>
                 <el-button type="primary" v-if="!in_edit" @click="confirmed">
                     &ensp;提&emsp;交&ensp;
@@ -251,56 +267,6 @@ export default {
             max: 4,
             questionnumber: 4,
             dialogVisible: false, // 设置表单设置选项卡初始状态为不显示
-            form1: {
-                id: 2,
-                questions: [
-                    {
-                        id: 4,
-                        title: "请选择你的性别",
-                        type: 1,
-                        choices: [
-                            {
-                                id: 3,
-                                num: 1,
-                                title: "男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男",
-                                // title: "男",
-                            },
-                            {
-                                id: 4,
-                                num: 2,
-                                title: "女",
-                            },
-                        ],
-                        choice: 0,
-                    },
-                    {
-                        id: 5,
-                        title: "请选择你的性别",
-                        type: 1,
-                        choices: [
-                            {
-                                id: 3,
-                                num: 1,
-                                title: "男",
-                            },
-                            {
-                                id: 4,
-                                num: 2,
-                                title: "女",
-                            },
-                        ],
-                        choice: 0,
-                    },
-                ],
-                creator: {
-                    id: 3,
-                    username: "dw",
-                    portrait: "",
-                },
-                title: "表单标题",
-                create_time: "2022-04-21T21:43:49.791713+08:00",
-                end_time: null,
-            },
         };
     },
     methods: {

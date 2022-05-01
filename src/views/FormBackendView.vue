@@ -128,6 +128,7 @@ export default {
     },
     data() {
         return {
+            num: 1,
             in_edit: true,
             form: {
                 id: 2,
@@ -140,12 +141,20 @@ export default {
                 whoCanEdit: "0",
                 create_time: "2022-04-21T21:43:49.791713+08:00",
                 end_time: null,
+                message: "",
                 questions: [
                     {
                         id: 1,
                         title: "",
                         type: 1,
                         mustDo: true,
+                        options: {
+                            type: "text",
+                            maxlength: "",
+                            minlength: "",
+                            show_word_limit: false,
+                            placeholder: "请输入",
+                        },
                         choices: [
                             {
                                 id: 1,
@@ -178,7 +187,7 @@ export default {
             console.log("press");
             ElMessage.info("Added a choice");
             this.form.questions.push({
-                id: 1,
+                id: (this.num += 1),
                 title: "",
                 type: 1,
                 mustDo: true,
@@ -204,6 +213,14 @@ export default {
                         title: "",
                     },
                 ],
+                message: "",
+                options: {
+                    type: "text",
+                    maxlength: "",
+                    minlength: "",
+                    show_word_limit: false,
+                    placeholder: "请输入",
+                },
                 choice: 0,
             });
             console.log(this.form);
@@ -211,7 +228,7 @@ export default {
         multipleChoice() {
             ElMessage.info("Added a multiple choice");
             this.form.questions.push({
-                id: 2,
+                id: (this.num += 1),
                 title: "",
                 type: 2,
                 mustDo: true,
@@ -239,6 +256,25 @@ export default {
                 ],
                 choice: [], //多选题需要数组形式来存储用户的选择
             });
+        },
+        gapFilling() {
+            console.log("press");
+            ElMessage.info("Added a gap filling");
+            this.form.questions.push({
+                id: (this.num += 1),
+                title: "",
+                type: 3,
+                mustDo: true,
+                message: "",
+                options: {
+                    type: "text",
+                    maxlength: "",
+                    minlength: "",
+                    show_word_limit: false,
+                    placeholder: "请输入",
+                },
+            });
+            console.log(this.form);
         },
         uploadForm() {
             if (this.form.title === "") {

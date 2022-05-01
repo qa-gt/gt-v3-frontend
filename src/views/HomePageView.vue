@@ -1,6 +1,6 @@
 <template id="app">
     <div class="title">
-        <img src="https://www.yangshangzhen.com/bing/wallpaper" />
+        <img src="//api.yixiangzhilv.com/utils/wallpaper" />
 
         <transition
             v-on:before-enter="commentAnimation1"
