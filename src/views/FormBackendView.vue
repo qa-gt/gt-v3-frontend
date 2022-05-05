@@ -17,8 +17,12 @@
                     <h2>创建一个表单</h2>
                     <el-divider />
                     <el-card>
-                        <el-dropdown>
-                            <el-button type="primary" plain>
+                        <el-dropdown :disabled="!in_edit">
+                            <el-button
+                                type="primary"
+                                plain
+                                :disabled="!in_edit"
+                            >
                                 添加组件
                             </el-button>
                             <template #dropdown>
@@ -50,6 +54,20 @@
                                 style="margin-left: 1%"
                             />
                         </span>
+                        <span style="margin-left: 3%">谁可以填写表单:</span>
+                        <span style="margin-left: 0.3%">
+                            <el-select
+                                style="margin-left: 1%"
+                                v-model="form.whoCanEdit"
+                            >
+                                <el-option label="随意填写(默认)" value="0">
+                                </el-option>
+                                <el-option label="登录后填写" value="1">
+                                </el-option>
+                                <el-option label="微信认证后填写" value="2">
+                                </el-option>
+                            </el-select>
+                        </span>
                         <span style="margin-left: 3%">
                             <el-switch
                                 v-model="in_edit"
@@ -64,7 +82,7 @@
                                 title="确定要保存吗？保存后将不可更改。"
                                 confirm-button-text="确定保存"
                                 cancel-button-text="继续编辑"
-                                @confirm="save_form"
+                                @confirm="uploadForm"
                             >
                                 <template #reference>
                                     <el-button type="primary">
@@ -110,6 +128,7 @@ export default {
     },
     data() {
         return {
+            num: 1,
             in_edit: true,
             form: {
                 id: 2,
@@ -119,13 +138,23 @@ export default {
                     username: "dw",
                     portrait: "",
                 },
+                whoCanEdit: "0",
                 create_time: "2022-04-21T21:43:49.791713+08:00",
                 end_time: null,
+                message: "",
                 questions: [
                     {
                         id: 1,
                         title: "",
                         type: 1,
+                        mustDo: true,
+                        options: {
+                            type: "text",
+                            maxlength: "",
+                            minlength: "",
+                            show_word_limit: false,
+                            placeholder: "请输入",
+                        },
                         choices: [
                             {
                                 id: 1,
@@ -158,9 +187,10 @@ export default {
             console.log("press");
             ElMessage.info("Added a choice");
             this.form.questions.push({
-                id: 1,
+                id: (this.num += 1),
                 title: "",
                 type: 1,
+                mustDo: true,
                 choices: [
                     {
                         id: 1,
@@ -183,15 +213,25 @@ export default {
                         title: "",
                     },
                 ],
+                message: "",
+                options: {
+                    type: "text",
+                    maxlength: "",
+                    minlength: "",
+                    show_word_limit: false,
+                    placeholder: "请输入",
+                },
+                choice: 0,
             });
             console.log(this.form);
         },
         multipleChoice() {
             ElMessage.info("Added a multiple choice");
             this.form.questions.push({
-                id: 2,
+                id: (this.num += 1),
                 title: "",
                 type: 2,
+                mustDo: true,
                 choices: [
                     {
                         id: 1,
@@ -214,7 +254,37 @@ export default {
                         title: "",
                     },
                 ],
+                choice: [], //多选题需要数组形式来存储用户的选择
             });
+        },
+        gapFilling() {
+            console.log("press");
+            ElMessage.info("Added a gap filling");
+            this.form.questions.push({
+                id: (this.num += 1),
+                title: "",
+                type: 3,
+                mustDo: true,
+                message: "",
+                options: {
+                    type: "text",
+                    maxlength: "",
+                    minlength: "",
+                    show_word_limit: false,
+                    placeholder: "请输入",
+                },
+            });
+            console.log(this.form);
+        },
+        uploadForm() {
+            if (this.form.title === "") {
+                ElMessage.error("你还没有填写表单标题！");
+            } else if (this.form.questions.length === 0) {
+                ElMessage.error("表单中应至少有一道题！");
+            } else {
+                // 在这里写前后端交互
+                ElMessage.success("表单保存成功！");
+            }
         },
     },
 };

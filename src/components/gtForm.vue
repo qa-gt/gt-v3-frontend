@@ -3,6 +3,7 @@
         <el-col :xs="23" :sm="16" :md="14" :lg="12" :xl="10">
             <el-card>
                 <template #header>
+                    <!-- 表单标题部分 -->
                     <div
                         style="
                             font-size: 20px;
@@ -32,6 +33,7 @@
                         />
                     </div>
                 </template>
+                <!-- 表单题目 -->
                 <div
                     class="question"
                     v-for="(i, id) in formdata.questions"
@@ -40,7 +42,13 @@
                     <span
                         v-if="in_edit"
                         style="float: right; margin-bottom: 20px"
-                    >
+                        ><el-switch
+                            v-model="i.mustDo"
+                            size="small"
+                            active-text="必做题"
+                            inactive-text="选做题"
+                            style="margin-right: 20px"
+                        />
                         <el-popconfirm
                             title="确定要删除本题吗？删除后将不可恢复。"
                             confirm-button-text="确定"
@@ -54,11 +62,14 @@
                             </template>
                         </el-popconfirm>
                     </span>
+                    <!-- 如果 !in_edit，那么显示预览界面（题目标题） -->
                     <div v-if="!in_edit">
                         <h4 style="margin-top: 0">
-                            {{ id + 1 }}. {{ i.title }}
+                            {{ id + 1 }}. [{{ isMust(i.mustDo) }}]
+                            {{ i.title }}
                         </h4>
                     </div>
+                    <!-- 如果 in_edit，那么显示编辑界面（题目标题） -->
                     <span v-if="in_edit">
                         <span> {{ id + 1 }}. </span>
                         <el-input
@@ -67,7 +78,12 @@
                             placeholder="请输入题目"
                         />
                     </span>
-                    <div style="margin: 15px" v-if="!in_edit">
+                    <!-- 如果 !in_edit，那么显示预览界面（单选选项） -->
+                    <div
+                        style="margin: 15px"
+                        v-if="!in_edit"
+                        v-show="i.type === 1"
+                    >
                         <el-radio
                             v-for="(j, index) in i.choices"
                             :key="j.id"
@@ -79,7 +95,12 @@
                             {{ i.choices[index].title }}
                         </el-radio>
                     </div>
-                    <div style="margin: 15px" v-if="in_edit">
+                    <!-- 如果 in_edit，那么显示编辑界面（单选选项） -->
+                    <div
+                        style="margin: 15px"
+                        v-if="in_edit"
+                        v-show="i.type === 1"
+                    >
                         <el-radio
                             v-for="(j, index) in i.choices"
                             :key="j.id"
@@ -125,9 +146,94 @@
                             + 添加选项
                         </el-button>
                     </div>
+
+                    <!-- 如果 !in_edit，那么显示预览界面（填空题） -->
+                    <div
+                        style="margin: 15px"
+                        v-if="!in_edit"
+                        v-show="i.type === 3"
+                    >
+                        <el-input
+                            :type="i.options.type"
+                            :maxlength="i.options.maxlength"
+                            :minlength="i.options.minlength"
+                            :show-word-limit="i.options.show_word_limit"
+                            :placeholder="i.options.placeholder"
+                            v-model="i.message"
+                            :disabled="in_edit"
+                        >
+                        </el-input>
+                    </div>
+                    <!-- 如果 in_edit，那么显示编辑界面（填空题） -->
+                    <div
+                        style="margin: 15px"
+                        v-if="in_edit"
+                        v-show="i.type === 3"
+                    >
+                        <el-input
+                            :type="i.options.type"
+                            :maxlength="i.options.maxlength"
+                            :minlength="i.options.minlength"
+                            :show-word-limit="i.options.show_word_limit"
+                            :placeholder="i.options.placeholder"
+                            :disabled="in_edit"
+                        >
+                        </el-input>
+                    </div>
                 </div>
-                <!-- {{ formdata.end_time }} -->
-                <el-button type="primary" v-if="!in_edit">
+                <!-- 如果 !in_edit，那么显示预览界面（多选选项） -->
+                <div style="margin: 15px" v-if="!in_edit && i.type === 2">
+                    <el-checkbox
+                        v-for="(j, index) in i.choices"
+                        :key="j.id"
+                        :label="j.id"
+                        v-model="i.choice"
+                        size="large"
+                        style="display: block; width: 100%; margin: -10px 0"
+                    >
+                        {{ i.choices[index].title }}
+                    </el-checkbox>
+                </div>
+                <!-- 如果 in_edit，那么显示编辑界面（多选选项） -->
+                <div style="margin: 15px" v-if="in_edit && i.type === 2">
+                    <!-- i 是当前题目，j 是当前选项 -->
+                    <el-checkbox
+                        v-for="(j, index) in i.choices"
+                        :key="j.id"
+                        :label="j.id"
+                        v-model="i.choice"
+                        :disabled="in_edit"
+                        size="large"
+                        style="display: block; width: 100%; margin: -10px 0"
+                    >
+                        <el-input
+                            placeholder="请输入选项内容"
+                            v-model="
+                                formdata.questions[id].choices[index].title
+                            "
+                            size="small"
+                            style="width: 245%; margin-right: 10px"
+                        />
+                        <el-popconfirm
+                            title="确定要删除本选项吗？删除后将不可恢复。"
+                            confirm-button-text="确定"
+                            cancel-button-text="取消"
+                            @confirm="del_choice(id, index)"
+                        >
+                            <template #reference>
+                                <el-button
+                                    type="danger"
+                                    size="small"
+                                    plain
+                                    circle
+                                >
+                                    <i class="far fa-trash"></i>
+                                </el-button>
+                            </template>
+                        </el-popconfirm>
+                    </el-checkbox>
+                </div>
+                <el-button type="primary" v-if="!in_edit" @click="confirmed">
                     &ensp;提&emsp;交&ensp;
                 </el-button>
             </el-card>
@@ -161,56 +267,6 @@ export default {
             max: 4,
             questionnumber: 4,
             dialogVisible: false, // 设置表单设置选项卡初始状态为不显示
-            form1: {
-                id: 2,
-                questions: [
-                    {
-                        id: 4,
-                        title: "请选择你的性别",
-                        type: 1,
-                        choices: [
-                            {
-                                id: 3,
-                                num: 1,
-                                title: "男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男",
-                                // title: "男",
-                            },
-                            {
-                                id: 4,
-                                num: 2,
-                                title: "女",
-                            },
-                        ],
-                        choice: 0,
-                    },
-                    {
-                        id: 5,
-                        title: "请选择你的性别",
-                        type: 1,
-                        choices: [
-                            {
-                                id: 3,
-                                num: 1,
-                                title: "男",
-                            },
-                            {
-                                id: 4,
-                                num: 2,
-                                title: "女",
-                            },
-                        ],
-                        choice: 0,
-                    },
-                ],
-                creator: {
-                    id: 3,
-                    username: "dw",
-                    portrait: "",
-                },
-                title: "表单标题",
-                create_time: "2022-04-21T21:43:49.791713+08:00",
-                end_time: null,
-            },
         };
     },
     methods: {
@@ -233,6 +289,13 @@ export default {
             ElMessage.success("添加成功");
         },
         confirmed() {},
+        isMust(mustDo) {
+            if (mustDo === true) {
+                return "必做";
+            } else if (mustDo === false) {
+                return "选做";
+            }
+        },
     },
 };
 </script>
