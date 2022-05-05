@@ -9,6 +9,7 @@ const routes = [
         name: "index",
         component: () => import("@/views/IndexView.vue"),
         meta: {
+            title: "首页",
             keepAlive: true,
         },
     },
@@ -36,6 +37,7 @@ const routes = [
         name: "login",
         component: () => import("@/views/LoginView.vue"),
         meta: {
+            title: "登录",
             keepAlive: true,
         },
     },
@@ -44,6 +46,7 @@ const routes = [
         name: "write",
         component: () => import("@/views/WriteView.vue"),
         meta: {
+            title: "写文章",
             keepAlive: true,
             requireLogin: true,
         },
@@ -62,6 +65,7 @@ const routes = [
         name: "user",
         component: () => import("@/views/UserView.vue"),
         meta: {
+            title: "用户主页",
             keepAlive: true,
         },
     },
@@ -70,6 +74,7 @@ const routes = [
         name: "register",
         component: () => import("@/views/RegisterView.vue"),
         meta: {
+            title: "注册",
             keepAlive: true,
         },
     },
@@ -78,6 +83,7 @@ const routes = [
         name: "404",
         component: () => import("@/views/404.vue"),
         meta: {
+            title: "404",
             keepAlive: true,
         },
     },
@@ -94,6 +100,7 @@ const routes = [
         name: "about",
         component: () => import("@/views/AboutView.vue"),
         meta: {
+            title: "关于",
             keepAlive: true,
         },
     },
@@ -142,6 +149,7 @@ const routes = [
         name: "calendar",
         component: () => import("@/views/CalendarView.vue"),
         meta: {
+            title: "校历",
             keepAlive: true,
         },
     },

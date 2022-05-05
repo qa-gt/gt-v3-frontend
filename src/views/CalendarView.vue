@@ -356,7 +356,6 @@ export default {
                     (this.$refs.calendar && this.$refs.calendar.date) || null),
             100
         );
-        // setInterval(() => console.log(this.newEvent.date), 1000);
     },
     watch: {
         currentDate(value, old) {

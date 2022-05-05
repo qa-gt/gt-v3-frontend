@@ -172,6 +172,7 @@ export default {
                         this.disabled.submit = false;
                     });
             }
+            atc.topic = atc._topic;
         },
         async uploadImage(files, callback) {
             const file = files[0];
@@ -245,7 +246,6 @@ export default {
         save() {
             if (this.atc.content.length > 15000) {
                 ElMessage.error("暂不支持缓存超过15000字符的文章！");
-                this.disabled.submit = false;
                 return;
             }
             this.$store.commit("setWritingAtc", this.atc);
@@ -266,26 +266,41 @@ export default {
             this.$store.commit("delWritingAtc");
             ElMessage.info("已清空");
         },
-    },
-    created() {
-        if (this.$route.query.id) {
-            this.atc.id = this.$route.query.id;
-            this.$axios
-                .get(`/article/${this.atc.id}/`)
-                .then(res => {
+        init() {
+            if (this.$route.query.id) {
+                this.atc.id = this.$route.query.id;
+                this.$axios.get(`/article/${this.atc.id}/`).then(res => {
                     this.atc.topic = res.topic.id;
                     this.atc.title = res.title;
                     this.atc.content = res.content;
                     this.atc.exist = true;
-                })
-                .catch(err => err);
-        } else if (this.writingAtc.title || this.writingAtc.content) {
-            this.atc = this.writingAtc;
-            ElMessage.info("已加载草稿");
-        }
+                });
+                ElMessage.info("当前处于编辑模式");
+            } else if (this.writingAtc.title || this.writingAtc.content) {
+                this.atc = this.writingAtc;
+                ElMessage.info("已加载草稿");
+            } else {
+                this.atc = {
+                    exist: false,
+                    id: "",
+                    title: "",
+                    content: "",
+                    topic: 0,
+                };
+            }
+        },
+    },
+    watch: {
+        $route(now, old) {
+            if (now.name !== "write") return;
+            if (now.query.id !== this.atc.id) this.init();
+        },
+    },
+    mounted() {
         this.$axios.get("/topic/", { params: { min_state: 0 } }).then(data => {
             this.topics = data;
         });
+        this.init();
     },
 };
 </script>
