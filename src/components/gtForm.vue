@@ -42,12 +42,12 @@
                     <span
                         v-if="in_edit"
                         style="float: right; margin-bottom: 20px"
-                        ><el-switch
+                    >
+                        <el-checkbox
                             v-model="i.mustDo"
+                            label="必填"
                             size="small"
-                            active-text="必做题"
-                            inactive-text="选做题"
-                            style="margin-right: 20px"
+                            style="margin: 0 5px"
                         />
                         <el-popconfirm
                             title="确定要删除本题吗？删除后将不可恢复。"
@@ -96,11 +96,7 @@
                         </el-radio>
                     </div>
                     <!-- 如果 in_edit，那么显示编辑界面（单选选项） -->
-                    <div
-                        style="margin: 15px"
-                        v-if="in_edit"
-                        v-show="i.type === 1"
-                    >
+                    <div style="margin: 15px" v-if="in_edit && i.type === 1">
                         <el-radio
                             v-for="(j, index) in i.choices"
                             :key="j.id"
@@ -148,11 +144,7 @@
                     </div>
 
                     <!-- 如果 !in_edit，那么显示预览界面（填空题） -->
-                    <div
-                        style="margin: 15px"
-                        v-if="!in_edit"
-                        v-show="i.type === 3"
-                    >
+                    <div style="margin: 15px" v-if="!in_edit && i.type === 3">
                         <el-input
                             :type="i.options.type"
                             :maxlength="i.options.maxlength"
@@ -165,11 +157,7 @@
                         </el-input>
                     </div>
                     <!-- 如果 in_edit，那么显示编辑界面（填空题） -->
-                    <div
-                        style="margin: 15px"
-                        v-if="in_edit"
-                        v-show="i.type === 3"
-                    >
+                    <div style="margin: 15px" v-if="in_edit && i.type === 3">
                         <el-input
                             :type="i.options.type"
                             :maxlength="i.options.maxlength"
@@ -180,59 +168,59 @@
                         >
                         </el-input>
                     </div>
-                </div>
-                <!-- 如果 !in_edit，那么显示预览界面（多选选项） -->
-                <div style="margin: 15px" v-if="!in_edit && i.type === 2">
-                    <el-checkbox
-                        v-for="(j, index) in i.choices"
-                        :key="j.id"
-                        :label="j.id"
-                        v-model="i.choice"
-                        size="large"
-                        style="display: block; width: 100%; margin: -10px 0"
-                    >
-                        {{ i.choices[index].title }}
-                    </el-checkbox>
-                </div>
-                <!-- 如果 in_edit，那么显示编辑界面（多选选项） -->
-                <div style="margin: 15px" v-if="in_edit && i.type === 2">
-                    <!-- i 是当前题目，j 是当前选项 -->
-                    <el-checkbox
-                        v-for="(j, index) in i.choices"
-                        :key="j.id"
-                        :label="j.id"
-                        v-model="i.choice"
-                        :disabled="in_edit"
-                        size="large"
-                        style="display: block; width: 100%; margin: -10px 0"
-                    >
-                        <el-input
-                            placeholder="请输入选项内容"
-                            v-model="
-                                formdata.questions[id].choices[index].title
-                            "
-                            size="small"
-                            style="width: 245%; margin-right: 10px"
-                        />
-                        <el-popconfirm
-                            title="确定要删除本选项吗？删除后将不可恢复。"
-                            confirm-button-text="确定"
-                            cancel-button-text="取消"
-                            @confirm="del_choice(id, index)"
+                    <!-- 如果 !in_edit，那么显示预览界面（多选选项） -->
+                    <div style="margin: 15px" v-if="!in_edit && i.type === 2">
+                        <el-checkbox
+                            v-for="(j, index) in i.choices"
+                            :key="j.id"
+                            :label="j.id"
+                            v-model="i.choice"
+                            size="large"
+                            style="display: block; width: 100%; margin: -10px 0"
                         >
-                            <template #reference>
-                                <el-button
-                                    type="danger"
-                                    size="small"
-                                    plain
-                                    circle
-                                >
-                                    <i class="far fa-trash"></i>
-                                </el-button>
-                            </template>
-                        </el-popconfirm>
-                    </el-checkbox>
+                            {{ i.choices[index].title }}
+                        </el-checkbox>
+                    </div>
+                    <!-- 如果 in_edit，那么显示编辑界面（多选选项） -->
+                    <div style="margin: 15px" v-if="in_edit && i.type === 2">
+                        <el-checkbox
+                            v-for="(j, index) in i.choices"
+                            :key="j.id"
+                            :label="j.id"
+                            v-model="i.choice"
+                            :disabled="in_edit"
+                            size="large"
+                            style="display: block; width: 100%; margin: -10px 0"
+                        >
+                            <el-input
+                                placeholder="请输入选项内容"
+                                v-model="
+                                    formdata.questions[id].choices[index].title
+                                "
+                                size="small"
+                                style="width: 100%; margin-right: 10px"
+                            />
+                            <el-popconfirm
+                                title="确定要删除本选项吗？删除后将不可恢复。"
+                                confirm-button-text="确定"
+                                cancel-button-text="取消"
+                                @confirm="del_choice(id, index)"
+                            >
+                                <template #reference>
+                                    <el-button
+                                        type="danger"
+                                        size="small"
+                                        plain
+                                        circle
+                                    >
+                                        <i class="far fa-trash" />
+                                    </el-button>
+                                </template>
+                            </el-popconfirm>
+                        </el-checkbox>
+                    </div>
                 </div>
+
                 <el-button type="primary" v-if="!in_edit" @click="confirmed">
                     &ensp;提&emsp;交&ensp;
                 </el-button>
@@ -246,15 +234,9 @@ import { ElMessage } from "element-plus";
 export default {
     name: "gtForm",
     props: {
-        showFollow: {
-            type: Boolean,
-            default() {
-                return true;
-            },
-        },
         formdata: {
             type: Object,
-            default: {},
+            default: { questions: [] },
         },
         in_edit: {
             type: Boolean,

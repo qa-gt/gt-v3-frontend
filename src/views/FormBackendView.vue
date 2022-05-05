@@ -99,15 +99,17 @@
                 <h2>表单预览 & 编辑</h2>
                 <el-divider />
                 <gt-form :formdata="form" :in_edit="in_edit" />
-                <div
+                <!-- <div
+                    v-for="item in form.questions"
                     :key="item"
-                    v-for="item in formitems"
                     style="margin-bottom: 15px"
                 >
                     <div style="margin-bottom: 15px">
-                        <el-card> </el-card>
+                        <el-card>
+                            {{ item }}
+                        </el-card>
                     </div>
-                </div>
+                </div> -->
             </el-card>
         </el-col>
     </el-row>

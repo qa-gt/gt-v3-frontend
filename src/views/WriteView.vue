@@ -13,9 +13,6 @@
         <el-col :xs="24" :sm="18" :md="17" :lg="18" :xl="19">
             <el-card full shadow="hover">
                 <h2>编辑文章</h2>
-                <!-- <p style="color: rgb(200, 200, 200)">
-                    若预览显示异常, 请复制源文本后刷新页面
-                </p> -->
                 <el-divider />
                 <el-form label-position="top">
                     <el-form-item>
@@ -101,6 +98,15 @@ import { mapState } from "vuex";
 import gtUser from "@/components/gtUser.vue";
 import gtMdEditor from "@/components/mdEditor.vue";
 import { ElMessage, ElNotification } from "element-plus";
+
+const atc_default = {
+    exist: false,
+    id: "",
+    title: "",
+    content: "",
+    topic: 0,
+};
+
 export default {
     computed: {
         ...mapState(["user", "uploadKey", "writingAtc", "imageCache"]),
@@ -114,13 +120,7 @@ export default {
     },
     data() {
         return {
-            atc: {
-                exist: false,
-                id: "",
-                title: "",
-                content: "",
-                topic: 0,
-            },
+            atc: atc_default,
             topics: [],
             disabled: { submit: false },
         };
@@ -256,13 +256,7 @@ export default {
             });
         },
         clear() {
-            this.atc = {
-                exist: false,
-                id: "",
-                title: "",
-                content: "",
-                topic: 0,
-            };
+            this.atc = atc_default;
             this.$store.commit("delWritingAtc");
             ElMessage.info("已清空");
         },
@@ -280,13 +274,7 @@ export default {
                 this.atc = this.writingAtc;
                 ElMessage.info("已加载草稿");
             } else {
-                this.atc = {
-                    exist: false,
-                    id: "",
-                    title: "",
-                    content: "",
-                    topic: 0,
-                };
+                this.atc = atc_default;
             }
         },
     },
