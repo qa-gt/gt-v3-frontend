@@ -41,26 +41,29 @@
                 >
                     <span
                         v-if="in_edit"
-                        style="float: right; margin-bottom: 20px"
+                        style="float: right; margin-bottom: 18px"
                     >
-                        <el-checkbox
-                            v-model="i.mustDo"
-                            label="必填"
-                            size="small"
-                            style="margin: 0 5px"
-                        />
-                        <el-popconfirm
-                            title="确定要删除本题吗？删除后将不可恢复。"
-                            confirm-button-text="确定"
-                            cancel-button-text="取消"
-                            @confirm="del_que(id)"
-                        >
-                            <template #reference>
-                                <el-button size="small" type="danger" plain>
-                                    删除该题
-                                </el-button>
-                            </template>
-                        </el-popconfirm>
+                        <span style="margin-right: 15px; margin-top: 15px">
+                            <el-checkbox
+                                v-model="i.mustDo"
+                                label="必填"
+                                size="small"
+                            />
+                        </span>
+                        <span>
+                            <el-popconfirm
+                                title="确定要删除本题吗？删除后将不可恢复。"
+                                confirm-button-text="确定"
+                                cancel-button-text="取消"
+                                @confirm="del_que(id)"
+                            >
+                                <template #reference>
+                                    <el-button size="small" type="danger" plain>
+                                        删除该题
+                                    </el-button>
+                                </template>
+                            </el-popconfirm>
+                        </span>
                     </span>
                     <!-- 如果 !in_edit，那么显示预览界面（题目标题） -->
                     <div v-if="!in_edit">
@@ -198,7 +201,7 @@
                                     formdata.questions[id].choices[index].title
                                 "
                                 size="small"
-                                style="width: 100%; margin-right: 10px"
+                                style="width: 245%; margin-right: 10px"
                             />
                             <el-popconfirm
                                 title="确定要删除本选项吗？删除后将不可恢复。"
