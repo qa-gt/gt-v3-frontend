@@ -221,6 +221,15 @@
                                 </template>
                             </el-popconfirm>
                         </el-checkbox>
+                        <el-button
+                            style="width: 103.1%"
+                            type="primary"
+                            size="small"
+                            plain
+                            @click="add_choice(id)"
+                        >
+                            + 添加选项
+                        </el-button>
                     </div>
                 </div>
 
