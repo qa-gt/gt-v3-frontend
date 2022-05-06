@@ -349,11 +349,4 @@ export default {
     -o-transform: translateY(-50%);
 }
 
-#main {
-    background: url("@/assets/img/main.jpg");
-    width: 100%;
-    height: 100%;
-    position: fixed;
-    background-size: 100% 100%;
-}
 </style>
