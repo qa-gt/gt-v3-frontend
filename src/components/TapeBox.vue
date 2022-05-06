@@ -1,62 +1,82 @@
 <template>
-    <el-card style="width: 70%; margin-left: 15%">
-        <h2>Tape提问箱</h2>
-        <el-divider />
-        <el-card
-            style="
-                margin: 20px 50% 20px 0px;
-                algin: center;
-                display: inline-block;
-                vertical-align: middle;
-            "
-        >
-            <div>
-                <span>
-                    <el-avatar />
-                </span>
-                <span> 由 {{ username }} 创建的提问箱 </span>
-            </div>
-        </el-card>
-
-        <div>
-            <el-tag size="large" style="width: 100%; justify-content: left">
-                <div style="font-size: 13px; justify-content: left">
-                    Ta的留言 > &emsp; {{ message }}
+    <el-row justify="space-evenly">
+        <el-col :xs="24" :sm="23" :md="22" :lg="21" :xl="20">
+            <el-card>
+                <h2>Tape提问箱</h2>
+                <el-divider />
+                <div class="el-card tape-title">
+                    <div
+                        style="
+                            background: #000;
+                            opacity: 0.5;
+                            width: 100%;
+                            height: 100%;
+                            margin: 0;
+                            padding: 20px !important;
+                        "
+                    >
+                        <div
+                            style="
+                                color: #ffffff;
+                                font-size: 200%;
+                                display: block;
+                                text-align: center;
+                                font-family: zh96;
+                                padding: 10px 0 20px 0;
+                            "
+                        >
+                            {{ message }}
+                        </div>
+                        <el-row style="padding: 10px 0" />
+                        <div
+                            style="
+                                display: flex;
+                                align-items: center;
+                                flex-grow: 1;
+                            "
+                        >
+                            <el-avatar style="padding-right: 10px" />
+                            <span style="font-weight: bold; color: #dcdcdc">
+                                由 {{ username }} 创建的提问箱
+                            </span>
+                        </div>
+                    </div>
                 </div>
-            </el-tag>
-        </div>
-        <div style="margin-top: 20px">
-            <el-input
-                type="textarea"
-                maxlength="150"
-                rows="4"
-                show-word-limit
-                placeholder="说点悄悄话吧！"
-                v-model="asr"
-            />
-        </div>
-        <div style="margin-top: 20px; float: right; margin-bottom: 20px">
-            <el-button type="primary">投递</el-button>
-        </div>
-    </el-card>
-    <el-card style="margin-top: 20px; width: 70%; margin-left: 15%">
-        <h3>看看别人都说了些啥</h3>
-        <el-divider />
-        <div v-for="item in reply" :key="item">
-            <span>
-                {{ item.answer }}
-            </span>
-            <span style="float: right; font-size: 13px; color: gray">
-                发表时间：{{ item.time }}
-            </span>
-            <el-divider />
-        </div>
-    </el-card>
+
+                <div style="padding-top: 20px">
+                    <el-input
+                        type="textarea"
+                        maxlength="150"
+                        rows="4"
+                        show-word-limit
+                        placeholder="说点悄悄话吧！"
+                        v-model="asr"
+                        style="margin: 0 5%; width: 90%"
+                    />
+                </div>
+                <div style="padding: 5px 5% 30px 0; float: right">
+                    <el-button type="primary">投递</el-button>
+                </div>
+            </el-card>
+            <el-row style="margin: 10px 0" />
+            <el-card>
+                <h3>{{ username }} 的其他回答</h3>
+                <el-divider />
+                <div v-for="item in reply" :key="item">
+                    <span>
+                        {{ item.answer }}
+                    </span>
+                    <span style="float: right; font-size: 13px; color: gray">
+                        发表时间：{{ item.time }}
+                    </span>
+                    <el-divider />
+                </div>
+            </el-card>
+        </el-col>
+    </el-row>
 </template>
 
 <script>
-import ElLoading from "element-plus";
-
 export default {
     props: {
         message: {
@@ -91,41 +111,21 @@ export default {
                 { answer: "hhh", time: "2022/04/30" },
                 { answer: "hhh", time: "2022/04/30" },
                 { answer: "hhh", time: "2022/04/30" },
-
             ],
         };
-    },
-    init() {
-        const loading = ElLoading.service({ fullscreen: true });
-        this.$axios
-            .get(`/tapebox/${this.$route.params.aid}/`)
-            .then((res) => {
-                res.create_time = this.$moment(res.create_time).fromNow();
-                res.update_time = this.$moment(res.update_time).fromNow();
-                this.atc = res;
-            })
-            .then(() => setTimeout(loading.close, 100))
-            .catch((err) => err);
-        this.$axios
-            .get("/like/", { params: { article: this.$route.params.aid } })
-            .then((res) => {
-                this.atcLike = res;
-                this.liked = this.atcLike.some(
-                    (item) => item.user.id === this.user.id
-                );
-            });
-        this.getCmts();
-        if (!this.readedAtc.includes(this.$route.params.aid)) {
-            this.$axios
-                .patch(`/article/${this.$route.params.aid}/read/`)
-                .then(() => {
-                    this.atc.read_count += 1;
-                })
-                .catch((err) => err);
-            this.$store.commit("addReadedAtc", this.$route.params.aid);
-        }
     },
 };
 </script>
 
-<style></style>
+<style scoped lang="scss">
+.tape-title {
+    background: url("https://api.yixiangzhilv.com/utils/wallpaper");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    margin: 10px 5%;
+}
+.el-card {
+    padding: 0 !important;
+}
+</style>

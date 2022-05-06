@@ -99,7 +99,7 @@
                 </el-collapse>
                 <el-divider style="margin-top: 10px" />
                 <gt-md-editor :modelValue="atc.content" :previewOnly="true" />
-                <gt-form :formdata="form" />
+                <!-- <gt-form :formdata="form" /> -->
             </el-card>
             <br /><br />
             <el-card shadow="hover" class="comments-card">
@@ -192,7 +192,6 @@
                                 >,&ensp;</span
                             >
                         </span>
-                        <!-- {{ atcLike.map(item => item.user.username).join(", ") }} -->
                     </div>
                 </el-row>
                 <el-divider />

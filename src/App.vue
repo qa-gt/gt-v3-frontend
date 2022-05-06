@@ -5,13 +5,6 @@
         </el-button>
 
         <div class="user">
-            <el-button @click="$router.push({ name: 'about' })" type="text">
-                <div
-                    style="color: #000000; font-size: 16px; margin-right: 30px"
-                >
-                    About
-                </div>
-            </el-button>
             <el-button @click="changeTheme()" type="text">
                 <i :class="['fal', theme === 'light' ? 'fa-sun' : 'fa-moon']" />
             </el-button>
@@ -23,7 +16,7 @@
             </el-button>
 
             <el-button @click="$router.push('/write')" type="text">
-                <i class="fal fa-comment-edit"></i>
+                <i class="fal fa-comment-edit" />
             </el-button>
 
             <el-button
@@ -31,13 +24,13 @@
                 type="text"
                 v-if="!loggedIn"
             >
-                <i class="fal fa-sign-in-alt"></i>
+                <i class="fal fa-sign-in-alt" />
             </el-button>
 
             <el-dropdown v-else>
                 <span class="el-dropdown-link" style="cursor: pointer">
                     {{ user.username }}
-                    <i class="fal fa-angle-down"></i>
+                    <i class="fal fa-angle-down" />
                 </span>
                 <template #dropdown>
                     <el-dropdown-menu>
@@ -271,5 +264,12 @@ export default {
     width: 100%;
     display: inline-block;
     margin-bottom: 15px;
+}
+</style>
+
+<style>
+@font-face {
+    font-family: zh96;
+    src: url("https://yiyan.yixiangzhilv.com/static/assets/fonts/zihun96.ttf");
 }
 </style>
