@@ -324,6 +324,11 @@ const extMd = (text, writing = false) => {
             }
         );
     }
+    text = text.replaceAll(/!!!IMAGE:(.*?)!!!/g, (match, p1) => {
+        if (p1.substr(0, 4) !== "http" && p1.substr(0, 2) !== "//")
+            p1 = "https://gtcdn.yxzl.top/atc_images_old/" + p1 + "/30";
+        return `<img src=${p1} />`;
+    });
     return text;
 };
 
