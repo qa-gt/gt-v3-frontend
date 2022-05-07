@@ -215,7 +215,8 @@ export default {
             });
             const fileKey = res.scope.replace(
                 "*",
-                String(new Date().getTime()) + file.name
+                String(new Date().getTime()) +
+                    file.name.replace(/[^\w0-9_-]/g, "")
             );
             let s3Upload = s3
                 .upload({

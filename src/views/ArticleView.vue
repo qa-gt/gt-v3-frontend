@@ -496,7 +496,7 @@ export default {
             }
             this.disabled.comment = true;
             await this.$recaptchaLoaded();
-            const token = await this.$recaptcha("write");
+            const token = await this.$recaptcha("comment");
 
             this.$axios
                 .post("/comment/", {

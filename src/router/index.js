@@ -154,10 +154,11 @@ const routes = [
         },
     },
     {
-        path: "/tapebox",
+        path: "/tapebox/:id",
         name: "tapebox",
         component: () => import("@/views/TapeBoxView.vue"),
         meta: {
+            title: "提问箱",
             keepAlive: true,
         },
     },
