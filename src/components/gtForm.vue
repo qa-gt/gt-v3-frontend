@@ -46,7 +46,7 @@
                         <span style="margin-right: 15px; margin-top: 15px">
                             <el-checkbox
                                 v-model="i.mustDo"
-                                label="必填"
+                                label="必做"
                                 size="small"
                             />
                         </span>
@@ -145,32 +145,6 @@
                             + 添加选项
                         </el-button>
                     </div>
-
-                    <!-- 如果 !in_edit，那么显示预览界面（填空题） -->
-                    <div style="margin: 15px" v-if="!in_edit && i.type === 3">
-                        <el-input
-                            :type="i.options.type"
-                            :maxlength="i.options.maxlength"
-                            :minlength="i.options.minlength"
-                            :show-word-limit="i.options.show_word_limit"
-                            :placeholder="i.options.placeholder"
-                            v-model="i.message"
-                            :disabled="in_edit"
-                        >
-                        </el-input>
-                    </div>
-                    <!-- 如果 in_edit，那么显示编辑界面（填空题） -->
-                    <div style="margin: 15px" v-if="in_edit && i.type === 3">
-                        <el-input
-                            :type="i.options.type"
-                            :maxlength="i.options.maxlength"
-                            :minlength="i.options.minlength"
-                            :show-word-limit="i.options.show_word_limit"
-                            :placeholder="i.options.placeholder"
-                            :disabled="in_edit"
-                        >
-                        </el-input>
-                    </div>
                     <!-- 如果 !in_edit，那么显示预览界面（多选选项） -->
                     <div style="margin: 15px" v-if="!in_edit && i.type === 2">
                         <el-checkbox
@@ -231,6 +205,35 @@
                             + 添加选项
                         </el-button>
                     </div>
+                    <!-- 填空部分不涉及是否正在编辑 -->
+                    <div style="margin: 15px" v-if="i.type === 3">
+                        <el-input
+                            :placeholder="i.options.placeholder"
+                            :type="i.options.type"
+                            :maxlength="i.options.maxlength"
+                            :minlength="i.options.minlength"
+                            show-word-limit="true"
+                            v-model="formdata.questions[id].message"
+                            rows="4"
+                            clearable
+                            style="
+                                width: 100%;
+                                margin-right: 10px;
+                                margin-bottom: 5px;
+                            "
+                            :disabled="in_edit"
+                        />
+                        <el-button
+                            style="width: 100%"
+                            type="primary"
+                            size="small"
+                            plain
+                            v-show="in_edit"
+                            @click="blankSetting(id)"
+                        >
+                            填空题设置
+                        </el-button>
+                    </div>
                 </div>
 
                 <el-button type="primary" v-if="!in_edit" @click="confirmed">
@@ -239,6 +242,30 @@
             </el-card>
         </el-col>
     </el-row>
+    <el-drawer v-model="show_setting" direction="ltr">
+        <h3>填空题设置</h3>
+        <el-divider />
+        <el-form label-position="top">
+            <el-form-item label="文本框类型">
+                <el-select
+                    v-model="formdata.questions[questionId].options.type"
+                >
+                    <el-option value="text" label="单行输入框" />
+                    <el-option value="textarea" label="多行文本框" />
+                </el-select>
+            </el-form-item>
+            <el-form-item label="字符数上限(设为零即为无限制)">
+                <el-input-number
+                    v-model="formdata.questions[questionId].options.maxlength"
+                />
+            </el-form-item>
+            <el-form-item label="文本框占位文本">
+                <el-input
+                    v-model="formdata.questions[questionId].options.placeholder"
+                />
+            </el-form-item>
+        </el-form>
+    </el-drawer>
 </template>
 
 <script>
@@ -261,6 +288,9 @@ export default {
             max: 4,
             questionnumber: 4,
             dialogVisible: false, // 设置表单设置选项卡初始状态为不显示
+            show_setting: false, //设置填空题选项卡初始状态为不显示
+            questionId: null, // 填空题设置——读取题号所用临时变量
+            limit: false,
         };
     },
     methods: {
@@ -282,12 +312,33 @@ export default {
             });
             ElMessage.success("添加成功");
         },
-        confirmed() {},
+
         isMust(mustDo) {
             if (mustDo === true) {
                 return "必做";
             } else if (mustDo === false) {
                 return "选做";
+            }
+        },
+        blankSetting(id) {
+            this.show_setting = true;
+            this.questionId = id;
+        },
+        confirmed() {
+            let que = this.formdata.questions;
+            for (let i = 0; i < que.length; i++) {
+                if (que[i].mustDo === true) {
+                    if (que[i].type === 1 && que[i].choice === 0) {
+                        ElMessage.error("你有一道单选题未完成");
+                        break;
+                    } else if (que[i].type === 2 && que[i].choice.length === 0) {
+                        ElMessage.error("你有一道多选题未完成");
+                        break;
+                    } else if (que[i].type === 3 && que[i].message === "") {
+                        ElMessage.error("你有一道填空题未完成");
+                        break;
+                    }
+                }
             }
         },
     },

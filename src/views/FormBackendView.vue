@@ -35,7 +35,9 @@
                                         @click="multipleChoice()"
                                         >多选题</el-dropdown-item
                                     >
-                                    <el-dropdown-item command="filling"
+                                    <el-dropdown-item
+                                        command="filling"
+                                        @click="gapFilling()"
                                         >填空题</el-dropdown-item
                                     >
                                     <el-dropdown-item command="timeChoice"
@@ -179,6 +181,7 @@ export default {
                                 title: "",
                             },
                         ],
+                        choice: 0,
                     },
                 ],
             },
@@ -215,14 +218,6 @@ export default {
                         title: "",
                     },
                 ],
-                message: "",
-                options: {
-                    type: "text",
-                    maxlength: "",
-                    minlength: "",
-                    show_word_limit: false,
-                    placeholder: "请输入",
-                },
                 choice: 0,
             });
             console.log(this.form);
@@ -270,7 +265,7 @@ export default {
                 message: "",
                 options: {
                     type: "text",
-                    maxlength: "",
+                    maxlength: null,
                     minlength: "",
                     show_word_limit: false,
                     placeholder: "请输入",
