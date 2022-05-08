@@ -14,7 +14,11 @@
         <el-col :xs="24" :sm="18" :md="17" :lg="18" :xl="19">
             <div style="margin-bottom: 15px">
                 <el-card>
-                    <h2>创建一个表单</h2>
+                    <h2>
+                        创建一个表单 &emsp;
+                        <el-button type="text" > 使用帮助 </el-button>
+                    </h2>
+
                     <el-divider />
                     <el-card>
                         <el-dropdown :disabled="!in_edit">

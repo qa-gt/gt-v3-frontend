@@ -340,9 +340,6 @@ export default {
         },
         confirmed() {
             let que = this.formdata.questions;
-            if (this.formdata.title === "") {
-                ElMessage.error("表单标题不可以为空");
-            }
             for (let i = 0; i < que.length; i++) {
                 if (que[i].mustDo === true) {
                     if (que[i].type === 1 && que[i].choice === 0) {
