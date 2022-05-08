@@ -234,6 +234,10 @@
                             填空题设置
                         </el-button>
                     </div>
+                    <!-- 评分部分不涉及是否正在编辑 -->
+                    <div style="margin: 15px" v-if="i.type === 4">
+                        <el-rate v-model="i.rate" />
+                    </div>
                 </div>
 
                 <el-button type="primary" v-if="!in_edit" @click="confirmed">
@@ -254,9 +258,11 @@
                     <el-option value="textarea" label="多行文本框" />
                 </el-select>
             </el-form-item>
-            <el-form-item label="字符数上限(设为零即为无限制)">
+            <el-form-item label="字符数上限">
                 <el-input-number
-                    v-model="formdata.questions[questionId].options.maxlength"
+                    v-model="maxlength"
+                    min="0"
+                    @change="inputLimit(questionId)"
                 />
             </el-form-item>
             <el-form-item label="文本框占位文本">
@@ -291,6 +297,7 @@ export default {
             show_setting: false, //设置填空题选项卡初始状态为不显示
             questionId: null, // 填空题设置——读取题号所用临时变量
             limit: false,
+            maxlength: null,
         };
     },
     methods: {
@@ -324,6 +331,13 @@ export default {
             this.show_setting = true;
             this.questionId = id;
         },
+        inputLimit(id) {
+            if (this.maxlength === 0) {
+                this.formdata.questions[id].options.maxlength = null;
+            } else {
+                this.formdata.questions[id].options.maxlength = this.maxlength;
+            };
+        },
         confirmed() {
             let que = this.formdata.questions;
             for (let i = 0; i < que.length; i++) {
@@ -331,7 +345,10 @@ export default {
                     if (que[i].type === 1 && que[i].choice === 0) {
                         ElMessage.error("你有一道单选题未完成");
                         break;
-                    } else if (que[i].type === 2 && que[i].choice.length === 0) {
+                    } else if (
+                        que[i].type === 2 &&
+                        que[i].choice.length === 0
+                    ) {
                         ElMessage.error("你有一道多选题未完成");
                         break;
                     } else if (que[i].type === 3 && que[i].message === "") {

@@ -43,6 +43,9 @@
                                     <el-dropdown-item command="timeChoice"
                                         >时间选择</el-dropdown-item
                                     >
+                                    <el-dropdown-item @click="rating()"
+                                        >评分</el-dropdown-item
+                                    >
                                 </el-dropdown-menu>
                             </template>
                         </el-dropdown>
@@ -270,6 +273,18 @@ export default {
                     show_word_limit: false,
                     placeholder: "请输入",
                 },
+            });
+            console.log(this.form);
+        },
+        rating() {
+            console.log("press");
+            ElMessage.info("Added a gap filling");
+            this.form.questions.push({
+                id: (this.num += 1),
+                title: "",
+                type: 4,
+                mustDo: true,
+                rate: 0,
             });
             console.log(this.form);
         },
