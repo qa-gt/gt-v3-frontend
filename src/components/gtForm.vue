@@ -336,10 +336,13 @@ export default {
                 this.formdata.questions[id].options.maxlength = null;
             } else {
                 this.formdata.questions[id].options.maxlength = this.maxlength;
-            };
+            }
         },
         confirmed() {
             let que = this.formdata.questions;
+            if (this.formdata.title === "") {
+                ElMessage.error("表单标题不可以为空");
+            }
             for (let i = 0; i < que.length; i++) {
                 if (que[i].mustDo === true) {
                     if (que[i].type === 1 && que[i].choice === 0) {
@@ -354,6 +357,8 @@ export default {
                     } else if (que[i].type === 3 && que[i].message === "") {
                         ElMessage.error("你有一道填空题未完成");
                         break;
+                    } else if (que[i].type === 4 && que[i].rate === 0) {
+                        ElMessage.error("你有一道评分未完成");
                     }
                 }
             }
