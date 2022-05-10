@@ -212,6 +212,13 @@ export default {
     created() {
         document.firstElementChild.className = this.theme;
         if (import.meta.env.DEV) window.STOP_DEV_GUARD = true;
+        if (this.$store.state.jwt) {
+            let data = atob(this.$store.state.jwt.split(".")[1]);
+            data = JSON.parse(data);
+            if (data.exp < Date.now() / 1000) {
+                this.$store.commit("logout");
+            }
+        }
         this.$axios.get("https://yiyan.yixiangzhilv.com/get").then(res => {
             if (res.from_who && res.from) {
                 res.from_show = `${res.from} · ${res.from_who}`;
@@ -221,7 +228,7 @@ export default {
             this.yiyan = res;
         });
         this.getNotices();
-        setInterval(this.getNotices, 120000);
+        setInterval(this.getNotices, 60000);
     },
 };
 </script>
