@@ -14,7 +14,11 @@
         <el-col :xs="24" :sm="18" :md="17" :lg="18" :xl="19">
             <div style="margin-bottom: 15px">
                 <el-card>
-                    <h2>创建一个表单</h2>
+                    <h2>
+                        创建一个表单 &emsp;
+                        <el-button type="text" > 使用帮助 </el-button>
+                    </h2>
+
                     <el-divider />
                     <el-card>
                         <el-dropdown :disabled="!in_edit">
@@ -42,6 +46,9 @@
                                     >
                                     <el-dropdown-item command="timeChoice"
                                         >时间选择</el-dropdown-item
+                                    >
+                                    <el-dropdown-item @click="rating()"
+                                        >评分</el-dropdown-item
                                     >
                                 </el-dropdown-menu>
                             </template>
@@ -270,6 +277,18 @@ export default {
                     show_word_limit: false,
                     placeholder: "请输入",
                 },
+            });
+            console.log(this.form);
+        },
+        rating() {
+            console.log("press");
+            ElMessage.info("Added a gap filling");
+            this.form.questions.push({
+                id: (this.num += 1),
+                title: "",
+                type: 4,
+                mustDo: true,
+                rate: 0,
             });
             console.log(this.form);
         },
