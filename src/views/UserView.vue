@@ -361,6 +361,7 @@ export default {
                         min_state: -2,
                         page: this.pageInfo.num,
                         search: this.searchText,
+                        ordering: "-state,-create_time",
                     },
                 })
                 .then(data => {
@@ -368,8 +369,7 @@ export default {
                     this.myAtcs = data.results;
                     this.empty = this.myAtcs.length === 0;
                 })
-                .catch(err => err)
-                .then(() => setTimeout(loading.close, 100));
+                .finally(() => setTimeout(loading.close, 100));
         },
         getMyClts() {
             const loading = ElLoading.service({ fullscreen: true });
@@ -379,6 +379,8 @@ export default {
                         user: this.$route.params.uid,
                         page: this.pageInfo.num,
                         search: this.searchText,
+                        ordering: "-id",
+                        article__state__gte: -3,
                     },
                 })
                 .then(data => {
@@ -387,8 +389,7 @@ export default {
                     this.myClts = data;
                     this.empty = this.myClts.length === 0;
                 })
-                .catch(err => err)
-                .then(() => setTimeout(loading.close, 100));
+                .finally(() => setTimeout(loading.close, 100));
         },
         getMyFollowing() {
             const loading = ElLoading.service({ fullscreen: true });

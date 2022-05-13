@@ -152,7 +152,10 @@ export default {
         return {
             searchInput: "",
             searchText: "",
-            topics: [{ id: -1, name: "全部" }],
+            topics: [
+                { id: -2, name: "置顶" },
+                { id: -1, name: "全部" },
+            ],
             value: 0,
             atcs: [],
             pageInfo: { total: 0, num: 1, size: 20 },
@@ -174,16 +177,28 @@ export default {
             this.pageInfo.num = 1;
         },
         getAtcs() {
-            let topic = this.currentTopic === "-1" ? "" : this.currentTopic;
+            let topic = this.currentTopic,
+                state__gte,
+                ordering = "-create_time";
+            if (topic === "-2") {
+                state__gte = 3;
+                topic = "";
+                ordering = "-state,-update_time";
+            } else if (topic === "-1") {
+                state__gte = 0;
+                topic = "";
+            } else {
+                state__gte = 0;
+            }
             const loading = ElLoading.service({ fullscreen: true });
             this.$axios
                 .get("/article/", {
                     params: {
-                        state__gte: topic === "" ? "0" : "-1",
+                        state__gte: state__gte,
                         page: this.pageInfo.num,
                         topic: topic,
                         search: this.searchText,
-                        ordering: "-create_time",
+                        ordering: ordering,
                     },
                 })
                 .then(data => {
