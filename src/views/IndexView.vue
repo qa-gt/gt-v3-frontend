@@ -179,11 +179,11 @@ export default {
             this.$axios
                 .get("/article/", {
                     params: {
-                        state__in: topic === "" ? "3,0" : "3,2,0",
+                        state__gte: topic === "" ? "0" : "-1",
                         page: this.pageInfo.num,
                         topic: topic,
                         search: this.searchText,
-                        ordering: "-state,-create_time",
+                        ordering: "-create_time",
                     },
                 })
                 .then(data => {

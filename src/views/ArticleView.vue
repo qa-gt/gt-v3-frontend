@@ -49,7 +49,7 @@
                         </p>
                         <p>
                             发布时间&emsp;
-                            {{ atc.create_time }}
+                            {{ $moment(atc.create_time).format("lll") }}
                             <el-popconfirm
                                 confirm-button-text="确定删除"
                                 cancel-button-text="我再想想"
@@ -74,7 +74,7 @@
                         </p>
                         <p>
                             更新时间&emsp;
-                            {{ atc.update_time }}
+                            {{ $moment(atc.update_time).format("lll") }}
                         </p>
                         <p>
                             阅读人数&emsp;
@@ -183,14 +183,17 @@
                                     this.$router.push(`/user/${item.user.id}`)
                                 "
                                 style="cursor: pointer"
-                                >{{ item.user.username }}</span
-                            ><span
+                            >
+                                {{ item.user.username }}
+                            </span>
+                            <span
                                 v-if="
                                     item.user.id !==
                                     atcLike[atcLike.length - 1].user.id
                                 "
-                                >,&ensp;</span
                             >
+                                ,&ensp;
+                            </span>
                         </span>
                     </div>
                 </el-row>
@@ -294,9 +297,15 @@
                                         </el-dropdown>
                                     </span>
                                 </div>
-                                <div class="comment comment-text">
-                                    {{ item.content }}
-                                </div>
+                                <div
+                                    class="comment comment-text"
+                                    v-html="
+                                        processMd(item.content).replaceAll(
+                                            '\n',
+                                            '<br />'
+                                        )
+                                    "
+                                ></div>
                             </div>
                         </el-col>
                         <el-divider class="comment-divider" />
@@ -336,7 +345,7 @@ import gtUser from "@/components/gtUser.vue";
 import gtMdEditor from "@/components/mdEditor.vue";
 import { ElLoading } from "element-plus";
 import gtForm from "@/components/gtForm.vue";
-
+import { processMd } from "@/plugins/markdown";
 export default {
     components: {
         gtUser,
@@ -411,6 +420,7 @@ export default {
         ...mapGetters(["loggedIn"]),
     },
     methods: {
+        processMd,
         getCmts() {
             this.pageInfo.loading = true;
             this.$axios
@@ -434,13 +444,8 @@ export default {
             const loading = ElLoading.service({ fullscreen: true });
             this.$axios
                 .get(`/article/${this.$route.params.aid}/`)
-                .then(res => {
-                    res.create_time = this.$moment(res.create_time).fromNow();
-                    res.update_time = this.$moment(res.update_time).fromNow();
-                    this.atc = res;
-                })
-                .then(() => setTimeout(loading.close, 100))
-                .catch(err => err);
+                .then(res => (this.atc = res))
+                .finally(() => setTimeout(loading.close, 100));
             this.$axios
                 .get("/like/", { params: { article: this.$route.params.aid } })
                 .then(res => {

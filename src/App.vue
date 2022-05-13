@@ -215,7 +215,7 @@ export default {
         if (this.$store.state.jwt) {
             let data = atob(this.$store.state.jwt.split(".")[1]);
             data = JSON.parse(data);
-            if (data.exp < Date.now() / 1000) {
+            if (data.exp + 86400 < Date.now() / 1000) {
                 this.$store.commit("logout");
             }
         }

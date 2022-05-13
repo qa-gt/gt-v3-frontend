@@ -406,8 +406,7 @@ export default {
                     this.myFollowing = data;
                     this.empty = this.myFollowing.length === 0;
                 })
-                .catch(err => err)
-                .then(() => setTimeout(loading.close, 100));
+                .finally(() => setTimeout(loading.close, 100));
         },
         getMyFollower() {
             const loading = ElLoading.service({ fullscreen: true });
@@ -425,8 +424,7 @@ export default {
                     this.myFollower = data;
                     this.empty = this.myFollower.length === 0;
                 })
-                .catch(err => err)
-                .then(() => setTimeout(loading.close, 100));
+                .finally(() => setTimeout(loading.close, 100));
         },
         getMyForms() {
             this.empty = this.getList().length === 0;
