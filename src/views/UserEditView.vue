@@ -271,12 +271,12 @@
                             placeholder="Tape提问箱标题"
                         />
                     </el-form-item>
-                    <el-form-item label="背景图">
+                    <!-- <el-form-item label="背景图">
                         <el-input
                             v-model="tape.image"
                             placeholder="不填写默认使用随机图片"
                         />
-                    </el-form-item>
+                    </el-form-item> -->
                     <el-button type="primary" @click="saveTape">
                         {{ tape.not_found ? "创建" : "更新" }}提问箱
                     </el-button>
@@ -379,6 +379,13 @@ export default {
                 });
         },
         saveTape() {
+            if (!this.tape.title) {
+                ElMessage.error("请填写标题");
+                return;
+            }
+            if (!this.tape.image) {
+                this.tape.image = "";
+            }
             if (!this.tape.id) {
                 this.$axios.post("/tape_box/", this.tape).then(res => {
                     console.log(res);

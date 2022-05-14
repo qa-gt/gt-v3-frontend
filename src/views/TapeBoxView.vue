@@ -63,7 +63,10 @@
                                 flex-grow: 1;
                             "
                         >
-                            <el-avatar style="margin-right: 10px" />
+                            <el-avatar
+                                style="margin-right: 10px"
+                                @click="$route"
+                            />
                             <span style="font-weight: bold; color: #dcdcdc">
                                 由 {{ box.user.username }} 创建的提问箱
                             </span>
@@ -137,6 +140,27 @@
                     </el-button>
                     <el-divider />
                 </div>
+                <el-pagination
+                    background
+                    layout="prev, pager, next, jumper, ->, total"
+                    v-model:current-page="pageInfo.num"
+                    :total="pageInfo.total"
+                    :page-size="pageInfo.size"
+                    :pager-count="7"
+                    :hide-on-single-page="true"
+                    @current-change="init"
+                    class="hidden-sm-and-down"
+                />
+                <el-pagination
+                    layout="prev, pager, next"
+                    v-model:current-page="pageInfo.num"
+                    :total="pageInfo.total"
+                    :page-size="pageInfo.size"
+                    :pager-count="5"
+                    :hide-on-single-page="true"
+                    @current-change="init"
+                    class="hidden-md-and-up"
+                />
             </el-card>
         </el-col>
     </el-row>
@@ -161,6 +185,7 @@ export default {
             questions: [],
             new_question: "",
             sending: false,
+            pageInfo: { total: 0, num: 1, size: 20 },
         };
     },
     methods: {
@@ -248,6 +273,7 @@ export default {
                 })
                 .then(res => res.results)
                 .then(res => {
+                    this.pageInfo.total = res.count;
                     this.questions = res;
                 });
         },
