@@ -8,7 +8,7 @@
             :xl="4"
             style="margin-bottom: 20px"
         >
-            <gt-user :user="atc.author"></gt-user>
+            <gt-user :user="atc.author" />
         </el-col>
 
         <el-col :xs="24" :sm="18" :md="17" :lg="18" :xl="19">

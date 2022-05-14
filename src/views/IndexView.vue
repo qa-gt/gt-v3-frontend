@@ -185,7 +185,7 @@ export default {
                 topic = "";
                 ordering = "-state,-update_time";
             } else if (topic === "-1") {
-                state__gte = 0;
+                state__gte = -1;
                 topic = "";
             } else {
                 state__gte = 0;

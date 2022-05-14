@@ -48,7 +48,7 @@
                                 font-size: 200%;
                                 display: block;
                                 text-align: center;
-                                font-family: zh96;
+                                font-weight: bold;
                                 padding: 10px 10px 20px 10px;
                             "
                         >
@@ -222,7 +222,7 @@ export default {
                     recaptcha: token,
                 })
                 .then(res => {
-                    console.log(res);
+                    this.init();
                     this.drawer = false;
                 });
         },
@@ -242,9 +242,6 @@ export default {
     },
     created() {
         this.init();
-        setTimeout(() => {
-            console.log(this.box.user.id, this.user.id);
-        }, 1000);
     },
 };
 </script>

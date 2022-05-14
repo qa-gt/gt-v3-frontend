@@ -21,13 +21,14 @@
                     label-width="120px"
                     @keydown="disabled.save = false"
                 >
-                    <el-form-item>
+                    <!-- <el-form-item>
                         <el-button
                             type="primary"
                             @click="this.$router.push('/user/repassword')"
-                            >修改密码</el-button
                         >
-                    </el-form-item>
+                            修改密码
+                        </el-button>
+                    </el-form-item> -->
                     <el-form-item label="年级">
                         <el-select
                             v-model="form.grade"
@@ -83,25 +84,13 @@
                             show-word-limit
                         />
                     </el-form-item>
-                    <br />
-                    <el-form-item>
-                        <el-button
-                            type="primary"
-                            @click="confirm"
-                            :disabled="form == formold || disabled.save"
-                            >保存</el-button
-                        >
-                        <el-popconfirm
-                            title="确认要取消吗？本次编辑内容将不会保存。"
-                            confirm-button-text="确定取消"
-                            cancel-button-text="再想想看"
-                            @confirm="cancel"
-                        >
-                            <template #reference>
-                                <el-button> 取 消 </el-button>
-                            </template>
-                        </el-popconfirm>
-                    </el-form-item>
+                    <el-button
+                        type="primary"
+                        @click="confirm"
+                        :disabled="disabled.save"
+                    >
+                        保存
+                    </el-button>
                 </el-form>
 
                 <el-divider />
@@ -134,6 +123,18 @@
                             该信息无任何强制性措施，可自愿填写。填写后可方便大家在瓜田证明自己的身份。请注意，每个云校账号只能帮顶一个瓜田账号！
                         </p>
                         <p>如果你的云校账号被他人盗用，请与我们联系。</p>
+                    </div>
+                    <div v-else-if="dialogContent === 'tape'">
+                        <p>
+                            我们注意到，最近一段时间大家十分喜欢Tape软件推出的匿名提问箱功能，因此我们在瓜田也模仿了一款。
+                        </p>
+                        <p>
+                            我们的特色是无需大家下载手机APP、无需任何个人账号登录即可使用，相较于Tape可在更高程度上保证大家的隐私安全。
+                        </p>
+                        <p>
+                            如果你填写了上方“个人信息”中的pushplus
+                            token一项，我们将在你收到提问时通过微信提醒你。
+                        </p>
                     </div>
                 </el-dialog>
                 <h2>实名认证</h2>
@@ -226,7 +227,6 @@
                 >
                     为什么需要？
                 </el-button>
-                {{ weChat }}
                 <el-form label-position="top" label-width="120px">
                     <div v-if="user.wechat" style="margin-bottom: 20px">
                         微信状态：已认证
@@ -250,36 +250,44 @@
                         </el-form-item>
                     </template>
                 </el-form>
+
+                <el-divider />
+
+                <h2>Tape提问箱</h2>
+                <el-button
+                    type="text"
+                    @click="
+                        dialogVisible = true;
+                        dialogContent = 'tape';
+                    "
+                    style="margin-bottom: 15px"
+                >
+                    这是什么？
+                </el-button>
+                <el-form label-position="top" label-width="120px">
+                    <el-form-item label="标题">
+                        <el-input
+                            v-model="tape.title"
+                            placeholder="Tape提问箱标题"
+                        />
+                    </el-form-item>
+                    <el-form-item label="背景图">
+                        <el-input
+                            v-model="tape.image"
+                            placeholder="不填写默认使用随机图片"
+                        />
+                    </el-form-item>
+                    <el-button type="primary" @click="saveTape">
+                        {{ tape.not_found ? "创建" : "更新" }}提问箱
+                    </el-button>
+                    <el-button v-if="!tape.not_found" @click="copyTapeUrl">
+                        复制链接
+                    </el-button>
+                </el-form>
             </el-card>
         </el-col>
     </el-row>
 </template>
-
-<style lang="scss" scoped>
-.avatar-uploader .el-upload {
-    border: 1px dashed #d9d9d9;
-    border-radius: 6px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-    transition: var(--el-transition-duration-fast);
-}
-.avatar-uploader .el-upload:hover {
-    border-color: var(--el-color-primary);
-}
-.el-icon.avatar-uploader-icon {
-    font-size: 28px;
-    color: #8c939d;
-    width: 178px;
-    height: 178px;
-    text-align: center;
-}
-.avatar {
-    width: 178px;
-    height: 178px;
-    display: block;
-}
-</style>
 
 <script>
 import { mapState } from "vuex";
@@ -323,10 +331,15 @@ export default {
             wechatQrCode: "",
             wechatChecker: undefined,
             disabled: {
-                save: true,
+                save: false,
             },
             dialogContent: "",
             dialogVisible: false,
+            tape: {
+                not_found: true,
+                title: "",
+                image: "",
+            },
         };
     },
     components: {
@@ -334,6 +347,16 @@ export default {
         QrcodeVue,
     },
     methods: {
+        copyTapeUrl() {
+            const text = `${window.location.protocol}//${window.location.host}/tapebox/${this.tape.id}`;
+            const input = document.createElement("input");
+            input.value = text;
+            document.body.appendChild(input);
+            input.select();
+            document.execCommand("copy");
+            document.body.removeChild(input);
+            ElMessage.success("复制成功");
+        },
         confirm() {
             this.disabled.save = true;
             this.$axios
@@ -347,10 +370,6 @@ export default {
                     this.disabled.save = false;
                 });
         },
-        cancel() {
-            ElMessage.info("已取消");
-            this.$router.go(-1);
-        },
         confirmYunxiao() {
             this.$axios
                 .post("/user/yunxiao_auth/", this.yunxiaoInfo)
@@ -359,17 +378,33 @@ export default {
                     ElMessage.success("提交成功");
                 });
         },
+        saveTape() {
+            if (!this.tape.id) {
+                this.$axios.post("/tape_box/", this.tape).then(res => {
+                    console.log(res);
+                    this.tape = res;
+                    ElMessage.success("保存成功");
+                });
+            } else {
+                let tape = {
+                    title: this.tape.title,
+                    image: this.tape.image,
+                };
+                this.$axios
+                    .patch(`/tape_box/${this.tape.id}/`, tape)
+                    .then(res => {
+                        this.tape = res;
+                        ElMessage.success("更新成功");
+                    });
+            }
+        },
         async getWeChatCode() {
             clearInterval(this.wechatChecker);
-            const res = await this.$axios.get(
-                "/user/wechat_auth/",
-                {
-                    params: {
-                        qrcode: true,
-                    },
+            const res = await this.$axios.get("/user/wechat_auth/", {
+                params: {
+                    qrcode: true,
                 },
-                this.yunxiaoInfo
-            );
+            });
             this.wechatQrCode = res.data.qrCode;
             this.wechatChecker = setInterval(() => {
                 this.$axios.get("/user/wechat_auth/").then(res => {
@@ -386,6 +421,35 @@ export default {
         this.yunxiaoInfo.show = String(
             Boolean(this.user.yunxiao !== null && this.user.yunxiao)
         );
+        this.$axios.get("/tape_box/me/").then(res => {
+            this.tape = res;
+        });
     },
 };
 </script>
+
+<style lang="scss" scoped>
+.avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: var(--el-transition-duration-fast);
+}
+.avatar-uploader .el-upload:hover {
+    border-color: var(--el-color-primary);
+}
+.el-icon.avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    text-align: center;
+}
+.avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
+}
+</style>
