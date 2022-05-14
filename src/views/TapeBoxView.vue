@@ -14,6 +14,7 @@
             <el-button
                 type="primary"
                 @click="sendReply"
+                :disabled="!reply.content || sending"
                 style="
                     margin: 10px auto;
                     display: block;
@@ -87,7 +88,11 @@
                         />
                     </div>
                     <div style="padding: 5px 5% 30px 0; float: right">
-                        <el-button type="primary" @click="sendQuestion">
+                        <el-button
+                            type="primary"
+                            @click="sendQuestion"
+                            :disabled="!new_question || sending"
+                        >
                             投递
                         </el-button>
                     </div>
@@ -155,14 +160,16 @@ export default {
             drawer: false,
             questions: [],
             new_question: "",
+            sending: false,
         };
     },
     methods: {
         async sendQuestion() {
-            if (!this.new_question) {
-                ElMessage.warning("请输入内容！");
+            if (this.new_question.length > 300) {
+                ElMessage.warning("提问内容不能超过300字！");
                 return;
             }
+            this.sending = true;
             await this.$recaptchaLoaded();
             const token = await this.$recaptcha("tape");
             this.$axios
@@ -182,14 +189,15 @@ export default {
                     ElMessage.success(
                         "投递成功！问题token已保存至剪贴板，请注意留存。"
                     );
+                    this.new_question = "";
                     this.init();
+                })
+                .finally(() => {
+                    this.sending = false;
                 });
         },
         async sendReply() {
-            if (!this.reply.content) {
-                ElMessage.warning("请输入回复内容！");
-                return;
-            } else if (this.reply.content.length > 300) {
+            if (this.reply.content.length > 300) {
                 ElMessage.warning("回复内容不能超过300字！");
                 return;
             }
@@ -212,6 +220,7 @@ export default {
                     if (!ans) return;
                 }
             }
+            this.sending = true;
             await this.$recaptchaLoaded();
             const token = await this.$recaptcha("tape");
             this.$axios
@@ -224,6 +233,9 @@ export default {
                 .then(res => {
                     this.init();
                     this.drawer = false;
+                })
+                .finally(() => {
+                    this.sending = false;
                 });
         },
         init() {
