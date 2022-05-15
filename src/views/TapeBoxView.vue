@@ -65,10 +65,19 @@
                         >
                             <el-avatar
                                 style="margin-right: 10px"
-                                @click="$route"
+                                @click="$router.push(`/user/${box.user.id}`)"
+                                :src="box.user.portrait"
                             />
                             <span style="font-weight: bold; color: #dcdcdc">
-                                由 {{ box.user.username }} 创建的提问箱
+                                由
+                                <span
+                                    @click="
+                                        $router.push(`/user/${box.user.id}`)
+                                    "
+                                >
+                                    {{ box.user.username }}
+                                </span>
+                                创建的提问箱
                             </span>
                         </div>
                     </div>
@@ -103,7 +112,12 @@
             </el-card>
             <el-row style="margin: 10px 0" />
             <el-card>
-                <h3>{{ box.user.username }} 的其他回答</h3>
+                <h3>
+                    <span @click="$router.push(`/user/${box.user.id}`)">
+                        {{ box.user.username }}
+                    </span>
+                    的其他回答
+                </h3>
                 <el-divider />
                 <div v-for="item in questions" :key="item">
                     <div class="question">
