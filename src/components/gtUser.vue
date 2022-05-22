@@ -32,7 +32,7 @@
                     v-bind:title="
                         user.id === $store.state.user.id ? '不能关注自己哦' : ''
                     "
-                    v-if="showFollow"
+                    v-if="showFollow && user.id !== $store.state.user.id"
                 >
                     {{ !followed ? "关&ensp;注" : "取&ensp;关" }}
                 </el-button>

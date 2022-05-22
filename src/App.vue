@@ -219,11 +219,11 @@ export default {
                 this.$store.commit("logout");
             }
         }
-        this.$axios.get("https://yiyan.yixiangzhilv.com/get").then(res => {
-            if (res.from_who && res.from) {
-                res.from_show = `${res.from} · ${res.from_who}`;
+        this.$axios.get("https://api.yixiangzhilv.com/yiyan/sentence/get/").then(res => {
+            if (res.provenance && res.author) {
+                res.from_show = `${res.provenance} · ${res.author}`;
             } else {
-                res.from_show = `${res.from || res.from_who || "未知"}`;
+                res.from_show = `${res.provenance || res.author}`;
             }
             this.yiyan = res;
         });
