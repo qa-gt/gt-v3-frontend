@@ -315,7 +315,9 @@ const extMd = (text, writing = false) => {
                 p1 = `${p1}-1`;
             }
             p1 = p1.split("-");
-            return `<iframe src="//player.bilibili.com/player.html?bvid=${p1[0]}&page=${p1[1]}&high_quality=1" allowfullscreen="allowfullscreen" style="width: 100%; height: 25rem" scrolling="no" frameborder="0" sandbox="allow-top-navigation allow-same-origin allow-forms allow-scripts"></iframe>`;
+            const bvid = p1[0],
+                page = p1[1] || "";
+            return `<iframe src="//player.bilibili.com/player.html?bvid=${bvid}&page=${page}&high_quality=1" allowfullscreen="allowfullscreen" style="width: 100%; height: 25rem" scrolling="no" frameborder="0" sandbox="allow-top-navigation allow-same-origin allow-forms allow-scripts"></iframe>`;
         });
         text = text.replaceAll(
             /!!!MUSIC-(WYY|QQ)-(ID|NAME):(.*?)!!!/g,
