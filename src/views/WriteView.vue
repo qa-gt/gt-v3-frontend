@@ -135,9 +135,9 @@ export default {
                 ElMessage.error("标题或正文不能为空");
                 this.disabled.submit = false;
                 return;
-            } else if (this.atc.content.length > 10000) {
+            } else if (this.atc.content.length > 100000) {
                 ElMessage.error(
-                    "正文内容不能超过10000字符！如果确有需要请与管理员联系申请。"
+                    "正文内容不能超过100,000字符！如果确有需要请与管理员联系申请。"
                 );
                 this.disabled.submit = false;
                 return;
