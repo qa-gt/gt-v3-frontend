@@ -85,11 +85,21 @@ let sanitizeData = {
     allowedIframeHostnames: ["player.bilibili.com"],
     allowedAttributes: {
         a: ["href", "name", "target"],
-        img: ["src", "srcset", "alt", "title", "width", "height", "loading"],
+        img: [
+            "src",
+            "srcset",
+            "alt",
+            "title",
+            "width",
+            "height",
+            "loading",
+            "style",
+        ],
         audio: ["src", "controls"],
         video: ["src", "controls"],
         svg: ["*"],
         path: ["*"],
+        div: ["style"],
     },
     allowedStyles: {
         "*": {
@@ -322,7 +332,7 @@ const extMd = (text, writing = false) => {
         text = text.replaceAll(
             /!!!MUSIC-(WYY|QQ)-(ID|NAME):(.*?)!!!/g,
             (match, p1, p2, p3) => {
-            return `<audio controls="controls" src="https://gtapi.yxzl.top/utils/get_music_url?site=${p1}&by=${p2}&value=${p3}"></audio>`;
+                return `<audio controls="controls" src="https://gtapi.yxzl.top/utils/get_music_url?site=${p1}&by=${p2}&value=${p3}"></audio>`;
             }
         );
     }
