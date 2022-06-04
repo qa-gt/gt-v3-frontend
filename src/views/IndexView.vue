@@ -217,6 +217,7 @@ export default {
         this.$axios.get("/topic/", { params: { min_state: 0 } }).then(data => {
             this.topics = this.topics.concat(data);
         });
+        setTimeout(this.getAtcs, 60000);
     },
 };
 </script>

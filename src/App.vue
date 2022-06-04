@@ -211,7 +211,11 @@ export default {
     },
     created() {
         document.firstElementChild.className = this.theme;
-        if (import.meta.env.DEV) window.STOP_DEV_GUARD = true;
+        if (
+            import.meta.env.DEV ||
+            document.cookie.indexOf("STOP_DEV_GUARD") !== -1
+        )
+            window.STOP_DEV_GUARD = true;
         if (this.$store.state.jwt) {
             let data = atob(this.$store.state.jwt.split(".")[1]);
             data = JSON.parse(data);
@@ -219,14 +223,16 @@ export default {
                 this.$store.commit("logout");
             }
         }
-        this.$axios.get("https://api.yixiangzhilv.com/yiyan/sentence/get/").then(res => {
-            if (res.provenance && res.author) {
-                res.from_show = `${res.provenance} · ${res.author}`;
-            } else {
-                res.from_show = `${res.provenance || res.author}`;
-            }
-            this.yiyan = res;
-        });
+        this.$axios
+            .get("https://api.yixiangzhilv.com/yiyan/sentence/get/")
+            .then(res => {
+                if (res.provenance && res.author) {
+                    res.from_show = `${res.provenance} · ${res.author}`;
+                } else {
+                    res.from_show = `${res.provenance || res.author}`;
+                }
+                this.yiyan = res;
+            });
         this.getNotices();
         setInterval(this.getNotices, 60000);
     },
