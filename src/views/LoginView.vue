@@ -2,7 +2,12 @@
     <el-row style="text-align: center; justify-content: center">
         <el-col :span="24" style="max-width: 450px">
             <el-card full class="login-card shadow-1">
-                <h3>登录到瓜田</h3>
+                <h3 v-if="$route.query.oauth === 'true' && $route.query.next">
+                    瓜田三方授权<span v-if="$route.query.site">
+                        - {{ $route.query.site }}</span
+                    >
+                </h3>
+                <h3 v-else>登录到瓜田</h3>
                 <el-divider />
                 <el-form @submit.prevent>
                     <el-input
@@ -26,7 +31,7 @@
                             <el-button
                                 type="primary"
                                 native-type="submit"
-                                @click="login"
+                                @click="doLogin"
                                 style="width: 100%; margin: 10px 0"
                             >
                                 登&emsp;录
@@ -74,11 +79,34 @@ export default {
         };
     },
     methods: {
-        login() {
+        doLogin() {
+            console.log(this.$route.query.oauth, this.$route.query.next);
             if (this.username === "" || this.password === "") {
                 ElMessage.error("用户名或密码不能为空");
                 return;
             }
+            if (this.$route.query.oauth === "true" && this.$route.query.next)
+                this.oauthLogin();
+            else this.login();
+        },
+        oauthLogin() {
+            this.$axios
+                .post("/user/oauth_login", {
+                    username: this.username,
+                    password: this.password,
+                })
+                .then(res => {
+                    let path = this.$route.query.next;
+                    if (path.indexOf("#") > -1) path = path.split("#")[0];
+                    if (path.indexOf("?") > -1 && path[path.length - 1] !== "?")
+                        path += "&";
+                    else path += "?";
+                    path += "token=" + res.token;
+                    window.open(path, "_self");
+                })
+                .catch(err => err);
+        },
+        login() {
             this.$axios
                 .post("/user/login", {
                     username: this.username,
