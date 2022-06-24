@@ -99,13 +99,7 @@ import gtUser from "@/components/gtUser.vue";
 import gtMdEditor from "@/components/mdEditor.vue";
 import { ElMessage, ElNotification } from "element-plus";
 
-const atc_default = {
-    exist: false,
-    id: "",
-    title: "",
-    content: "",
-    topic: 0,
-};
+const atc_default = '{"exist":false,"id":"","title":"","content":"","topic":0}';
 
 export default {
     computed: {
@@ -120,7 +114,7 @@ export default {
     },
     data() {
         return {
-            atc: atc_default,
+            atc: JSON.parse(atc_default),
             topics: [],
             disabled: { submit: false },
         };
@@ -257,7 +251,7 @@ export default {
             });
         },
         clear() {
-            this.atc = atc_default;
+            this.atc = JSON.parse(atc_default);
             this.$store.commit("delWritingAtc");
             ElMessage.info("已清空");
         },
