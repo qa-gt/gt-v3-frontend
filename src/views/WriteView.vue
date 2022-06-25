@@ -99,6 +99,8 @@ import gtUser from "@/components/gtUser.vue";
 import gtMdEditor from "@/components/mdEditor.vue";
 import { ElMessage, ElNotification } from "element-plus";
 
+const atc_default = '{"exist":false,"id":"","title":"","content":"","topic":0}';
+
 export default {
     computed: {
         ...mapState(["user", "uploadKey", "writingAtc", "imageCache"]),
@@ -112,7 +114,7 @@ export default {
     },
     data() {
         return {
-            atc: { exist: false, id: "", title: "", content: "", topic: 0 },
+            atc: JSON.parse(atc_default),
             topics: [],
             disabled: { submit: false },
         };
@@ -249,13 +251,7 @@ export default {
             });
         },
         clear() {
-            this.atc = {
-                exist: false,
-                id: "",
-                title: "",
-                content: "",
-                topic: 0,
-            };
+            this.atc = JSON.parse(atc_default);
             this.$store.commit("delWritingAtc");
             ElMessage.info("已清空");
         },
@@ -273,7 +269,7 @@ export default {
                 this.atc = this.writingAtc;
                 ElMessage.info("已加载草稿");
             } else {
-                this.atc = atc_default;
+                this.atc = JSON.parse(atc_default);
             }
         },
     },
