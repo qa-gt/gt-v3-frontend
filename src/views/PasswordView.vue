@@ -2,11 +2,11 @@
     <el-row style="text-align: center; justify-content: center">
         <el-col :span="24" style="max-width: 450px">
             <el-card full class="password-card">
-                <h3>重置密码</h3>
+                <h3>更改密码</h3>
                 <el-divider />
-                <el-form :model="form" @submit.prevent>
+                <el-form @submit.prevent>
                     <el-input
-                        v-model="passwordold"
+                        v-model="old_password"
                         type="password"
                         class="w-50 m-2"
                         placeholder="旧密码"
@@ -15,7 +15,7 @@
                         style="margin-bottom: 10px"
                     />
                     <el-input
-                        v-model="password"
+                        v-model="new_password"
                         type="password"
                         class="w-50 m-2"
                         placeholder="新密码"
@@ -24,7 +24,7 @@
                         style="margin-bottom: 10px"
                     />
                     <el-input
-                        v-model="password2"
+                        v-model="re_new_password"
                         type="password"
                         class="w-50 m-2"
                         placeholder="重复新密码"
@@ -41,6 +41,9 @@
                         &emsp;&emsp;&emsp;确&emsp;认&emsp;&emsp;&emsp;
                     </el-button>
                 </el-form>
+                <p style="text-align: center">
+                    *修改密码后不会使已登录的账号退出
+                </p>
             </el-card>
         </el-col>
     </el-row>
@@ -56,27 +59,34 @@ export default {
     },
     data() {
         return {
-            name: "",
-            password: "",
-            password2: "",
-            passwordold: "",
+            new_password: "",
+            re_new_password: "",
+            old_password: "",
         };
     },
     methods: {
         contrast() {
-            if (this.password == this.password2 && this.password != "") {
-                ElMessage.success("更改成功！");
-                this.$router.push("/user/edit");
-            } else if (this.password != this.password2) {
+            if (
+                !this.old_password ||
+                !this.new_password ||
+                !this.re_new_password
+            ) {
+                ElMessage.error("请将字段填写完整");
+                return;
+            } else if (this.new_password !== this.re_new_password) {
                 ElMessage.error("两次密码不匹配，请确认重新输入！");
-            } else if (this.password == "") {
-                ElMessage.error("你还没有输入新密码！");
-            } else if (this.password2 == "") {
-                ElMessage.error("你还没有重复新密码！");
             }
-        },
-        match() {
-            ElMessage.success("更改成功！");
+            this.$axios
+                .post("/user/change_password", {
+                    old_password: this.old_password,
+                    new_password: this.new_password,
+                })
+                .then(res => {
+                    if (res.status === "success") {
+                        ElMessage.success("修改成功");
+                        this.$router.push("/");
+                    }
+                });
         },
     },
 };

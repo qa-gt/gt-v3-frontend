@@ -50,12 +50,11 @@
                         </el-col>
                     </el-row>
                     <span style="font-size: 14px">
-                        忘记密码？
                         <el-button
                             type="text"
-                            @click="$router.push('/user/repassword')"
+                            @click="$router.push('/user/change_password')"
                         >
-                            点此重置
+                            点击以修改密码
                         </el-button>
                     </span>
                 </el-form>

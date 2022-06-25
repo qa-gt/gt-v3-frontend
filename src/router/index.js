@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { store } from "@/store";
+import { ElMessage } from "element-plus";
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
 
@@ -52,12 +53,13 @@ const routes = [
         },
     },
     {
-        path: "/user/repassword",
-        name: "repassword",
+        path: "/user/change_password",
+        name: "change_password",
         component: () => import("@/views/PasswordView.vue"),
         meta: {
             keepAlive: true,
             requireLogin: true,
+            loginMessage: "请在登录后修改密码",
         },
     },
     {
@@ -180,8 +182,10 @@ NProgress.configure({
 
 router.beforeEach((to, from, next) => {
     NProgress.start();
-    if (to.meta.requireLogin && !store.getters.loggedIn)
-        next({ name: "login" });
+    if (to.meta.requireLogin && !store.getters.loggedIn) {
+        if (to.meta.loginMessage) ElMessage.error(to.meta.loginMessage);
+        next({ name: "login", query: { next: to.fullPath } });
+    }
     next();
 });
 
