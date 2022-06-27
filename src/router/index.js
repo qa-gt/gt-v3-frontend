@@ -165,6 +165,15 @@ const routes = [
         },
     },
     {
+        path: "/live",
+        name: "live",
+        component: () => import("@/views/LiveView.vue"),
+        meta: {
+            title: "直播",
+            requireLogin: true,
+        }
+    },
+    {
         path: "/:catchAll(.*)",
         redirect: "/404",
         hidden: true,
