@@ -19,11 +19,13 @@ export const Axios = axios.create({
 
 Axios.interceptors.request.use(
     async config => {
-        if (store.state.jwt) {
-            config.headers.Authorization = store.state.jwt;
-        }
-        if (["post", "put", "patch"].includes(config.method)) {
-            config.data = window.GuardEncode(JSON.stringify(config.data));
+        if (config.url.indexOf("http") !== 0) {
+            if (store.state.jwt) {
+                config.headers.Authorization = store.state.jwt;
+            }
+            if (["post", "put", "patch"].includes(config.method)) {
+                config.data = window.GuardEncode(JSON.stringify(config.data));
+            }
         }
         return config;
     },
