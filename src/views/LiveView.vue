@@ -181,7 +181,7 @@ export default {
     methods: {
         async loadLive() {
             await this.$recaptchaLoaded();
-            const token = await this.$recaptcha("comment");
+            const token = await this.$recaptcha("pull_live");
             this.play = true;
             const data = await this.$axios.get(
                 `/utils/live_key?path=${this.pullPath}&recaptcha=${token}`
@@ -225,12 +225,15 @@ export default {
                     console.log(this.pushUri);
                 });
         },
-        sendDm() {
+        async sendDm() {
+            await this.$recaptchaLoaded();
+            const token = await this.$recaptcha("send_dm");
             this.$axios
                 .post("https://dm.qdzx.icu/create", {
                     room: "main",
                     message: this.dmInput,
                     user: this.user.username,
+                    recaptcha: token,
                 })
                 .then(data => {
                     console.log(data);
