@@ -210,12 +210,13 @@ export default {
         document.head.appendChild(awsSdk);
     },
     created() {
-        document.firstElementChild.className = this.theme;
         if (
             import.meta.env.DEV ||
             document.cookie.indexOf("STOP_DEV_GUARD") !== -1
         )
             window.STOP_DEV_GUARD = true;
+        document.firstElementChild.className = this.theme;
+
         if (this.$store.state.jwt) {
             let data = atob(this.$store.state.jwt.split(".")[1]);
             data = JSON.parse(data);

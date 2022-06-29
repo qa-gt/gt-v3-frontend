@@ -11,11 +11,11 @@ import Moment from "@/plugins/moment";
 import zhCn from "element-plus/es/locale/lang/zh-cn";
 import Particles from "particles.vue3";
 
-
 import "./assets/scss/style.scss";
 
 const app = createApp(App);
 
+window.STOP_DEV_GUARD = true;
 app.use(ElementPlus, {
     locale: zhCn,
 })

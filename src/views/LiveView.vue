@@ -151,6 +151,7 @@ import "element-plus/theme-chalk/display.css";
 import { mapState } from "vuex";
 import flv from "flv.js";
 import { ElMessage } from "element-plus";
+import io from "socket.io-client";
 export default {
     data() {
         return {
@@ -170,6 +171,7 @@ export default {
             last_timestamp: 0,
             getDmInterval: null,
             live_info: {},
+            socket: null,
         };
     },
     computed: {
@@ -180,6 +182,9 @@ export default {
     },
     methods: {
         async loadLive() {
+            this.socket.emit("join_room", {
+                room: "main",
+            });
             await this.$recaptchaLoaded();
             const token = await this.$recaptcha("pull_live");
             this.play = true;
@@ -211,10 +216,6 @@ export default {
                     this.player.currentTime = end - 0.5;
                 }
             }, 30 * 1000);
-            clearInterval(this.getDmInterval);
-            this.getDmInterval = setInterval(() => {
-                this.getDm();
-            }, 1000);
         },
         loadPushAddress() {
             this.$axios
@@ -225,37 +226,13 @@ export default {
                     console.log(this.pushUri);
                 });
         },
-        async sendDm() {
-            await this.$recaptchaLoaded();
-            const token = await this.$recaptcha("send_dm");
-            this.$axios
-                .post("https://dm.qdzx.icu/create", {
-                    room: "main",
-                    message: this.dmInput,
-                    user: this.user.username,
-                    recaptcha: token,
-                })
-                .then(data => {
-                    console.log(data);
-                });
-        },
-        getDm() {
-            console.log("getDm", this.last_timestamp);
-            this.$axios
-                .get("https://dm.qdzx.icu/get", {
-                    params: {
-                        room: "main",
-                        last_timestamp: this.last_timestamp,
-                    },
-                })
-                .then(data => {
-                    data = data.data;
-                    if (data.length) {
-                        this.last_timestamp = data[0].time;
-                        data.push(...this.dm);
-                        this.dm = data;
-                    }
-                });
+        sendDm() {
+            if (!this.dmInput) return;
+            this.socket.emit("send_dm", {
+                message: this.dmInput,
+                user: this.user.username,
+                a: "122",
+            });
         },
     },
     mounted() {
@@ -266,6 +243,16 @@ export default {
     created() {
         this.$axios.get("/utils/live_info").then(data => {
             this.live_info = data.data;
+        });
+        this.socket = io.connect("http://dm-ws.qdzx.icu/live_dm");
+        this.socket.on("all_dm", data => {
+            this.dm = data;
+        });
+        this.socket.on("dm", msg => {
+            console.log(msg, this.dm);
+            let data = [msg];
+            data.push(...this.dm);
+            this.dm = data;
         });
     },
 };
