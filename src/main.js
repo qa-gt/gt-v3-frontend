@@ -15,7 +15,6 @@ import "./assets/scss/style.scss";
 
 const app = createApp(App);
 
-window.STOP_DEV_GUARD = true;
 app.use(ElementPlus, {
     locale: zhCn,
 })

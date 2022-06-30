@@ -182,12 +182,12 @@ export default {
     },
     methods: {
         async loadLive() {
+            this.play = true;
             this.socket.emit("join_room", {
                 room: "main",
             });
             await this.$recaptchaLoaded();
             const token = await this.$recaptcha("pull_live");
-            this.play = true;
             const data = await this.$axios.get(
                 `/utils/live_key?path=${this.pullPath}&recaptcha=${token}`
             );
@@ -231,7 +231,6 @@ export default {
             this.socket.emit("send_dm", {
                 message: this.dmInput,
                 user: this.user.username,
-                a: "122",
             });
         },
     },
@@ -244,7 +243,7 @@ export default {
         this.$axios.get("/utils/live_info").then(data => {
             this.live_info = data.data;
         });
-        this.socket = io.connect("http://dm-ws.qdzx.icu/live_dm");
+        this.socket = io.connect("https://dm-ws.qdzx.icu/live_dm");
         this.socket.on("all_dm", data => {
             this.dm = data;
         });
