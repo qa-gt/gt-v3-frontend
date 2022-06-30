@@ -3,13 +3,16 @@
         <el-col :xs="24" :sm="23" :md="22" :lg="21" :xl="20">
             <el-card>
                 <h2>瓜田直播</h2>
-                <span>目前仅支持电脑观看，若播放失败请更换谷歌浏览器。</span>
+                <span>
+                    如若直播插件在您的设备上无法正常使用，请下载安装最新版谷歌浏览器。
+                </span>
                 &ensp;
                 <el-link
                     style="margin-bottom: 0px"
                     type="primary"
                     href="https://www.google.cn/chrome/index.html"
-                    >前往官网下载
+                >
+                    前往官网下载
                 </el-link>
                 <el-divider />
                 <div>
@@ -40,7 +43,11 @@
                             style="width: 100%"
                         />
                         <h2>{{ live_info.title }}</h2>
-                        <p>{{ $moment(live_info.time).calendar() }}</p>
+                        <p>
+                            {{
+                                $moment(live_info.time).calendar()
+                            }}&emsp;观看人次：{{ live_info.watched }}
+                        </p>
                         <el-divider />
                         <p>{{ live_info.description }}</p>
                     </el-col>
@@ -84,7 +91,11 @@
                 <el-row v-else>
                     <el-col>
                         <h2>{{ live_info.title }}</h2>
-                        <p>{{ $moment(live_info.time).calendar() }}</p>
+                        <p>
+                            {{
+                                $moment(live_info.time).calendar()
+                            }}&emsp;观看人次：{{ live_info.watched }}
+                        </p>
                         <el-divider />
                         <p>{{ live_info.description }}</p>
                     </el-col>
