@@ -46,7 +46,10 @@
                         <p>
                             {{
                                 $moment(live_info.time).calendar()
-                            }}&emsp;观看人次：{{ live_info.watched }}
+                            }}&emsp;观看人次：{{ live_info.watched
+                            }}<span v-show="current_info.online"
+                                >&emsp;当前在线：{{ current_info.online }}</span
+                            >
                         </p>
                         <el-divider />
                         <p>{{ live_info.description }}</p>
@@ -94,7 +97,10 @@
                         <p>
                             {{
                                 $moment(live_info.time).calendar()
-                            }}&emsp;观看人次：{{ live_info.watched }}
+                            }}&emsp;观看人次：{{ live_info.watched
+                            }}<span v-show="current_info.online"
+                                >&emsp;当前在线：{{ current_info.online }}</span
+                            >
                         </p>
                         <el-divider />
                         <p>{{ live_info.description }}</p>
@@ -183,6 +189,7 @@ export default {
             getDmInterval: null,
             live_info: {},
             socket: null,
+            current_info: {},
         };
     },
     computed: {
@@ -244,11 +251,16 @@ export default {
                 user: this.user.username,
             });
         },
+        heartbeat() {
+            this.socket.emit("heartbeat");
+        },
     },
     mounted() {
         if (!flv.isSupported()) {
             ElMessage.error("浏览器不支持FLV播放器");
         }
+        this.heartbeat();
+        setInterval(this.heartbeat, 3 * 1000);
     },
     created() {
         this.$axios.get("/utils/live_info").then(data => {
@@ -258,11 +270,15 @@ export default {
         this.socket.on("all_dm", data => {
             this.dm = data;
         });
-        this.socket.on("dm", msg => {
-            console.log(msg, this.dm);
-            let data = [msg];
+        this.socket.on("dm", data => {
+            console.log(data, this.dm);
+            data = [data];
             data.push(...this.dm);
             this.dm = data;
+        });
+        this.socket.on("current_info", data => {
+            console.log(data);
+            this.current_info = data;
         });
     },
 };
