@@ -202,7 +202,7 @@ export default {
         async loadLive() {
             this.play = true;
             this.socket.emit("join_room", {
-                room: "main",
+                room: "main" + this.live_info.id,
             });
             await this.$recaptchaLoaded();
             const token = await this.$recaptcha("pull_live");
