@@ -44,12 +44,6 @@ Axios.interceptors.response.use(
         return response;
     },
     async error => {
-        // if (
-        //     error.response.request.responseType === "blob" &&
-        //     error.response.data instanceof Blob
-        // ) {
-        //     error.response.data = await DecodeBlob(error.response.data);
-        // }
         if (!error.response) {
             ElMessage.error(error.message);
             return Promise.reject(error.message);

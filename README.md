@@ -18,7 +18,7 @@ yarn
 ### 开发模式
 
 ```bash
-yarn serve
+yarn dev
 ```
 
 ### 生产模式模式
