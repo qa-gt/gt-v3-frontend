@@ -1,0 +1,3 @@
+[submodule "src/components/hccaptcha"]
+	path = src/components/hccaptcha
+	url = git@codeup.aliyun.com:pdc/hccaptcha/frontend/hccaptcha-vite.git
