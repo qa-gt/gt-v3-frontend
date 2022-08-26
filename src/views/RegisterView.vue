@@ -30,8 +30,8 @@
             show-password
             style="margin-bottom: 20px"
           />
-          <div style="margin: 20px">
-            <CaptchaBar v-model:code="captchaCode" style="z-index: 99999" />
+          <div style="margin-bottom: 20px">
+            <CaptchaBar v-model:code="captchaCode" />
           </div>
           <el-row justify="space-between">
             <el-col :xs="24" :sm="11" :md="11" :lg="11" :xl="11">
@@ -126,5 +126,11 @@ export default {
 <style lang="scss" scoped>
 .register-card {
   min-height: 420px;
+}
+</style>
+
+<style>
+.captcha-box {
+  margin: 0 auto !important;
 }
 </style>
