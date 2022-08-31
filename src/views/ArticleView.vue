@@ -108,7 +108,7 @@
                     v-on:enter="commentAnimation2"
                     v-on:leave="commentAnimation3"
                 >
-                    <el-row gutter="3" v-if="showComment">
+                    <el-row gutter="3" v-if="showComment" style="height: auto;">
                         <el-col :span="24">
                             <el-input
                                 id="comment"
@@ -122,12 +122,13 @@
                                 show-word-limit
                                 :rows="3"
                                 type="textarea"
+                                style="height: auto; max-height: 500px !important;"
                             >
                             </el-input>
                         </el-col>
                     </el-row>
                 </transition>
-                <el-row style="float: right">
+                <el-row style="margin-top: 10px; float: right">
                     <el-button
                         type="primary"
                         style="padding: 10px; margin-right: 5px"
@@ -344,13 +345,11 @@ import { mapState, mapGetters } from "vuex";
 import gtUser from "@/components/gtUser.vue";
 import gtMdEditor from "@/components/mdEditor.vue";
 import { ElLoading } from "element-plus";
-import gtForm from "@/components/gtForm.vue";
 import { processMd } from "@/plugins/markdown";
 export default {
     components: {
         gtUser,
         gtMdEditor,
-        gtForm,
     },
     data() {
         return {
@@ -363,56 +362,6 @@ export default {
             reply: { status: false, id: 0, username: "" },
             pageInfo: { total: 0, num: 1, size: 20, loading: false },
             disabled: { comment: false },
-            form: {
-                id: 2,
-                title: "性别选择",
-                create_time: "2022-04-21T21:43:49.791713+08:00",
-                end_time: null,
-                questions: [
-                    {
-                        id: 4,
-                        title: "请选择你的性别1",
-                        type: 1,
-                        choices: [
-                            {
-                                id: 3,
-                                num: 1,
-                                title: "男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男男",
-                                // title: "男",
-                            },
-                            {
-                                id: 4,
-                                num: 2,
-                                title: "女",
-                            },
-                        ],
-                        choice: 0,
-                    },
-                    {
-                        id: 5,
-                        title: "请选择你的性别2",
-                        type: 1,
-                        choices: [
-                            {
-                                id: 3,
-                                num: 1,
-                                title: "男",
-                            },
-                            {
-                                id: 4,
-                                num: 2,
-                                title: "女",
-                            },
-                        ],
-                        choice: 0,
-                    },
-                ],
-                creator: {
-                    id: 3,
-                    username: "dw",
-                    portrait: "",
-                },
-            },
         };
     },
     computed: {
