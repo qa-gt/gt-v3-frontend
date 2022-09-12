@@ -47,17 +47,15 @@
                 class="msg-item msg-item-right"
                 v-if="item.sender.id === user.id"
               >
-                <span>
+                <span class="msg-item-content">
                   <div class="msg-sender">
                     {{ item.sender.username }}
                     &ensp;
                     {{ $wechatTime(item.time) }}
                   </div>
-                  <div class="msg-content">
-                    {{ item.content }}
-                  </div>
+                  <msg-item :msg="item" />
                 </span>
-                <span>
+                <span class="msg-item-avatar">
                   <el-avatar
                     shape="square"
                     :size="35"
@@ -68,22 +66,20 @@
 
               <!-- 别人的消息 -->
               <div class="msg-item msg-item-left" v-else>
-                <span>
+                <span class="msg-item-avatar">
                   <el-avatar
                     shape="square"
                     :size="35"
                     :src="item.sender.portrait"
                   />
                 </span>
-                <span>
+                <span class="msg-item-content">
                   <div class="msg-sender">
                     {{ item.sender.username }}
                     &ensp;
                     {{ $wechatTime(item.time) }}
                   </div>
-                  <div class="msg-content">
-                    {{ item.content }}
-                  </div>
+                  <msg-item :msg="item" />
                 </span>
               </div>
             </div>
@@ -132,9 +128,14 @@
 <script>
 import { mapState } from 'vuex';
 import { ElMessage, ElMessageBox } from 'element-plus';
+import AlertAudio from '@/assets/alert.mp3';
+import MsgItem from '@/components/MsgItem.vue';
 export default {
   computed: {
     ...mapState(['user', 'jwt']),
+  },
+  components: {
+    MsgItem,
   },
   methods: {
     atBottom() {
@@ -152,15 +153,29 @@ export default {
       });
     },
     sendMessage() {
+      while ([' ', '\n'].includes(this.message.slice(-1))) {
+        this.message = this.message.slice(0, -1);
+      }
       if (!this.message) return;
+      const msg = {
+        content: this.message,
+        content_type: 0,
+        room_id: this.currentRoom.room.id,
+      };
+      const image_re = new RegExp(
+        '^IMAGE\n([https:]*?//[A-Za-z0-9-.:]+[.][A-Za-z0-9-:]+/[-A-Za-z0-9+&@#/%=!~_|]*)$'
+      );
+      if (image_re.test(this.message)) {
+        msg.content_type = 1;
+        msg.content = image_re.exec(this.message)[1];
+      } else {
+        msg.content_type = 0;
+        msg.content = this.message;
+      }
       this.ws.send(
         JSON.stringify({
           action: 'new_message',
-          data: {
-            content: this.message,
-            content_type: 0,
-            room_id: this.currentRoom.room.id,
-          },
+          data: msg,
         })
       );
       this.message = '';
@@ -180,8 +195,13 @@ export default {
         for (let i in this.roomList) {
           if (this.roomList[i].id === data.room_id) {
             const obj = this.roomList[i];
-            if (data.room_id !== this.currentRoom.id)
+            if (
+              data.room_id !== this.currentRoom.id &&
+              data.sender.id !== this.user.id
+            ) {
               obj.unread = obj.unread += 1;
+              new Audio(AlertAudio).play();
+            }
             this.roomList.splice(i, 1);
             this.roomList.unshift(obj);
             break;
@@ -314,83 +334,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped>
-.room-item {
-  width: 100%;
-  height: 50px;
-  display: flex;
-  align-items: center;
-  vertical-align: middle;
-  align-content: center;
-  padding-top: 20px;
-  color: rgb(0, 0, 0);
-  background-color: rgba(0, 0, 0, 0);
-
-  span {
-    display: inline-block;
-    word-break: keep-all;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-  }
-}
-.room-item:hover {
-  background-color: rgba(0, 0, 0, 0.05);
-}
-.room-item:active {
-  background-color: rgba(0, 0, 0, 0.08);
-}
-.room-item-current {
-  background-color: rgba(0, 0, 0, 0.12);
-}
-.room-item-current:hover {
-  color: rgb(0, 0, 0);
-  background-color: rgba(0, 0, 0, 0.12);
-}
-
-#el-input::-webkit-scrollbar {
-  width: 2px;
-}
-
-.msg-sender {
-  margin-top: -2.5px;
-  color: rgba(0, 0, 0, 0.5);
-  font-size: small;
-}
-.msg-item {
-  display: flex;
-  margin: 10px;
-}
-.msg-content {
-  white-space: pre-wrap;
-}
-.msg-item-left {
-  margin-bottom: 20px;
-  padding-top: 12px;
-  .msg-sender {
-    margin-left: 10px;
-  }
-  .msg-content {
-    margin-left: 10px;
-  }
-}
-.msg-item-right {
-  justify-content: flex-end;
-  margin-bottom: 20px;
-  margin-right: 17.5px;
-  .msg-sender {
-    display: flex;
-    justify-content: flex-end;
-    margin-right: 10px;
-  }
-  .msg-content {
-    margin-right: 10px;
-  }
-}
-</style>
-<style>
-.el-badge__content {
-  border: none !important;
-}
-</style>
