@@ -82,10 +82,10 @@
   </el-header>
   <div :style="{ margin: '45px 25px 20px 25px', minHeight: `${minHeight}px` }">
     <router-view v-slot="{ Component }">
-      <keep-alive execlude="im">
+      <keep-alive v-if="$route.meta.keepAlive">
         <component :is="Component" />
       </keep-alive>
-      <!-- <component :is="Component" v-else /> -->
+      <component :is="Component" v-else />
     </router-view>
   </div>
   <div
