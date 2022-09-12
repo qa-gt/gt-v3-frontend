@@ -8,9 +8,10 @@
             v-for="item in roomList"
             :key="item"
             :class="{
-              'room-list': true,
-              'room-list-current': currentRoom.id === item.id,
+              'room-item': true,
+              'room-item-current': currentRoom.id === item.id,
             }"
+            :title="item.room.name || item.single_chat_with.username"
             @click="showRoom(item)"
           >
             <el-badge :hidden="item.unread <= 0" :value="item.unread">
@@ -136,6 +137,20 @@ export default {
     ...mapState(['user', 'jwt']),
   },
   methods: {
+    atBottom() {
+      const element = this.$refs.chatBox.wrap$;
+      return (
+        Math.abs(
+          element.clientHeight + element.scrollTop - element.scrollHeight
+        ) < 3
+      );
+    },
+    toBottom() {
+      const element = this.$refs.chatBox.wrap$;
+      setTimeout(() => {
+        element.scrollTop = element.scrollHeight;
+      });
+    },
     sendMessage() {
       if (!this.message) return;
       this.ws.send(
@@ -149,6 +164,7 @@ export default {
         })
       );
       this.message = '';
+      this.toBottom();
     },
     receiveWebsocket(res) {
       let data = res.data;
@@ -171,7 +187,11 @@ export default {
             break;
           }
         }
-        if (data.room_id === this.currentRoom.id && this.focus) {
+        if (
+          data.room_id === this.currentRoom.id &&
+          this.focus &&
+          this.atBottom()
+        ) {
           this.ws.send(
             JSON.stringify({
               action: 'update_last_read_time',
@@ -181,10 +201,7 @@ export default {
               },
             })
           );
-          setTimeout(() => {
-            this.$refs.chatBox.wrap$.scrollTop =
-              this.$refs.chatBox.wrap$.scrollTopMax;
-          });
+          this.toBottom();
         }
       } else if (action === 'get_room_message') {
         const chat = this.chat[data.room_id];
@@ -206,10 +223,7 @@ export default {
         );
       }
       this.currentRoom = room;
-      setTimeout(() => {
-        this.$refs.chatBox.wrap$.scrollTop =
-          this.$refs.chatBox.wrap$.scrollTopMax;
-      });
+      this.toBottom();
     },
   },
   data() {
@@ -226,7 +240,7 @@ export default {
   },
   created() {
     this.ws = new WebSocket(
-      (import.meta.env.PROD
+      (import.meta.env.PROD || document.cookie.indexOf('USE_PROD_SERVER') !== -1
         ? 'wss://gtapi.qdzx.icu/ws/im/?jwt='
         : 'ws://127.0.0.1:8000/ws/im/?jwt=') + encodeURIComponent(this.jwt)
     );
@@ -302,28 +316,35 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.room-list {
+.room-item {
   width: 100%;
   height: 50px;
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
   vertical-align: middle;
   align-content: center;
   padding-top: 20px;
   color: rgb(0, 0, 0);
   background-color: rgba(0, 0, 0, 0);
+
+  span {
+    display: inline-block;
+    word-break: keep-all;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
 }
-.room-list:hover {
+.room-item:hover {
   background-color: rgba(0, 0, 0, 0.05);
 }
-.room-list:active {
+.room-item:active {
   background-color: rgba(0, 0, 0, 0.08);
 }
-.room-list-current {
+.room-item-current {
   background-color: rgba(0, 0, 0, 0.12);
 }
-.room-list-current:hover {
+.room-item-current:hover {
   color: rgb(0, 0, 0);
   background-color: rgba(0, 0, 0, 0.12);
 }
