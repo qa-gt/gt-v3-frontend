@@ -178,7 +178,7 @@ const routes = [
         name: "im",
         component: () => import("@/views/ImView.vue"),
         meta: {
-            title: "私聊",
+            title: "IM",
             requireLogin: true,
         }
     },

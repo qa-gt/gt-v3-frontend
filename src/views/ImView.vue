@@ -171,7 +171,7 @@ export default {
             break;
           }
         }
-        if (data.room_id === this.currentRoom.id) {
+        if (data.room_id === this.currentRoom.id && this.focus) {
           this.ws.send(
             JSON.stringify({
               action: 'update_last_read_time',
@@ -221,6 +221,7 @@ export default {
       ws: undefined,
       wsHeartbeat: undefined,
       wsOncloseLock: false,
+      focus: false,
     };
   },
   created() {
@@ -265,10 +266,37 @@ export default {
               },
             })
           );
-        }, 500 * i);
+        }, 500 * (i + 1));
       }
       this.roomList = res;
     });
+  },
+  beforeRouteEnter(to, from, next) {
+    next(vm => {
+      vm.focus = true;
+      if (vm.chat[vm.currentRoom.id]) {
+        vm.ws.send(
+          JSON.stringify({
+            action: 'update_last_read_time',
+            data: {
+              room_id: vm.currentRoom.id,
+              last_read_time:
+                vm.chat[vm.currentRoom.id][
+                  vm.chat[vm.currentRoom.id].length - 1
+                ].time,
+            },
+          })
+        );
+        setTimeout(() => {
+          vm.$refs.chatBox.wrap$.scrollTop =
+            vm.$refs.chatBox.wrap$.scrollTopMax;
+        });
+      }
+    });
+  },
+  beforeRouteLeave(to, from, next) {
+    this.focus = false;
+    next();
   },
 };
 </script>
