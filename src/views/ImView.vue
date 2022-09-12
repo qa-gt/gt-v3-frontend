@@ -362,6 +362,9 @@ export default {
   display: flex;
   margin: 10px;
 }
+.msg-content {
+  white-space: pre-wrap;
+}
 .msg-item-left {
   margin-bottom: 20px;
   padding-top: 12px;
@@ -370,7 +373,6 @@ export default {
   }
   .msg-content {
     margin-left: 10px;
-    white-space: pre;
   }
 }
 .msg-item-right {
@@ -384,7 +386,6 @@ export default {
   }
   .msg-content {
     margin-right: 10px;
-    white-space: pre;
   }
 }
 </style>
