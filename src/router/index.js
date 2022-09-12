@@ -174,6 +174,15 @@ const routes = [
         }
     },
     {
+        path: "/im",
+        name: "im",
+        component: () => import("@/views/ImView.vue"),
+        meta: {
+            title: "私聊",
+            requireLogin: true,
+        }
+    },
+    {
         path: "/:catchAll(.*)",
         redirect: "/404",
         hidden: true,
