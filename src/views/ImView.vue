@@ -300,7 +300,7 @@ export default {
               },
             })
           );
-        }, 500 * (i + 1));
+        }, 500 * (Number(i) + 1));
       }
       this.roomList = res;
     });
