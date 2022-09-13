@@ -40,7 +40,7 @@
 
           <el-divider style="margin-top: 10px" />
 
-          <el-scrollbar style="height: 50%" max-height="60vh" ref="chatBox">
+          <el-scrollbar style="height: 60vh" max-height="60vh" ref="chatBox">
             <div v-for="item in chat[currentRoom.id]" :key="item">
               <!-- 自己的消息 -->
               <div
@@ -234,6 +234,7 @@ export default {
         if (
           data.room_id === this.currentRoom.id &&
           this.focus &&
+          !window.document.hidden &&
           this.atBottom()
         ) {
           this.ws.send(
@@ -246,6 +247,11 @@ export default {
             })
           );
           this.toBottom();
+        } else if (
+          (!this.focus || window.document.hidden) &&
+          window.document.title.slice(0, 6) !== '【有新消息】'
+        ) {
+          window.document.title = '【有新消息】' + window.document.title;
         }
       } else if (action === 'get_room_message') {
         const chat = this.chat[data.room_id];
@@ -329,11 +335,15 @@ export default {
       }
       this.roomList = res;
     });
+    window.addEventListener('focus', () => {
+      if (window.document.title.slice(0, 6) === '【有新消息】')
+        window.document.title = window.document.title.slice(6);
+    });
   },
   beforeRouteEnter(to, from, next) {
     next(vm => {
       vm.focus = true;
-      if (vm.chat[vm.currentRoom.id]) {
+      if (vm.currentRoom.id && vm.chat[vm.currentRoom.id] && vm.atBottom()) {
         vm.ws.send(
           JSON.stringify({
             action: 'update_last_read_time',
