@@ -1,9 +1,9 @@
 <template>
-  <el-row :gutter="10" justify="space-around" style="height: 100%; margin-top: -10px">
+  <el-row :gutter="20" justify="center" style="height: 100%; margin-top: -20px">
     <!-- 房间列表 -->
     <el-col :span="6">
-      <el-card style="width: 90%; height: 87vh">
-        <el-scrollbar height="83vh">
+      <el-card style="width: 90%; height: 90vh">
+        <el-scrollbar height="80vh">
           <div
             v-for="item in roomList"
             :key="item"
@@ -31,8 +31,8 @@
     </el-col>
 
     <!-- 聊天界面 -->
-    <el-col :span="18" style="height: 87vh">
-      <el-card style="margin-left: -20px; height: 87vh">
+    <el-col :span="14" style="height: 90vh">
+      <el-card style="margin-left: -20px; height: 100%">
         <div v-show="currentRoom.id">
           <h3 style="margin: 0">
             {{ currentRoom.room.name || currentRoom.single_chat_with.username }}
@@ -40,7 +40,7 @@
 
           <el-divider style="margin-top: 10px" />
 
-          <el-scrollbar style="height: 60vh" max-height="60vh" ref="chatBox">
+          <el-scrollbar style="height: 50%" max-height="60vh" ref="chatBox">
             <div v-for="item in chat[currentRoom.id]" :key="item">
               <!-- 自己的消息 -->
               <div
@@ -85,16 +85,22 @@
             </div>
           </el-scrollbar>
 
-          <el-divider />
+          <el-divider style="margin: 12px 0" />
 
           <div>
             <!-- 工具栏 -->
-            <div style="margin-top: -10px; align-items: right; text-align: right;">
-              <el-button @click="dialogVisible = true">发送图片</el-button>
-              <el-button type="primary" @click="sendMessage">发&emsp;送</el-button>
+            <div
+              style="margin-top: -10px; align-items: right; text-align: right"
+            >
+              <el-button @click="dialogVisible = true" size="small">
+                发送图片
+              </el-button>
+              <el-button type="primary" @click="sendMessage" size="small">
+                发&emsp;送
+              </el-button>
             </div>
             <el-input
-              :rows="4"
+              :rows="3"
               resize="none"
               clearable
               v-model="message"
@@ -124,13 +130,13 @@
   </el-row>
   <el-dialog v-model="dialogVisible" title="请上传图片">
     <el-upload
-    v-model:file-list="fileList"
-    action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
-    list-type="picture-card"
-    :on-preview="handlePictureCardPreview"
-    :on-remove="handleRemove"
-  >+
-  </el-upload>
+      v-model:file-list="fileList"
+      action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
+      list-type="picture-card"
+      :on-preview="handlePictureCardPreview"
+      :on-remove="handleRemove"
+      >+
+    </el-upload>
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="dialogVisible = false">取消</el-button>
@@ -169,8 +175,7 @@ export default {
         element.scrollTop = element.scrollHeight;
       });
     },
-    sendImg() {
-    },
+    sendImg() {},
     sendMessage() {
       while ([' ', '\n'].includes(this.message.slice(-1))) {
         this.message = this.message.slice(0, -1);

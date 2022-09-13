@@ -1,10 +1,18 @@
 <template>
-  <el-header class="header" v-show="!($router.path in ['/homepage'])">
+  <el-header
+    class="header"
+    v-show="!($router.path in ['/homepage'])"
+    v-if="this.addition"
+  >
     <el-button @click="$router.push({ name: 'index' })" type="text">
       <img style="height: 50px" :src="logoLr" />
     </el-button>
 
     <div class="user">
+      <el-button @click="this.addition = false" type="text" v-show="!isMobile">
+        <i class="fal fa-arrow-to-top" />
+      </el-button>
+
       <el-button @click="changeTheme()" type="text">
         <i :class="['fal', theme === 'light' ? 'fa-sun' : 'fa-moon']" />
       </el-button>
@@ -91,6 +99,7 @@
   <div
     style="color: rgb(190, 190, 190); height: 28px; padding: 0px 20px 0px 20px"
     id="footer"
+    v-if="this.addition"
   >
     <el-link
       :href="`https://yiyan.yixiangzhilv.com/?id=${yiyan.uuid}`"
@@ -132,6 +141,7 @@ export default {
       windowHeight: 0,
       loading: false,
       notices: [],
+      addition: true,
     };
   },
   computed: {
