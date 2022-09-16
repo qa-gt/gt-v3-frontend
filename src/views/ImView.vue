@@ -1,9 +1,35 @@
 <template>
-  <el-row :gutter="20" justify="center" style="height: 100%; margin-top: -20px">
+  <el-row justify="center" style="height: 100%; margin-top: -20px" :gutter="20">
     <!-- 房间列表 -->
     <el-col :span="6">
       <el-card style="width: 90%; height: 90vh">
-        <el-scrollbar height="80vh">
+        <el-row style="height: 3vh; margin-bottom: 10px" justify="center">
+          <el-col :span="16">
+            <el-input
+              v-model="searchUser"
+              size="small"
+              placeholder="搜索用户"
+            />
+          </el-col>
+          <el-col :span="1" />
+          <el-col :span="6">
+            <el-dropdown>
+              <el-button size="small"> 更多+ </el-button>
+              <template #dropdown>
+                <el-dropdown-menu>
+                  <!-- <el-dropdown-item>添加好友</el-dropdown-item> -->
+                  <el-dropdown-item @click="dialogVisible.createGroup = true">
+                    创建群聊
+                  </el-dropdown-item>
+                  <el-dropdown-item @click="dialogVisible.joinGroup = true">
+                    加入群聊
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </template>
+            </el-dropdown>
+          </el-col>
+        </el-row>
+        <el-scrollbar height="76vh">
           <div
             v-for="item in rooms"
             :key="item"
@@ -17,13 +43,18 @@
             <el-badge :hidden="item.unread <= 0" :value="item.unread">
               <el-avatar
                 shape="square"
-                :src="item.room.avatar || item.single_chat_with.portrait"
+                :src="
+                  item.room.is_group
+                    ? item.room.avatar
+                    : item.single_chat_with.portrait
+                "
                 :size="40"
                 style="margin-bottom: 17.5px; margin-left: 10px"
               />
             </el-badge>
             <span style="margin-left: 20px; margin-bottom: 17.5px">
               {{ item.room.name || item.single_chat_with.username }}
+              <i v-if="item.room.is_group" class="fal fa-users" />
             </span>
           </div>
         </el-scrollbar>
@@ -38,19 +69,28 @@
             {{ currentRoom.room.name || currentRoom.single_chat_with.username }}
           </h3>
 
-          <el-divider style="margin-top: 10px" />
-
           <el-scrollbar
-            style="height: 60vh"
+            style="
+              height: 60vh;
+              border-top: 1px var(--el-border-color) var(--el-border-style);
+              border-bottom: 1px var(--el-border-color) var(--el-border-style);
+              padding: 10px 0;
+              margin: 10px 0;
+            "
             max-height="60vh"
             ref="chatBox"
             v-loading="currentRoom.load.loading"
           >
             <div v-for="item in currentRoom.message" :key="item">
+              <!-- 系统消息 -->
+              <div class="msg-item msg-item-system" v-if="!item.sender">
+                {{ $wechatTime(item.time) }}&emsp;{{ item.content }}
+              </div>
+
               <!-- 自己的消息 -->
               <div
                 class="msg-item msg-item-right"
-                v-if="item.sender.id === user.id"
+                v-else-if="item.sender.id === user.id"
               >
                 <span class="msg-item-content">
                   <div class="msg-sender">
@@ -90,14 +130,10 @@
             </div>
           </el-scrollbar>
 
-          <el-divider style="margin: 12px 0" />
-
           <div>
             <!-- 工具栏 -->
-            <div
-              style="margin-top: -10px; align-items: right; text-align: right"
-            >
-              <el-button @click="dialogVisible = true" size="small">
+            <div style="align-items: right; text-align: right">
+              <el-button @click="dialogVisible.sendImage = true" size="small">
                 发送图片
               </el-button>
               <el-button type="primary" @click="sendMessage" size="small">
@@ -133,21 +169,51 @@
       </el-card>
     </el-col>
   </el-row>
-  <el-dialog v-model="dialogVisible" title="请上传图片">
-    <el-upload
-      v-model:file-list="fileList"
-      action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
-      list-type="picture-card"
-      :on-preview="handlePictureCardPreview"
-      :on-remove="handleRemove"
-      >+
-    </el-upload>
+
+  <!-- el-dialog -->
+
+  <el-dialog v-model="dialogVisible.joinGroup" title="加入群聊">
+    <el-input v-model="joinGroupData.inviteCode" placeholder="邀请码" />
+    <p>点击确认后将自动刷新界面，请注意保存当前页面状态。</p>
     <template #footer>
       <span class="dialog-footer">
-        <el-button @click="dialogVisible = false">取消</el-button>
-        <el-button type="primary" @click="dialogVisible = false"
-          >确认上传</el-button
+        <el-button @click="dialogVisible.joinGroup = false">取消</el-button>
+        <el-button type="primary" @click="joinGroup">确认加入</el-button>
+      </span>
+    </template>
+  </el-dialog>
+
+  <el-dialog v-model="dialogVisible.createGroup" title="创建群聊">
+    <div v-if="createGroupData.inviteCode">
+      <h3 style="text-align: center">您的邀请码是（点击复制）</h3>
+      <h1
+        style="text-align: center; cursor: pointer"
+        @click="copyText(createGroupData.inviteCode, true)"
+      >
+        {{ createGroupData.inviteCode }}
+      </h1>
+    </div>
+    <div v-else>
+      <el-input v-model="createGroupData.name" placeholder="群聊名称" />
+      <el-input
+        v-model="createGroupData.avatar"
+        placeholder="群聊头像(URL地址)"
+        style="margin-top: 10px"
+      />
+    </div>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="dialogVisible.createGroup = false">取消</el-button>
+        <el-button
+          type="primary"
+          @click="dialogVisible.createGroup = false"
+          v-if="createGroupData.inviteCode"
         >
+          完成
+        </el-button>
+        <el-button type="primary" @click="createGroup" v-else>
+          确认创建
+        </el-button>
       </span>
     </template>
   </el-dialog>
@@ -157,7 +223,7 @@
 import { mapState } from 'vuex';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import AlertAudio from '@/assets/alert.mp3';
-import MsgItem from '@/components/MsgItem.vue';
+import MsgItem from '@/components/im/MsgItem.vue';
 export default {
   computed: {
     ...mapState(['user', 'jwt']),
@@ -165,7 +231,61 @@ export default {
   components: {
     MsgItem,
   },
+  data() {
+    return {
+      currentRoom: { room: { id: 0 }, single_chat_with: {}, load: {} },
+      message: '',
+      rooms: [],
+      ws: undefined,
+      wsHeartbeat: undefined,
+      wsOncloseLock: false,
+      dialogVisible: {
+        createGroup: false,
+        joinGroup: false,
+      },
+      createGroupData: {
+        name: '',
+        avatar: '',
+        inviteCode: '',
+      },
+      joinGroupData: {
+        inviteCode: '',
+      },
+      focus: false,
+      searchUser: '',
+    };
+  },
   methods: {
+    copyText(text, alert = false) {
+      const input = document.createElement('input');
+      input.setAttribute('readonly', 'readonly');
+      input.setAttribute('value', text);
+      document.body.appendChild(input);
+      input.select();
+      document.execCommand('copy');
+      document.body.removeChild(input);
+      if (alert) {
+        ElMessage.success('复制成功');
+      }
+    },
+    createGroup() {
+      this.ws.send(
+        JSON.stringify({
+          action: 'create_group',
+          data: this.createGroupData,
+        })
+      );
+    },
+    joinGroup() {
+      this.ws.send(
+        JSON.stringify({
+          action: 'join_group',
+          data: {
+            invite_code: this.joinGroupData.inviteCode,
+          },
+        })
+      );
+    },
     loadMore() {
       if (this.currentRoom.load.loading || this.currentRoom.load.noMore) return;
       const element = this.$refs.chatBox.wrap$;
@@ -191,9 +311,11 @@ export default {
     },
     toBottom() {
       const element = this.$refs.chatBox.wrap$;
-      setTimeout(() => {
-        element.scrollTop = element.scrollHeight;
-      });
+      for (let i = 0; i < 20; i++) {
+        setTimeout(() => {
+          element.scrollTop = element.scrollHeight;
+        }, i * 5);
+      }
     },
     sendImg() {},
     sendMessage() {
@@ -289,6 +411,10 @@ export default {
             break;
           }
         }
+      } else if (action === 'create_group') {
+        this.createGroupData.inviteCode = data.invite_code;
+      } else if (action === 'join_group') {
+        window.location.reload();
       } else if (action === 'init') {
         this.rooms = data;
       } else {
@@ -330,7 +456,7 @@ export default {
       if (room.load === undefined) {
         room.load = {
           loading: false,
-          noMore: false,
+          noMore: Boolean(room.message),
         };
       }
       this.currentRoom = room;
@@ -341,28 +467,18 @@ export default {
         });
     },
   },
-  data() {
-    return {
-      currentRoom: { room: { id: 0 }, single_chat_with: {}, load: {} },
-      message: '',
-      rooms: [],
-      ws: undefined,
-      wsHeartbeat: undefined,
-      wsOncloseLock: false,
-      dialogVisible: false,
-      focus: false,
-    };
-  },
+
   created() {
     console.log('created');
     this.ws = new WebSocket(
       (import.meta.env.PROD || document.cookie.indexOf('USE_PROD_SERVER') !== -1
-        ? 'wss://gtapi.qdzx.icu/ws/im/?jwt='
+        ? // ? 'wss://gtapi.qdzx.icu/ws/im/?jwt='
+          'wss://gtapi.yxzl.top/ws/im/?jwt='
         : 'ws://127.0.0.1:8000/ws/im/?jwt=') + encodeURIComponent(this.jwt)
     );
     this.wsHeartbeat = setInterval(() => {
       this.ws.send(JSON.stringify({ action: 'heartbeat' }));
-    }, 15000);
+    }, 5000);
     this.ws.onmessage = this.receiveWebsocket;
     this.ws.onclose = this.oncloseWebsocket;
     window.addEventListener('focus', () => {
@@ -397,3 +513,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.fa-users {
+  color: rgba(0, 0, 0, 0.35);
+}
+</style>

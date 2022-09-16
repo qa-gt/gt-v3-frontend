@@ -126,6 +126,7 @@ p {
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
+    cursor: default;
   }
 }
 .room-item:hover {
@@ -153,9 +154,10 @@ p {
   margin-top: -2.5px;
   color: rgba(0, 0, 0, 0.5);
   font-size: small;
+  cursor: default;
+  user-select: none;
 }
 .msg-item {
-  display: flex;
   margin: 10px;
   .el-image {
     min-width: 50px;
@@ -174,7 +176,15 @@ p {
 .msg-content {
   white-space: pre-wrap;
 }
+.msg-item-system {
+  text-align: center;
+  color: rgba(0, 0, 0, 0.5);
+  font-size: small;
+  cursor: default;
+  user-select: none;
+}
 .msg-item-left {
+  display: flex;
   margin-bottom: 20px;
   padding-top: 12px;
   .msg-sender {
@@ -190,6 +200,7 @@ p {
   }
 }
 .msg-item-right {
+  display: flex;
   justify-content: flex-end;
   margin-bottom: 20px;
   margin-right: 17.5px;
