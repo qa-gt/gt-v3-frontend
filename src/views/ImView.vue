@@ -5,11 +5,11 @@
       <el-card style="width: 90%; height: 90vh">
         <el-scrollbar height="80vh">
           <div
-            v-for="item in roomList"
+            v-for="item in rooms"
             :key="item"
             :class="{
               'room-item': true,
-              'room-item-current': currentRoom.id === item.id,
+              'room-item-current': currentRoom.room.id === item.room.id,
             }"
             :title="item.room.name || item.single_chat_with.username"
             @click="showRoom(item)"
@@ -33,15 +33,20 @@
     <!-- 聊天界面 -->
     <el-col :span="14" style="height: 90vh">
       <el-card style="margin-left: -20px; height: 100%">
-        <div v-show="currentRoom.id">
+        <div v-show="currentRoom.room.id">
           <h3 style="margin: 0">
             {{ currentRoom.room.name || currentRoom.single_chat_with.username }}
           </h3>
 
           <el-divider style="margin-top: 10px" />
 
-          <el-scrollbar style="height: 60vh" max-height="60vh" ref="chatBox">
-            <div v-for="item in chat[currentRoom.id]" :key="item">
+          <el-scrollbar
+            style="height: 60vh"
+            max-height="60vh"
+            ref="chatBox"
+            v-loading="currentRoom.load.loading"
+          >
+            <div v-for="item in currentRoom.message" :key="item">
               <!-- 自己的消息 -->
               <div
                 class="msg-item msg-item-right"
@@ -113,7 +118,7 @@
           </div>
         </div>
         <h1
-          v-show="!currentRoom.id"
+          v-show="!currentRoom.room.id"
           style="
             display: block;
             width: 100%;
@@ -161,6 +166,21 @@ export default {
     MsgItem,
   },
   methods: {
+    loadMore() {
+      if (this.currentRoom.load.loading || this.currentRoom.load.noMore) return;
+      const element = this.$refs.chatBox.wrap$;
+      if (element.scrollTop !== 0) return;
+      this.currentRoom.load.loading = true;
+      this.ws.send(
+        JSON.stringify({
+          action: 'more_message',
+          data: {
+            room_id: this.currentRoom.room.id,
+            oldest_time: this.currentRoom.message[0].time,
+          },
+        })
+      );
+    },
     atBottom() {
       const element = this.$refs.chatBox.wrap$;
       return (
@@ -186,9 +206,7 @@ export default {
         content_type: 0,
         room_id: this.currentRoom.room.id,
       };
-      const image_re = new RegExp(
-        '^IMAGE\n([https:]*?//[A-Za-z0-9-.:]+[.][A-Za-z0-9-:]+/[-A-Za-z0-9+&@#/%=!~_|]*)$'
-      );
+      const image_re = new RegExp('^IMAGE\n(.*)?$');
       if (image_re.test(this.message)) {
         msg.content_type = 1;
         msg.content = image_re.exec(this.message)[1];
@@ -215,24 +233,24 @@ export default {
         ElMessage.error(data);
         return;
       } else if (action === 'new_message') {
-        this.chat[data.room_id].push(data);
-        for (let i in this.roomList) {
-          if (this.roomList[i].id === data.room_id) {
-            const obj = this.roomList[i];
+        for (let i in this.rooms) {
+          if (this.rooms[i].room.id === data.room_id) {
+            const obj = this.rooms[i];
+            obj.message.push(data);
             if (
-              data.room_id !== this.currentRoom.id &&
+              data.room_id !== this.currentRoom.room.id &&
               data.sender.id !== this.user.id
             ) {
               obj.unread = obj.unread += 1;
               new Audio(AlertAudio).play();
             }
-            this.roomList.splice(i, 1);
-            this.roomList.unshift(obj);
+            this.rooms.splice(i, 1);
+            this.rooms.unshift(obj);
             break;
           }
         }
         if (
-          data.room_id === this.currentRoom.id &&
+          data.room_id === this.currentRoom.room.id &&
           this.focus &&
           !window.document.hidden &&
           this.atBottom()
@@ -253,9 +271,24 @@ export default {
         ) {
           window.document.title = '【有新消息】' + window.document.title;
         }
-      } else if (action === 'get_room_message') {
-        const chat = this.chat[data.room_id];
-        this.chat[data.room_id] = chat.concat(data.messages);
+      } else if (action === 'more_message') {
+        for (let i in this.rooms) {
+          if (this.rooms[i].room.id === data.room_id) {
+            const element = this.$refs.chatBox.wrap$;
+            const oldScrollTop = element.scrollHeight;
+            const obj = this.rooms[i];
+            obj.message.unshift(...data.message);
+            if (data.message.length < 50) obj.load.noMore = true;
+            setTimeout(() => {
+              const newScrollTop = element.scrollHeight;
+              element.scrollTop += newScrollTop - oldScrollTop;
+            });
+            setTimeout(() => {
+              obj.load.loading = false;
+            }, 250);
+            break;
+          }
+        }
       } else if (action === 'init') {
         this.rooms = data;
       } else {
@@ -288,23 +321,30 @@ export default {
           JSON.stringify({
             action: 'update_last_read_time',
             data: {
-              room_id: room.id,
-              last_read_time:
-                this.chat[room.id][this.chat[room.id].length - 1].time,
+              room_id: room.room.id,
+              last_read_time: room.message[room.message.length - 1].time,
             },
           })
         );
       }
+      if (room.load === undefined) {
+        room.load = {
+          loading: false,
+          noMore: false,
+        };
+      }
       this.currentRoom = room;
       this.toBottom();
+      if (!room.load.noMore)
+        setTimeout(() => {
+          this.$refs.chatBox.wrap$.onscroll = this.loadMore;
+        });
     },
   },
   data() {
     return {
-      currentRoom: { room: { id: 0 }, single_chat_with: {} },
+      currentRoom: { room: { id: 0 }, single_chat_with: {}, load: {} },
       message: '',
-      chat: {},
-      roomList: [],
       rooms: [],
       ws: undefined,
       wsHeartbeat: undefined,
@@ -314,6 +354,7 @@ export default {
     };
   },
   created() {
+    console.log('created');
     this.ws = new WebSocket(
       (import.meta.env.PROD || document.cookie.indexOf('USE_PROD_SERVER') !== -1
         ? 'wss://gtapi.qdzx.icu/ws/im/?jwt='
@@ -324,24 +365,6 @@ export default {
     }, 15000);
     this.ws.onmessage = this.receiveWebsocket;
     this.ws.onclose = this.oncloseWebsocket;
-    this.$axios.get('/im_room/').then(res => {
-      for (let i in res) {
-        res[i].id = res[i].room.id;
-        this.chat[res[i].id] = [];
-        res[i].unread = res[i].unread ?? 0;
-        setTimeout(() => {
-          this.ws.send(
-            JSON.stringify({
-              action: 'get_room_message',
-              data: {
-                room_id: res[i].id,
-              },
-            })
-          );
-        }, 500 * (Number(i) + 1));
-      }
-      this.roomList = res;
-    });
     window.addEventListener('focus', () => {
       if (window.document.title.slice(0, 6) === '【有新消息】')
         window.document.title = window.document.title.slice(6);
@@ -350,16 +373,14 @@ export default {
   beforeRouteEnter(to, from, next) {
     next(vm => {
       vm.focus = true;
-      if (vm.currentRoom.id && vm.chat[vm.currentRoom.id] && vm.atBottom()) {
+      if (vm.currentRoom.room.id && vm.currentRoom.message && vm.atBottom()) {
         vm.ws.send(
           JSON.stringify({
             action: 'update_last_read_time',
             data: {
-              room_id: vm.currentRoom.id,
+              room_id: vm.currentRoom.room.id,
               last_read_time:
-                vm.chat[vm.currentRoom.id][
-                  vm.chat[vm.currentRoom.id].length - 1
-                ].time,
+                vm.currentRoom.message[vm.currentRoom.message.length - 1].time,
             },
           })
         );
