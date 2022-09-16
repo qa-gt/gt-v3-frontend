@@ -256,6 +256,29 @@ export default {
       } else if (action === 'get_room_message') {
         const chat = this.chat[data.room_id];
         this.chat[data.room_id] = chat.concat(data.messages);
+      } else if (action === 'init') {
+        this.rooms = data;
+      } else {
+        console.error('接收到包含未知action的WebScoket数据！');
+        console.log(action, data);
+      }
+    },
+    oncloseWebsocket(e) {
+      if (!this.wsOncloseLock) {
+        this.wsOncloseLock = true;
+        setTimeout(() => {
+          ElMessageBox.confirm(
+            '很抱歉，浏览器与服务器的WebSocket连接意外断开了，页面无法获取实时消息。是否刷新页面重连？',
+            '连接丢失',
+            {
+              confirmButtonText: '刷新',
+              cancelButtonText: '留在此界面',
+              type: 'error',
+            }
+          ).then(() => {
+            window.location.reload();
+          });
+        }, 1000);
       }
     },
     showRoom(room) {
@@ -282,6 +305,7 @@ export default {
       message: '',
       chat: {},
       roomList: [],
+      rooms: [],
       ws: undefined,
       wsHeartbeat: undefined,
       wsOncloseLock: false,
@@ -299,24 +323,7 @@ export default {
       this.ws.send(JSON.stringify({ action: 'heartbeat' }));
     }, 15000);
     this.ws.onmessage = this.receiveWebsocket;
-    this.ws.onclose = e => {
-      if (!this.wsOncloseLock) {
-        this.wsOncloseLock = true;
-        setTimeout(() => {
-          ElMessageBox.confirm(
-            '很抱歉，浏览器与服务器的WebSocket连接意外断开了，页面无法获取实时消息。是否刷新页面重连？',
-            '连接丢失',
-            {
-              confirmButtonText: '刷新',
-              cancelButtonText: '留在此界面',
-              type: 'error',
-            }
-          ).then(() => {
-            window.location.reload();
-          });
-        }, 1000);
-      }
-    };
+    this.ws.onclose = this.oncloseWebsocket;
     this.$axios.get('/im_room/').then(res => {
       for (let i in res) {
         res[i].id = res[i].room.id;
