@@ -456,7 +456,7 @@ export default {
       if (room.load === undefined) {
         room.load = {
           loading: false,
-          noMore: Boolean(room.message),
+          noMore: !Boolean(room.message),
         };
       }
       this.currentRoom = room;
