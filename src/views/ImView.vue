@@ -19,7 +19,7 @@
                 <el-dropdown-menu>
                   <el-dropdown-item
                     @click="
-                      redirect('http://qatest.yxzl.top:18080/article/12030')
+                      redirect('https://gt.qdzx.icu/article/12030')
                     "
                   >
                     使用说明
@@ -333,7 +333,6 @@ export default {
         '/*',
         '/im_' + String(new Date().getTime()) + file.name.replace(re, '')
       );
-      console.log(fileKey);
       const s3Upload = s3
         .upload({
           Key: fileKey,
@@ -677,7 +676,6 @@ export default {
           'dragenter',
           e => {
             e.preventDefault();
-            console.log(123);
           },
           false
         );
