@@ -58,7 +58,6 @@
             </span>
           </div>
         </el-scrollbar>
-        <el-progress :percentage="50" />
       </el-card>
     </el-col>
 
@@ -68,6 +67,7 @@
         <div v-show="currentRoom.room.id">
           <h3 style="margin: 0">
             {{ currentRoom.room.name || currentRoom.single_chat_with.username }}
+            <i v-if="item.room.is_group" class="fal fa-users" />
           </h3>
 
           <el-scrollbar
@@ -204,6 +204,7 @@
         placeholder="群聊头像(URL地址)"
         style="margin-top: 10px"
       />
+      <p>创建后需刷新界面以使该群聊显示在列表中。</p>
     </div>
     <template #footer>
       <span class="dialog-footer">
@@ -224,12 +225,10 @@
 </template>
 
 <script>
-import { h } from 'vue';
 import { mapState } from 'vuex';
 import { ElMessage, ElMessageBox, ElNotification } from 'element-plus';
 import AlertAudio from '@/assets/alert.mp3';
 import MsgItem from '@/components/im/MsgItem.vue';
-import { uploadLargeFileChunk } from '@harrisoff/onedrive-js-sdk';
 import { saveAs } from 'file-saver';
 import UploadProgress from '@/components/im/UploadProgress.vue';
 export default {
