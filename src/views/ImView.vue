@@ -53,8 +53,8 @@
               />
             </el-badge>
             <span style="margin-left: 20px; margin-bottom: 17.5px">
-              {{ item.room.name || item.single_chat_with.username }}
               <i v-if="item.room.is_group" class="fal fa-users" />
+              {{ item.room.name || item.single_chat_with.username }}
             </span>
           </div>
         </el-scrollbar>
@@ -66,8 +66,8 @@
       <el-card style="margin-left: -20px; height: 100%">
         <div v-show="currentRoom.room.id">
           <h3 style="margin: 0">
-            {{ currentRoom.room.name || currentRoom.single_chat_with.username }}
             <i v-if="currentRoom.room.is_group" class="fal fa-users" />
+            {{ currentRoom.room.name || currentRoom.single_chat_with.username }}
           </h3>
 
           <el-scrollbar
@@ -526,7 +526,7 @@ export default {
             message: `<div class="el-progress el-progress--line" role="progressbar"><div class="el-progress-bar"><div class="el-progress-bar__outer" style="height: 6px;"><div class="el-progress-bar__inner" style="width: 0%; animation-duration: 3s;" id="upload-progress-bar"></div></div></div><div class="el-progress__text" style="font-size: 14.4px;"><span id="upload-progress-text">准备中...</span></div></div>`,
             dangerouslyUseHTMLString: true,
             duration: 0,
-            'show-close': false,
+            offset: 60,
           });
           this.ws.send(
             JSON.stringify({
@@ -595,8 +595,7 @@ export default {
   created() {
     this.ws = new WebSocket(
       (import.meta.env.PROD || document.cookie.indexOf('USE_PROD_SERVER') !== -1
-        ? // ? 'wss://gtapi.qdzx.icu/ws/im/?jwt='
-          'wss://gtapi.yxzl.top/ws/im/?jwt='
+        ? 'wss://gtapi.yxzl.top/ws/im/?jwt='
         : 'ws://127.0.0.1:8000/ws/im/?jwt=') + encodeURIComponent(this.jwt)
     );
     this.wsHeartbeat = setInterval(() => {
@@ -639,6 +638,6 @@ export default {
 
 <style scoped>
 .fa-users {
-  color: rgba(0, 0, 0, 0.35);
+  color: rgba(0, 0, 0, 0.3);
 }
 </style>
