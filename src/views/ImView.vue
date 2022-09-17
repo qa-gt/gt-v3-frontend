@@ -14,12 +14,9 @@
           <el-col :span="1" />
           <el-col :span="4">
             <el-dropdown>
-              <el-button size="small" style="width: 100%">
-                更多 +
-              </el-button>
+              <el-button size="small" style="width: 100%"> 更多 + </el-button>
               <template #dropdown>
                 <el-dropdown-menu>
-                  <!-- <el-dropdown-item>添加好友</el-dropdown-item> -->
                   <el-dropdown-item @click="dialogVisible.createGroup = true">
                     创建群聊
                   </el-dropdown-item>
@@ -61,6 +58,7 @@
             </span>
           </div>
         </el-scrollbar>
+        <el-progress :percentage="50" />
       </el-card>
     </el-col>
 
@@ -226,17 +224,20 @@
 </template>
 
 <script>
+import { h } from 'vue';
 import { mapState } from 'vuex';
-import { ElMessage, ElMessageBox } from 'element-plus';
+import { ElMessage, ElMessageBox, ElNotification } from 'element-plus';
 import AlertAudio from '@/assets/alert.mp3';
 import MsgItem from '@/components/im/MsgItem.vue';
 import { uploadLargeFileChunk } from '@harrisoff/onedrive-js-sdk';
 import { saveAs } from 'file-saver';
+import UploadProgress from '@/components/im/UploadProgress.vue';
 export default {
   computed: {
     ...mapState(['user', 'jwt']),
   },
   components: {
+    UploadProgress,
     MsgItem,
   },
   data() {
@@ -262,6 +263,7 @@ export default {
       focus: false,
       searchUser: '',
       uploadFile: null,
+      uploadFileNotification: null,
     };
   },
   methods: {
@@ -354,6 +356,53 @@ export default {
       this.message = '';
       this.toBottom();
     },
+    async doUpload(uploadUrl, fileId) {
+      const total = this.uploadFile.size;
+      const piece = parseInt(Math.min(1024 * 1024 * 10, total / 2 + 1));
+      let start = 0;
+      let end = start + piece;
+      let cnt = Math.ceil(total / piece);
+      const upload_progress_bar = document.getElementById(
+          'upload-progress-bar'
+        ),
+        upload_progress_text = document.getElementById('upload-progress-text');
+      upload_progress_text.innerText = '0%';
+      while (start < total - 1) {
+        const current = Math.min(end, total - 1);
+        await this.$axios.put(
+          uploadUrl,
+          this.uploadFile.slice(start, current),
+          {
+            headers: {
+              'Content-Range': `bytes ${start}-${current - 1}/${total}`,
+            },
+          }
+        );
+        cnt--;
+        if (cnt === 0) {
+          upload_progress_bar.style.width = '100%';
+          upload_progress_text.innerText = '上传成功';
+          setTimeout(() => {
+            this.uploadFileNotification.close();
+            this.uploadFileNotification = null;
+          }, 2000);
+          this.ws.send(
+            JSON.stringify({
+              action: 'upload_finish',
+              data: {
+                file_id: fileId,
+              },
+            })
+          );
+          this.uploadFile = null;
+        } else {
+          upload_progress_bar.style.width = upload_progress_text.innerText =
+            Math.round((1 - cnt / Math.ceil(total / piece)) * 100) + '%';
+        }
+        start = current;
+        end = start + piece;
+      }
+    },
     receiveWebsocket(res) {
       let data = res.data;
       data = JSON.parse(data);
@@ -403,44 +452,10 @@ export default {
           window.document.title = '【有新消息】' + window.document.title;
         }
       } else if (action === 'upload_file') {
-        const uploadUrl = data.upload_url;
-        const piece = 1024 * 1024 * 5;
-        const total = this.uploadFile.size;
-        let start = 0;
-        let end = start + piece;
-        let cnt = 0;
-        console.log('start upload');
-        while (start < total) {
-          const current = Math.min(end, total - 1);
-          uploadLargeFileChunk(this.uploadFile, uploadUrl, {
-            start,
-            end: total - 1,
-            total,
-          }).then(res => {
-            cnt--;
-            if (cnt === 0) {
-              this.ws.send(
-                JSON.stringify({
-                  action: 'upload_finish',
-                  data: {
-                    file_id: data.file_id,
-                  },
-                })
-              );
-              this.uploadFile = null;
-            }
-          });
-          start = current + 1;
-          end = start + piece;
-          cnt++;
-        }
+        setTimeout(() => {
+          this.doUpload(data.upload_url, data.file_id);
+        });
       } else if (action === 'download_file') {
-        // const a = document.createElement('a');
-        // a.href = data.download_url;
-        // a.download = data.file_name;
-        // a.target = '_blank';
-        // a.click();
-        // a.remove();
         saveAs(data.download_url, data.file_name);
       } else if (action === 'more_message') {
         for (let i in this.rooms) {
@@ -491,17 +506,43 @@ export default {
     },
     dropFile(e) {
       e.preventDefault();
-      if (!this.uploadFile) this.uploadFile = e.dataTransfer.files[0];
-      this.ws.send(
-        JSON.stringify({
-          action: 'upload_file',
-          data: {
-            room_id: this.currentRoom.room.id,
-            file_name: this.uploadFile.name,
-            file_size: this.uploadFile.size,
-          },
+      if (this.uploadFile) return;
+      else if (this.uploadFileNotification) {
+        this.uploadFileNotification.close();
+        this.uploadFileNotification = null;
+      }
+      this.uploadFile = e.dataTransfer.files[0];
+      ElMessageBox.confirm(
+        `确定要上传文件 ${this.uploadFile.name} 吗？`,
+        '确认上传',
+        {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'info',
+        }
+      )
+        .then(async () => {
+          this.uploadFileNotification = await ElNotification.info({
+            title: '上传文件',
+            message: `<div class="el-progress el-progress--line" role="progressbar"><div class="el-progress-bar"><div class="el-progress-bar__outer" style="height: 6px;"><div class="el-progress-bar__inner" style="width: 0%; animation-duration: 3s;" id="upload-progress-bar"></div></div></div><div class="el-progress__text" style="font-size: 14.4px;"><span id="upload-progress-text">准备中...</span></div></div>`,
+            dangerouslyUseHTMLString: true,
+            duration: 0,
+            'show-close': false,
+          });
+          this.ws.send(
+            JSON.stringify({
+              action: 'upload_file',
+              data: {
+                file_name: this.uploadFile.name,
+                file_size: this.uploadFile.size,
+                room_id: this.currentRoom.room.id,
+              },
+            })
+          );
         })
-      );
+        .catch(() => {
+          this.uploadFile = null;
+        });
     },
     downloadFile(message_id) {
       this.ws.send(
@@ -529,20 +570,26 @@ export default {
       if (room.load === undefined) {
         room.load = {
           loading: false,
-          noMore: !Boolean(room.message),
+          noMore: room.message.length < 20,
         };
       }
       this.currentRoom = room;
       this.toBottom();
-      if (!room.load.noMore)
-        setTimeout(() => {
-          const element = this.$refs.chatBox.wrap$;
-          element.onscroll = this.loadMore;
-          element.addEventListener('drop', this.dropFile, false);
-          element.addEventListener('dragenter', e => e.preventDefault(), false);
-          element.addEventListener('dragover', e => e.preventDefault(), false);
-          element.addEventListener('dragleave', e => e.preventDefault(), false);
-        });
+      setTimeout(() => {
+        const element = this.$refs.chatBox.wrap$;
+        if (!room.load.noMore) element.onscroll = this.loadMore;
+        element.addEventListener('drop', this.dropFile, false);
+        element.addEventListener(
+          'dragenter',
+          e => {
+            e.preventDefault();
+            console.log(123);
+          },
+          false
+        );
+        element.addEventListener('dragover', e => e.preventDefault(), false);
+        element.addEventListener('dragleave', e => e.preventDefault(), false);
+      });
     },
   },
 

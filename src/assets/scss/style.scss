@@ -93,6 +93,15 @@ p {
   color: $ft !important;
 }
 
+.el-message-box__message {
+  p {
+    word-break: break-all;
+  }
+}
+.el-notification__group {
+  width: 90%;
+}
+
 .v-md-editor-preview audio {
   width: 100%;
   max-width: 400px;
