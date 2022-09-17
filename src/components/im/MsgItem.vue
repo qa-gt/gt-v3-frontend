@@ -5,7 +5,12 @@
   <div class="msg-content msg-content-image" v-else-if="msg.content_type === 1">
     <el-image
       :src="msg.content"
-      :preview-src-list="[msg.content]"
+      :preview-src-list="[
+        msg.content.indexOf('https://gtcdn.yxzl.top/') === 0 &&
+        msg.content.slice(-3) === '/30'
+          ? msg.content.slice(0, -3)
+          : msg.content,
+      ]"
       :hide-on-click-modal="true"
     >
       <template #error>

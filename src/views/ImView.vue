@@ -17,6 +17,13 @@
               <el-button size="small" style="width: 100%"> 更多 + </el-button>
               <template #dropdown>
                 <el-dropdown-menu>
+                  <el-dropdown-item
+                    @click="
+                      redirect('http://qatest.yxzl.top:18080/article/12030')
+                    "
+                  >
+                    使用说明
+                  </el-dropdown-item>
                   <el-dropdown-item @click="dialogVisible.createGroup = true">
                     创建群聊
                   </el-dropdown-item>
@@ -134,7 +141,14 @@
           <!-- 工具栏 -->
           <div>
             <div style="align-items: right; text-align: right">
-              <el-button @click="dialogVisible.sendImage = true" size="small">
+              <input
+                type="file"
+                style="display: none"
+                accept="image/*"
+                ref="chooseImage"
+                @change="e => uploadImage(e.srcElement.files[0])"
+              />
+              <el-button @click="$refs.chooseImage.click()" size="small">
                 发送图片
               </el-button>
               <el-button type="primary" @click="sendMessage" size="small">
@@ -151,6 +165,7 @@
               style="margin-bottom: -20px; margin-top: 10px; width: 100%"
               maxlength="50000"
               v-on:keydown.ctrl.enter="sendMessage"
+              @paste="e => uploadImage(e.clipboardData.files[0])"
             />
           </div>
         </div>
@@ -230,13 +245,11 @@ import { ElMessage, ElMessageBox, ElNotification } from 'element-plus';
 import AlertAudio from '@/assets/alert.mp3';
 import MsgItem from '@/components/im/MsgItem.vue';
 import { saveAs } from 'file-saver';
-import UploadProgress from '@/components/im/UploadProgress.vue';
 export default {
   computed: {
-    ...mapState(['user', 'jwt']),
+    ...mapState(['user', 'jwt', 'uploadKey', 'imageCache']),
   },
   components: {
-    UploadProgress,
     MsgItem,
   },
   data() {
@@ -266,6 +279,84 @@ export default {
     };
   },
   methods: {
+    redirect(url) {
+      window.open(url, '_blank');
+    },
+    async uploadImage(file) {
+      if (file === undefined) return;
+      if (file.type.indexOf('image') === -1) {
+        ElMessage.error('只能粘贴图片');
+        return;
+      }
+      await ElMessageBox.confirm(
+        `确定要发送图片 ${file.name} 吗？`,
+        '发送图片',
+        {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'info',
+        }
+      );
+      const key = file.name + file.type + file.size;
+      if (this.imageCache[key]) {
+        this.sendMessage({
+          content: this.imageCache[key],
+          content_type: 1,
+        });
+        ElMessage.success('已从缓存中读取！');
+        return;
+      }
+      if (file.size > 1024 * 1024 * 10) {
+        ElMessage.error('图片大小不能超过10M');
+        return;
+      }
+      let res = this.uploadKey;
+      if (!res || !res.expire || res.expire < Date.now()) {
+        res = await this.$axios.post('/utils/upload_key').then(res => res.data);
+        if (!res.Credentials) {
+          ElMessage.error('上传未授权！');
+          return;
+        }
+        this.$store.commit('setUploadKey', res);
+      }
+      const bucket = res.Buckets[0];
+      const s3 = new AWS.S3({
+        region: 'automatic',
+        endpoint: bucket.s3Endpoint,
+        credentials: res.Credentials,
+        params: {
+          Bucket: bucket.s3Bucket,
+        },
+      });
+      const re = /[^\w0-9_.-]/g;
+      const fileKey = res.scope.replace(
+        '/*',
+        '/im_' + String(new Date().getTime()) + file.name.replace(re, '')
+      );
+      console.log(fileKey);
+      const s3Upload = s3
+        .upload({
+          Key: fileKey,
+          Body: file,
+          ContentType: file.type,
+        })
+        .on('httpUploadProgress', evt => {});
+      s3Upload.send(err => {
+        if (err) {
+          ElMessage.error('上传失败！');
+          return;
+        }
+        this.sendMessage({
+          content: `https://gtcdn.yxzl.top/${fileKey}/30`,
+          content_type: 1,
+        });
+        ElMessage.success('上传成功！');
+        this.$store.commit('addImageCache', {
+          key: key,
+          url: `https://gtcdn.yxzl.top/${fileKey}/30`,
+        });
+      });
+    },
     copyText(text, alert = false) {
       const input = document.createElement('input');
       input.setAttribute('readonly', 'readonly');
@@ -327,32 +418,35 @@ export default {
         }, i * 5);
       }
     },
-    sendImg() {},
-    sendMessage() {
-      while ([' ', '\n'].includes(this.message.slice(-1))) {
-        this.message = this.message.slice(0, -1);
+    sendMessage(msg) {
+      if (!msg || !msg.content || !msg.content_type) {
+        while ([' ', '\n'].includes(this.message.slice(-1))) {
+          this.message = this.message.slice(0, -1);
+        }
+        if (!this.message) return;
+        const image_re = new RegExp('^IMAGE\n(.*)?$');
+        if (image_re.test(this.message)) {
+          msg = {
+            content: image_re.exec(this.message)[1],
+            content_type: 1,
+          };
+        } else {
+          msg = {
+            content: this.message,
+            content_type: 0,
+          };
+        }
+        this.message = '';
       }
-      if (!this.message) return;
-      const msg = {
-        content: this.message,
-        content_type: 0,
-        room_id: this.currentRoom.room.id,
-      };
-      const image_re = new RegExp('^IMAGE\n(.*)?$');
-      if (image_re.test(this.message)) {
-        msg.content_type = 1;
-        msg.content = image_re.exec(this.message)[1];
-      } else {
-        msg.content_type = 0;
-        msg.content = this.message;
-      }
+      if (!msg.room_id) msg.room_id = this.currentRoom.room.id;
+
       this.ws.send(
         JSON.stringify({
           action: 'new_message',
           data: msg,
         })
       );
-      this.message = '';
+
       this.toBottom();
     },
     async doUpload(uploadUrl, fileId) {
@@ -408,9 +502,10 @@ export default {
       const action = data.action;
       data = data.data;
       if (action === 'heartbeat') return;
-      else if (action === 'error') {
+      else if (action === 'warning') {
+        ElMessage.warning(data);
+      } else if (action === 'error') {
         ElMessage.error(data);
-        return;
       } else if (action === 'new_message') {
         for (let i in this.rooms) {
           if (this.rooms[i].room.id === data.room_id) {

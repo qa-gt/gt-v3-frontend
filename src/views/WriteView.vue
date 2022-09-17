@@ -176,8 +176,8 @@ export default {
                 ElMessage.success("已从缓存中读取！");
                 return;
             }
-            if (file.size > 1024 * 1024 * 5) {
-                ElMessage.error("图片大小不能超过5M");
+            if (file.size > 1024 * 1024 * 10) {
+                ElMessage.error("图片大小不能超过10M");
                 return;
             }
             // const formData = new FormData();
@@ -210,7 +210,7 @@ export default {
             const fileKey = res.scope.replace(
                 "*",
                 String(new Date().getTime()) +
-                    file.name.replace(/[^\w0-9_-]/g, "")
+                    file.name.replace(/[^\w0-9_-.]/g, "")
             );
             let s3Upload = s3
                 .upload({
@@ -230,7 +230,6 @@ export default {
                         key: key,
                         url: `https://gtcdn.yxzl.top/${fileKey}/30`,
                     });
-                    console.log(this.$store.state.imageCache, this.imageCache);
                 }
             });
         },
