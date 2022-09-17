@@ -953,6 +953,13 @@
   resolved "https://registry.npmmirror.com/@gar/promisify/-/promisify-1.1.3.tgz"
   integrity sha512-k2Ty1JcVojjJFwrg/ThKi2ujJ7XNLYaFGNB/bWT9wGR+oSMJHMa5w+CUq6p/pVrKeNNgA7pCqEcjSnHVoqJQFw==
 
+"@harrisoff/onedrive-js-sdk@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.npmmirror.com/@harrisoff/onedrive-js-sdk/-/onedrive-js-sdk-1.1.0.tgz#939f774f96b7b030b402b181c4ccb1d9de957e1a"
+  integrity sha512-V9aHrR3DMWAHYcV/P6VLHaLVAcMo3481ftvf4voLL6CZ+lTMI6EyEg0vS3VG10Xn3rWpVIPIx8C7uRE+WYpJQQ==
+  dependencies:
+    axios "^0.23.0"
+
 "@humanwhocodes/config-array@^0.5.0":
   version "0.5.0"
   resolved "https://registry.npmmirror.com/@humanwhocodes/config-array/-/config-array-0.5.0.tgz"
@@ -1389,6 +1396,13 @@ aws4@^1.8.0:
   version "1.11.0"
   resolved "https://registry.npmmirror.com/aws4/-/aws4-1.11.0.tgz"
   integrity sha512-xh1Rl34h6Fi1DC2WWKfxUTVqRsNnr6LsKz2+hfwDxQJWmrx8+c7ylaqBMcHfl1U1r2dsifOvKX3LQuLNZ+XSvA==
+
+axios@^0.23.0:
+  version "0.23.0"
+  resolved "https://registry.npmmirror.com/axios/-/axios-0.23.0.tgz#b0fa5d0948a8d1d75e3d5635238b6c4625b05149"
+  integrity sha512-NmvAE4i0YAv5cKq8zlDoPd1VLKAqX5oLuZKs8xkJa4qi6RGn0uhCYFjWtHHC9EM/MwOwYWOs53W+V0aqEXq1sg==
+  dependencies:
+    follow-redirects "^1.14.4"
 
 axios@^0.26.1:
   version "0.26.1"
@@ -2326,6 +2340,11 @@ flv.js@^1.6.2:
   dependencies:
     es6-promise "^4.2.8"
     webworkify-webpack "^2.1.5"
+
+follow-redirects@^1.14.4:
+  version "1.15.2"
+  resolved "https://registry.npmmirror.com/follow-redirects/-/follow-redirects-1.15.2.tgz#b460864144ba63f2681096f274c4e57026da2c13"
+  integrity sha512-VQLG33o04KaQ8uYi2tVNbdrWp1QWxNNea+nmIB4EVM28v0hmP17z7aG1+wAkNzVq4KeXTq3221ye5qTJP91JwA==
 
 follow-redirects@^1.14.8, follow-redirects@^1.14.9:
   version "1.14.9"

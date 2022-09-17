@@ -17,10 +17,21 @@
       </template>
     </el-image>
   </div>
+  <div class="msg-content msg-content-file" v-else-if="msg.content_type === 3">
+    <el-button type="text" @click="downloadFile(msg.id)">
+      <el-icon>
+        <icon-files />
+      </el-icon>
+      <span>{{ msg.file.name }}</span>
+    </el-button>
+  </div>
 </template>
 
 <script>
-import { Picture as IconPicture } from '@element-plus/icons-vue';
+import {
+  Picture as IconPicture,
+  Files as IconFiles,
+} from '@element-plus/icons-vue';
 export default {
   name: 'MsgItem',
   props: {
@@ -30,9 +41,16 @@ export default {
         return {};
       },
     },
+    downloadFile: {
+      type: Function,
+      default() {
+        return () => {};
+      },
+    },
   },
   components: {
     IconPicture,
+    IconFiles,
   },
   data() {
     return {};

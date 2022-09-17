@@ -98,7 +98,7 @@
                     &ensp;
                     {{ $wechatTime(item.time) }}
                   </div>
-                  <msg-item :msg="item" />
+                  <msg-item :msg="item" :downloadFile="downloadFile" />
                 </span>
                 <span class="msg-item-avatar">
                   <el-avatar
@@ -124,14 +124,14 @@
                     &ensp;
                     {{ $wechatTime(item.time) }}
                   </div>
-                  <msg-item :msg="item" />
+                  <msg-item :msg="item" :downloadFile="downloadFile" />
                 </span>
               </div>
             </div>
           </el-scrollbar>
 
+          <!-- 工具栏 -->
           <div>
-            <!-- 工具栏 -->
             <div style="align-items: right; text-align: right">
               <el-button @click="dialogVisible.sendImage = true" size="small">
                 发送图片
@@ -173,7 +173,10 @@
   <!-- el-dialog -->
 
   <el-dialog v-model="dialogVisible.joinGroup" title="加入群聊">
-    <el-input v-model="joinGroupData.inviteCode" placeholder="邀请码" />
+    <el-input
+      v-model="joinGroupData.inviteCode"
+      placeholder="邀请码（不区分大小写）"
+    />
     <p>点击确认后将自动刷新界面，请注意保存当前页面状态。</p>
     <template #footer>
       <span class="dialog-footer">
@@ -224,6 +227,7 @@ import { mapState } from 'vuex';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import AlertAudio from '@/assets/alert.mp3';
 import MsgItem from '@/components/im/MsgItem.vue';
+import { uploadLargeFileChunk } from '@harrisoff/onedrive-js-sdk';
 export default {
   computed: {
     ...mapState(['user', 'jwt']),
@@ -253,6 +257,7 @@ export default {
       },
       focus: false,
       searchUser: '',
+      uploadFile: null,
     };
   },
   methods: {
@@ -393,6 +398,45 @@ export default {
         ) {
           window.document.title = '【有新消息】' + window.document.title;
         }
+      } else if (action === 'upload_file') {
+        const uploadUrl = data.upload_url;
+        const piece = 1024 * 1024 * 5;
+        const total = this.uploadFile.size;
+        let start = 0;
+        let end = start + piece;
+        let cnt = 0;
+        console.log('start upload');
+        while (start < total) {
+          const current = Math.min(end, total - 1);
+          uploadLargeFileChunk(this.uploadFile, uploadUrl, {
+            start,
+            end: total - 1,
+            total,
+          }).then(res => {
+            cnt--;
+            if (cnt === 0) {
+              this.ws.send(
+                JSON.stringify({
+                  action: 'upload_finish',
+                  data: {
+                    file_id: data.file_id,
+                  },
+                })
+              );
+              this.uploadFile = null;
+            }
+          });
+          start = current + 1;
+          end = start + piece;
+          cnt++;
+        }
+      } else if (action === 'download_file') {
+        const a = document.createElement('a');
+        a.href = data.download_url;
+        a.download = data.file_name;
+        a.target = '_blank';
+        a.click();
+        a.remove();
       } else if (action === 'more_message') {
         for (let i in this.rooms) {
           if (this.rooms[i].room.id === data.room_id) {
@@ -440,6 +484,30 @@ export default {
         }, 1000);
       }
     },
+    dropFile(e) {
+      e.preventDefault();
+      if (!this.uploadFile) this.uploadFile = e.dataTransfer.files[0];
+      this.ws.send(
+        JSON.stringify({
+          action: 'upload_file',
+          data: {
+            room_id: this.currentRoom.room.id,
+            file_name: this.uploadFile.name,
+            file_size: this.uploadFile.size,
+          },
+        })
+      );
+    },
+    downloadFile(message_id) {
+      this.ws.send(
+        JSON.stringify({
+          action: 'download_file',
+          data: {
+            message_id,
+          },
+        })
+      );
+    },
     showRoom(room) {
       if (room.unread > 0) {
         room.unread = 0;
@@ -463,13 +531,17 @@ export default {
       this.toBottom();
       if (!room.load.noMore)
         setTimeout(() => {
-          this.$refs.chatBox.wrap$.onscroll = this.loadMore;
+          const element = this.$refs.chatBox.wrap$;
+          element.onscroll = this.loadMore;
+          element.addEventListener('drop', this.dropFile, false);
+          element.addEventListener('dragenter', e => e.preventDefault(), false);
+          element.addEventListener('dragover', e => e.preventDefault(), false);
+          element.addEventListener('dragleave', e => e.preventDefault(), false);
         });
     },
   },
 
   created() {
-    console.log('created');
     this.ws = new WebSocket(
       (import.meta.env.PROD || document.cookie.indexOf('USE_PROD_SERVER') !== -1
         ? // ? 'wss://gtapi.qdzx.icu/ws/im/?jwt='

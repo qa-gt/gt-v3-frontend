@@ -8,6 +8,7 @@
     "lint": "vite lint"
   },
   "dependencies": {
+    "@harrisoff/onedrive-js-sdk": "^1.1.0",
     "@vue/compiler-sfc": "^3.0.4",
     "assert": "^2.0.0",
     "axios": "^0.26.1",
