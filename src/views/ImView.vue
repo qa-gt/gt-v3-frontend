@@ -18,9 +18,7 @@
               <template #dropdown>
                 <el-dropdown-menu>
                   <el-dropdown-item
-                    @click="
-                      redirect('https://gt.qdzx.icu/article/12030')
-                    "
+                    @click="redirect('https://gt.qdzx.icu/article/12030')"
                   >
                     使用说明
                   </el-dropdown-item>
@@ -328,10 +326,12 @@ export default {
           Bucket: bucket.s3Bucket,
         },
       });
-      const re = /[^\w0-9_.-]/g;
+      const re = /[^\w0-9_-]/g;
       const fileKey = res.scope.replace(
         '/*',
-        '/im_' + String(new Date().getTime()) + file.name.replace(re, '')
+        '/im_' +
+          String(new Date().getTime()) +
+          file.name.replace('.', '_').replace(re, '')
       );
       const s3Upload = s3
         .upload({
