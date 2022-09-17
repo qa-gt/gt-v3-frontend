@@ -12,9 +12,11 @@
             />
           </el-col>
           <el-col :span="1" />
-          <el-col :span="6">
+          <el-col :span="4">
             <el-dropdown>
-              <el-button size="small"> 更多+ </el-button>
+              <el-button size="small" style="width: 100%">
+                更多 +
+              </el-button>
               <template #dropdown>
                 <el-dropdown-menu>
                   <!-- <el-dropdown-item>添加好友</el-dropdown-item> -->
@@ -28,6 +30,7 @@
               </template>
             </el-dropdown>
           </el-col>
+          <el-col :span="1" />
         </el-row>
         <el-scrollbar height="76vh">
           <div
@@ -228,6 +231,7 @@ import { ElMessage, ElMessageBox } from 'element-plus';
 import AlertAudio from '@/assets/alert.mp3';
 import MsgItem from '@/components/im/MsgItem.vue';
 import { uploadLargeFileChunk } from '@harrisoff/onedrive-js-sdk';
+import { saveAs } from 'file-saver';
 export default {
   computed: {
     ...mapState(['user', 'jwt']),
@@ -431,12 +435,13 @@ export default {
           cnt++;
         }
       } else if (action === 'download_file') {
-        const a = document.createElement('a');
-        a.href = data.download_url;
-        a.download = data.file_name;
-        a.target = '_blank';
-        a.click();
-        a.remove();
+        // const a = document.createElement('a');
+        // a.href = data.download_url;
+        // a.download = data.file_name;
+        // a.target = '_blank';
+        // a.click();
+        // a.remove();
+        saveAs(data.download_url, data.file_name);
       } else if (action === 'more_message') {
         for (let i in this.rooms) {
           if (this.rooms[i].room.id === data.room_id) {
