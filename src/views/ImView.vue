@@ -67,7 +67,7 @@
         <div v-show="currentRoom.room.id">
           <h3 style="margin: 0">
             {{ currentRoom.room.name || currentRoom.single_chat_with.username }}
-            <i v-if="item.room.is_group" class="fal fa-users" />
+            <i v-if="currentRoom.room.is_group" class="fal fa-users" />
           </h3>
 
           <el-scrollbar
@@ -367,7 +367,7 @@ export default {
         upload_progress_text = document.getElementById('upload-progress-text');
       upload_progress_text.innerText = '0%';
       while (start < total - 1) {
-        const current = Math.min(end, total - 1);
+        const current = Math.min(end, total);
         await this.$axios.put(
           uploadUrl,
           this.uploadFile.slice(start, current),
