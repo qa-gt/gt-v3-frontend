@@ -8,14 +8,12 @@
     "lint": "vite lint"
   },
   "dependencies": {
-    "@harrisoff/onedrive-js-sdk": "^1.1.0",
     "@vue/compiler-sfc": "^3.0.4",
     "assert": "^2.0.0",
     "axios": "^0.26.1",
     "chart.js": "^3.7.1",
     "chartjs": "^0.3.24",
     "core-js": "^3.21.1",
-    "file-saver": "^2.0.5",
     "flv.js": "^1.6.2",
     "follow-redirects": "^1.14.9",
     "http": "^0.0.1-security",

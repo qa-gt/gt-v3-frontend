@@ -242,7 +242,6 @@ import { mapState } from 'vuex';
 import { ElMessage, ElMessageBox, ElNotification } from 'element-plus';
 import AlertAudio from '@/assets/alert.mp3';
 import MsgItem from '@/components/im/MsgItem.vue';
-import { saveAs } from 'file-saver';
 export default {
   computed: {
     ...mapState(['user', 'jwt', 'uploadKey', 'imageCache']),
@@ -549,7 +548,7 @@ export default {
           this.doUpload(data.upload_url, data.file_id);
         });
       } else if (action === 'download_file') {
-        saveAs(data.download_url, data.file_name);
+        window.open(data.download_url);
       } else if (action === 'more_message') {
         for (let i in this.rooms) {
           if (this.rooms[i].room.id === data.room_id) {
