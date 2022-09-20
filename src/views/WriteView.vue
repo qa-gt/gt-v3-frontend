@@ -203,7 +203,7 @@ export default {
         '*',
         String(new Date().getTime()) + file.name.replace(/[^\w0-9_-]/g, '')
       );
-      let s3Upload = s3
+      const s3Upload = s3
         .upload({
           Key: fileKey,
           Body: file,

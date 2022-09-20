@@ -142,10 +142,23 @@
               <input
                 type="file"
                 style="display: none"
+                ref="chooseFile"
+                @change="e => doUploadFile(e.srcElement.files[0])"
+              />
+              <input
+                type="file"
+                style="display: none"
                 accept="image/*"
                 ref="chooseImage"
                 @change="e => uploadImage(e.srcElement.files[0])"
               />
+              <el-button
+                @click="$refs.chooseFile.click()"
+                size="small"
+                :disabled="this.uploadFile"
+              >
+                发送文件
+              </el-button>
               <el-button @click="$refs.chooseImage.click()" size="small">
                 发送图片
               </el-button>
@@ -242,6 +255,7 @@ import { mapState } from 'vuex';
 import { ElMessage, ElMessageBox, ElNotification } from 'element-plus';
 import AlertAudio from '@/assets/alert.mp3';
 import MsgItem from '@/components/im/MsgItem.vue';
+import { saveAs } from 'file-saver';
 export default {
   computed: {
     ...mapState(['user', 'jwt', 'uploadKey', 'imageCache']),
@@ -494,6 +508,9 @@ export default {
         end = start + piece;
       }
     },
+    doDownload(fileName, downloadUrl) {
+      saveAs(downloadUrl, fileName);
+    },
     receiveWebsocket(res) {
       let data = res.data;
       data = JSON.parse(data);
@@ -548,7 +565,11 @@ export default {
           this.doUpload(data.upload_url, data.file_id);
         });
       } else if (action === 'download_file') {
-        window.open(data.download_url);
+        if (data.file_size > 1024 * 1024 * 5) window.open(data.download_url);
+        else {
+          ElMessage.info('正在下载...');
+          this.doDownload(data.file_name, data.download_url);
+        }
       } else if (action === 'more_message') {
         for (let i in this.rooms) {
           if (this.rooms[i].room.id === data.room_id) {
@@ -596,14 +617,12 @@ export default {
         }, 1000);
       }
     },
-    dropFile(e) {
-      e.preventDefault();
-      if (this.uploadFile) return;
-      else if (this.uploadFileNotification) {
+    doUploadFile(file) {
+      this.uploadFile = file;
+      if (this.uploadFileNotification) {
         this.uploadFileNotification.close();
         this.uploadFileNotification = null;
       }
-      this.uploadFile = e.dataTransfer.files[0];
       ElMessageBox.confirm(
         `确定要上传文件 ${this.uploadFile.name} 吗？`,
         '确认上传',
@@ -635,6 +654,11 @@ export default {
         .catch(() => {
           this.uploadFile = null;
         });
+    },
+    dropFile(e) {
+      e.preventDefault();
+      if (this.uploadFile) return;
+      this.doUploadFile(e.dataTransfer.files[0]);
     },
     downloadFile(message_id) {
       this.ws.send(
