@@ -1,7 +1,9 @@
 <template>
-  <div class="msg-content msg-content-text" v-if="msg.content_type === 0">
-    {{ msg.content }}
-  </div>
+  <div
+    class="msg-content msg-content-text"
+    v-if="msg.content_type === 0"
+    v-html="parseUrl(msg.content)"
+  />
   <div class="msg-content msg-content-image" v-else-if="msg.content_type === 1">
     <el-image
       :src="msg.content"
@@ -62,6 +64,16 @@ export default {
     return {};
   },
   methods: {
+    parseUrl(content) {
+      const reg =
+        /(http:\/\/|https:\/\/)?([A-Z|a-z|0-9|\-|\.]+)([.])([A-Z|a-z|0-9|\-]+)([\/]?)([A-Z|a-z|0-9|\/|=|\?|\&|\-|%]+)/g;
+      return content.replace(reg, match => {
+        if (match.slice(0, 4) !== 'http') {
+          return `<a class="el-link el-link--primary el-link-message-content" target="_blank" href="http://${match}"><span class="el-link__inner">${match}</span></a>`;
+        }
+        return `<a class="el-link el-link--primary el-link-message-content" target="_blank" href="${match}"><span class="el-link__inner">${match}</span></a>`;
+      });
+    },
     formatName(name, length = 30) {
       if (name.length > length) {
         name =
@@ -80,3 +92,11 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+.el-link-message-content {
+  display: unset;
+  font-size: unset;
+  vertical-align: unset;
+}
+</style>
