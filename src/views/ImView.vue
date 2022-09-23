@@ -9,6 +9,8 @@
               v-model="searchUser"
               size="small"
               placeholder="搜索用户"
+              :disabled="true"
+              title="正在开发中..."
             />
           </el-col>
           <el-col :span="1" />
@@ -57,10 +59,16 @@
                 style="margin-bottom: 17.5px; margin-left: 10px"
               />
             </el-badge>
-            <span style="margin-left: 20px; margin-bottom: 17.5px">
-              <i v-if="item.room.is_group" class="fal fa-users" />
-              {{ item.room.name || item.single_chat_with.username }}
-            </span>
+            <div class="room-item-right">
+              <span class="room-name">
+                <i v-if="item.room.is_group" class="fal fa-users" />
+                {{ item.room.name || item.single_chat_with.username }}
+              </span>
+              <br />
+              <small class="latest-message">
+                {{ item.message[item.message.length - 1].content }}
+              </small>
+            </div>
           </div>
         </el-scrollbar>
       </el-card>

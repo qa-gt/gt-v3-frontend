@@ -102,6 +102,12 @@ p {
   width: 90%;
 }
 
+.is-horizontal {
+  .el-scrollbar__thumb {
+    display: none;
+  }
+}
+
 .v-md-editor-preview audio {
   width: 100%;
   max-width: 400px;
@@ -127,15 +133,33 @@ p {
   padding-top: 20px;
   color: rgb(0, 0, 0);
   background-color: rgba(0, 0, 0, 0);
-  border-radius: 5px; /* Advised by Alpha */
+  border-radius: 5px;
 
-  span {
-    display: inline-block;
-    word-break: keep-all;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    cursor: default;
+  .room-item-right {
+    margin-left: 20px;
+    margin-top: -15px;
+    width: calc(100% - 80px);
+    user-select: none;
+
+    .room-name {
+      width: 100%;
+      display: inline-block;
+      word-break: keep-all;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      cursor: default;
+    }
+    .latest-message {
+      color: rgba(0, 0, 0, 0.4);
+      width: 100%;
+      display: inline-block;
+      word-break: keep-all;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      cursor: default;
+    }
   }
 }
 .room-item:hover {
@@ -184,6 +208,7 @@ p {
 }
 .msg-content {
   white-space: pre-wrap;
+  word-break: break-all;
 }
 .msg-item-system {
   text-align: center;
@@ -226,7 +251,10 @@ p {
     width: 100%;
     text-align: right;
   }
-
+  .msg-content-text {
+    text-align: left;
+    float: right;
+  }
   div.el-image {
     text-align: right;
   }
