@@ -112,7 +112,11 @@
                     &ensp;
                     {{ $wechatTime(item.time) }}
                   </div>
-                  <msg-item :msg="item" :downloadFile="downloadFile" />
+                  <msg-item
+                    :msg="item"
+                    :getDirectUrl="getDirectUrl"
+                    :directUrls="directUrls"
+                  />
                 </span>
                 <span class="msg-item-avatar">
                   <el-avatar
@@ -138,7 +142,11 @@
                     &ensp;
                     {{ $wechatTime(item.time) }}
                   </div>
-                  <msg-item :msg="item" :downloadFile="downloadFile" />
+                  <msg-item
+                    :msg="item"
+                    :getDirectUrl="getDirectUrl"
+                    :directUrls="directUrls"
+                  />
                 </span>
               </div>
             </div>
@@ -273,6 +281,8 @@ export default {
   },
   data() {
     return {
+      fileName: 'file name',
+      fileSize: '10M',
       currentRoom: { room: { id: 0 }, single_chat_with: {}, load: {} },
       message: '',
       rooms: [],
@@ -295,6 +305,7 @@ export default {
       searchUser: '',
       uploadFile: null,
       uploadFileNotification: null,
+      directUrls: {},
     };
   },
   methods: {
@@ -445,10 +456,16 @@ export default {
         }
         if (!this.message) return;
         const image_re = new RegExp('^IMAGE\n(.*)?$');
+        const audio_re = new RegExp('^AUDIO\n(.*)?$');
         if (image_re.test(this.message)) {
           msg = {
             content: image_re.exec(this.message)[1],
             content_type: 1,
+          };
+        } else if (audio_re.test(this.message)) {
+          msg = {
+            content: audio_re.exec(this.message)[1],
+            content_type: 4,
           };
         } else {
           msg = {
@@ -523,6 +540,7 @@ export default {
       let data = res.data;
       data = JSON.parse(data);
       const action = data.action;
+      const keep = data.keep || {};
       data = data.data;
       if (action === 'heartbeat') return;
       else if (action === 'warning') {
@@ -572,11 +590,14 @@ export default {
         setTimeout(() => {
           this.doUpload(data.upload_url, data.file_id);
         });
-      } else if (action === 'download_file') {
-        if (data.file_size > 1024 * 1024 * 5) window.open(data.download_url);
-        else {
-          ElMessage.info('正在下载...');
-          this.doDownload(data.file_name, data.download_url);
+      } else if (action === 'get_direct_url') {
+        this.directUrls[keep.message_id] = data.download_url;
+        if (keep.download) {
+          if (data.file_size > 1024 * 1024 * 5) window.open(data.download_url);
+          else {
+            ElMessage.info('正在下载...');
+            this.doDownload(data.file_name, data.download_url);
+          }
         }
       } else if (action === 'more_message') {
         for (let i in this.rooms) {
@@ -668,10 +689,25 @@ export default {
       if (this.uploadFile) return;
       this.doUploadFile(e.dataTransfer.files[0]);
     },
-    downloadFile(message_id) {
+    getDirectUrl(message_id, download = false) {
+      if (this.directUrls[message_id]) return;
       this.ws.send(
         JSON.stringify({
-          action: 'download_file',
+          action: 'get_direct_url',
+          data: {
+            message_id,
+          },
+          keep: {
+            download,
+            message_id,
+          },
+        })
+      );
+    },
+    audioFile(message_id) {
+      this.ws.send(
+        JSON.stringify({
+          action: 'audio_file',
           data: {
             message_id,
           },
@@ -763,5 +799,15 @@ export default {
 <style scoped>
 .fa-users {
   color: rgba(0, 0, 0, 0.3);
+}
+.card-r {
+  display: flex;
+  justify-content: right;
+  margin-right: 5px;
+}
+.card-l {
+  display: flex;
+  justify-content: left;
+  margin-left: 5px;
 }
 </style>

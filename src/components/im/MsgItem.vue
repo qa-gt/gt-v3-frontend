@@ -24,22 +24,60 @@
       </template>
     </el-image>
   </div>
-  <div class="msg-content msg-content-file" v-else-if="msg.content_type === 3">
-    <el-button type="text" @click="downloadFile(msg.id)" :title="msg.file.name">
-      <el-icon><i class="fal fa-file-alt" /></el-icon>
-      <span>
-        {{ formatName(msg.file.name) }}
-        <small>{{ formatSize(msg.file.size) }}</small>
+  <div
+    class="msg-content msg-content-file"
+    v-else-if="
+      [2, 3, 4].includes(msg.content_type) && !playAudio && !directUrls[msg.id]
+    "
+  >
+    <el-button
+      type="text"
+      :title="
+        msg.file ? msg.file.name : { 4: '音频' }[msg.content_type] + '文件'
+      "
+    >
+      <el-icon @click="getDirectUrl(msg.id, true)">
+        <i class="fal fa-file-alt" />
+      </el-icon>
+      <span @click="getDirectUrl(msg.id, true)">
+        {{
+          formatName(
+            msg.file ? msg.file.name : { 4: '音频' }[msg.content_type] + '文件'
+          )
+        }}
       </span>
+      <small>{{ msg.file ? formatSize(msg.file.size) : '' }}</small>
+      <small
+        v-if="[4].includes(msg.content_type)"
+        @click="
+          getDirectUrl(msg.id, false);
+          playAudio = true;
+        "
+      >
+        播放
+      </small>
     </el-button>
+  </div>
+  <div v-if="playAudio">
+    <el-card class="music-preview-card">
+      <div class="music-preview">
+        <div class="fileInfo">
+          <span class="fileName">
+            {{ msg.file.name }}
+          </span>
+          <br />
+          <span class="fileSize">
+            {{ msg.file ? formatSize(msg.file.size) : '' }}
+          </span>
+        </div>
+        <audio :src="directUrls[msg.id]" class="player" controls />
+      </div>
+    </el-card>
   </div>
 </template>
 
 <script>
-import {
-  Picture as IconPicture,
-  Files as IconFiles,
-} from '@element-plus/icons-vue';
+import { Picture as IconPicture } from '@element-plus/icons-vue';
 export default {
   name: 'MsgItem',
   props: {
@@ -49,19 +87,24 @@ export default {
         return {};
       },
     },
-    downloadFile: {
+    getDirectUrl: {
       type: Function,
       default() {
         return () => {};
       },
     },
+    directUrls: {
+      type: Object,
+      default: '',
+    },
   },
   components: {
     IconPicture,
-    IconFiles,
   },
   data() {
-    return {};
+    return {
+      playAudio: false,
+    };
   },
   methods: {
     parseUrl(content) {
@@ -93,7 +136,53 @@ export default {
 };
 </script>
 
+<style lang="scss" scoped>
+.msg-content-file {
+  small {
+    margin-left: 3px;
+  }
+}
+
+.music-preview {
+  .player {
+    margin-bottom: -25px;
+    /* height: 20px; */
+    width: 100%;
+    min-width: 250px;
+    max-width: 1000px;
+  }
+  audio::-webkit-media-controls-enclosure {
+    border-radius: 5px !important;
+    background-color: rgba(255, 255, 255, 0);
+  }
+  audio::-moz-media-controls-enclosure {
+    border-radius: 5px !important;
+    background-color: rgba(255, 255, 255, 0);
+  }
+  .fileName {
+    display: inline-block;
+    font-size: 16px;
+    margin-left: 20px;
+    overflow: hidden;
+    width: 90% !important;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .fileSize {
+    margin-left: 20px;
+    font-size: 10px;
+    color: rgba(0, 0, 0, 0.5);
+  }
+}
+</style>
+
 <style lang="scss">
+.music-preview-card {
+  .el-card__body {
+    padding: 20px 5px !important;
+  }
+}
+
 .el-link-message-content {
   display: unset;
   font-size: unset;
