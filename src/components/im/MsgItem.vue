@@ -26,7 +26,9 @@
   </div>
   <div
     class="msg-content msg-content-file"
-    v-else-if="[3, 4].includes(msg.content_type) && !playAudio"
+    v-else-if="
+      [2, 3, 4].includes(msg.content_type) && !playAudio && !directUrls[msg.id]
+    "
   >
     <el-button
       type="text"
