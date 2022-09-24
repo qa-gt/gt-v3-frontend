@@ -5,13 +5,7 @@
       <el-card style="width: 90%; height: 90vh">
         <el-row style="height: 3vh; margin-bottom: 10px" justify="center">
           <el-col :span="16">
-            <el-input
-              v-model="searchUser"
-              size="small"
-              placeholder="搜索用户"
-              :disabled="true"
-              title="正在开发中..."
-            />
+            <el-input v-model="searchUser" size="small" placeholder="搜索用户" :disabled="true" title="正在开发中..." />
           </el-col>
           <el-col :span="1" />
           <el-col :span="4">
@@ -19,9 +13,7 @@
               <el-button size="small" style="width: 100%"> 更多 + </el-button>
               <template #dropdown>
                 <el-dropdown-menu>
-                  <el-dropdown-item
-                    @click="redirect('https://gt.qdzx.icu/article/12030')"
-                  >
+                  <el-dropdown-item @click="redirect('https://gt.qdzx.icu/article/12030')">
                     使用说明
                   </el-dropdown-item>
                   <el-dropdown-item @click="dialogVisible.createGroup = true">
@@ -37,27 +29,16 @@
           <el-col :span="1" />
         </el-row>
         <el-scrollbar height="76vh">
-          <div
-            v-for="item in rooms"
-            :key="item"
-            :class="{
-              'room-item': true,
-              'room-item-current': currentRoom.room.id === item.room.id,
-            }"
-            :title="item.room.name || item.single_chat_with.username"
-            @click="showRoom(item)"
-          >
+          <div v-for="item in rooms" :key="item" :class="{
+            'room-item': true,
+            'room-item-current': currentRoom.room.id === item.room.id,
+          }" :title="item.room.name || item.single_chat_with.username" @click="showRoom(item)">
             <el-badge :hidden="item.unread <= 0" :value="item.unread">
-              <el-avatar
-                shape="square"
-                :src="
-                  item.room.is_group
-                    ? item.room.avatar
-                    : item.single_chat_with.portrait
-                "
-                :size="40"
-                style="margin-bottom: 17.5px; margin-left: 10px"
-              />
+              <el-avatar shape="square" :src="
+                item.room.is_group
+                  ? item.room.avatar
+                  : item.single_chat_with.portrait
+              " :size="40" style="margin-bottom: 17.5px; margin-left: 10px" />
             </el-badge>
             <div class="room-item-right">
               <span class="room-name">
@@ -65,8 +46,11 @@
                 {{ item.room.name || item.single_chat_with.username }}
               </span>
               <br />
-              <small class="latest-message">
+              <small v-if="item.message[item.message.length - 1]" class="latest-message">
                 {{ item.message[item.message.length - 1].content }}
+              </small>
+              <small v-if="!item.message[item.message.length - 1]" class="latest-message">
+                {{ empty }}
               </small>
             </div>
           </div>
@@ -83,18 +67,13 @@
             {{ currentRoom.room.name || currentRoom.single_chat_with.username }}
           </h3>
 
-          <el-scrollbar
-            style="
+          <el-scrollbar style="
               height: 60vh;
               border-top: 1px var(--el-border-color) var(--el-border-style);
               border-bottom: 1px var(--el-border-color) var(--el-border-style);
               padding: 10px 0;
               margin: 10px 0;
-            "
-            max-height="60vh"
-            ref="chatBox"
-            v-loading="currentRoom.load.loading"
-          >
+            " max-height="60vh" ref="chatBox" v-loading="currentRoom.load.loading">
             <div v-for="item in currentRoom.message" :key="item">
               <!-- 系统消息 -->
               <div class="msg-item msg-item-system" v-if="!item.sender">
@@ -102,39 +81,24 @@
               </div>
 
               <!-- 自己的消息 -->
-              <div
-                class="msg-item msg-item-right"
-                v-else-if="item.sender.id === user.id"
-              >
+              <div class="msg-item msg-item-right" v-else-if="item.sender.id === user.id">
                 <span class="msg-item-content">
                   <div class="msg-sender">
                     {{ item.sender.username }}
                     &ensp;
                     {{ $wechatTime(item.time) }}
                   </div>
-                  <msg-item
-                    :msg="item"
-                    :getDirectUrl="getDirectUrl"
-                    :directUrls="directUrls"
-                  />
+                  <msg-item :msg="item" :getDirectUrl="getDirectUrl" :directUrls="directUrls" />
                 </span>
                 <span class="msg-item-avatar">
-                  <el-avatar
-                    shape="square"
-                    :size="35"
-                    :src="item.sender.portrait"
-                  />
+                  <el-avatar shape="square" :size="35" :src="item.sender.portrait" />
                 </span>
               </div>
 
               <!-- 别人的消息 -->
               <div class="msg-item msg-item-left" v-else>
                 <span class="msg-item-avatar">
-                  <el-avatar
-                    shape="square"
-                    :size="35"
-                    :src="item.sender.portrait"
-                  />
+                  <el-avatar shape="square" :size="35" :src="item.sender.portrait" />
                 </span>
                 <span class="msg-item-content">
                   <div class="msg-sender">
@@ -142,11 +106,7 @@
                     &ensp;
                     {{ $wechatTime(item.time) }}
                   </div>
-                  <msg-item
-                    :msg="item"
-                    :getDirectUrl="getDirectUrl"
-                    :directUrls="directUrls"
-                  />
+                  <msg-item :msg="item" :getDirectUrl="getDirectUrl" :directUrls="directUrls" />
                 </span>
               </div>
             </div>
@@ -155,24 +115,11 @@
           <!-- 工具栏 -->
           <div>
             <div style="align-items: right; text-align: right">
-              <input
-                type="file"
-                style="display: none"
-                ref="chooseFile"
-                @change="e => doUploadFile(e.srcElement.files[0])"
-              />
-              <input
-                type="file"
-                style="display: none"
-                accept="image/*"
-                ref="chooseImage"
-                @change="e => uploadImage(e.srcElement.files[0])"
-              />
-              <el-button
-                @click="$refs.chooseFile.click()"
-                size="small"
-                :disabled="this.uploadFile"
-              >
+              <input type="file" style="display: none" ref="chooseFile"
+                @change="e => doUploadFile(e.srcElement.files[0])" />
+              <input type="file" style="display: none" accept="image/*" ref="chooseImage"
+                @change="e => uploadImage(e.srcElement.files[0])" />
+              <el-button @click="$refs.chooseFile.click()" size="small" :disabled="this.uploadFile">
                 发送文件
               </el-button>
               <el-button @click="$refs.chooseImage.click()" size="small">
@@ -182,31 +129,19 @@
                 发&emsp;送
               </el-button>
             </div>
-            <el-input
-              :rows="3"
-              resize="none"
-              clearable
-              v-model="message"
-              placeholder="按下Ctrl+Enter发送"
-              type="textarea"
-              style="margin-bottom: -20px; margin-top: 10px; width: 100%"
-              maxlength="50000"
-              v-on:keydown.ctrl.enter="sendMessage"
-              @paste="e => uploadImage(e.clipboardData.files[0])"
-            />
+            <el-input :rows="3" resize="none" clearable v-model="message" placeholder="按下Ctrl+Enter发送" type="textarea"
+              style="margin-bottom: -20px; margin-top: 10px; width: 100%" maxlength="50000"
+              v-on:keydown.ctrl.enter="sendMessage" @paste="e => uploadImage(e.clipboardData.files[0])" />
           </div>
         </div>
-        <h1
-          v-show="!currentRoom.room.id"
-          style="
+        <h1 v-show="!currentRoom.room.id" style="
             display: block;
             width: 100%;
             height: 100%;
             text-align: center;
             margin-top: 35vh;
             color: rgba(0, 0, 0, 0.3);
-          "
-        >
+          ">
           请选择一个聊天
         </h1>
       </el-card>
@@ -216,10 +151,7 @@
   <!-- el-dialog -->
 
   <el-dialog v-model="dialogVisible.joinGroup" title="加入群聊">
-    <el-input
-      v-model="joinGroupData.inviteCode"
-      placeholder="邀请码（不区分大小写）"
-    />
+    <el-input v-model="joinGroupData.inviteCode" placeholder="邀请码（不区分大小写）" />
     <p>点击确认后将自动刷新界面，请注意保存当前页面状态。</p>
     <template #footer>
       <span class="dialog-footer">
@@ -232,30 +164,19 @@
   <el-dialog v-model="dialogVisible.createGroup" title="创建群聊">
     <div v-if="createGroupData.inviteCode">
       <h3 style="text-align: center">您的邀请码是（点击复制）</h3>
-      <h1
-        style="text-align: center; cursor: pointer"
-        @click="copyText(createGroupData.inviteCode, true)"
-      >
+      <h1 style="text-align: center; cursor: pointer" @click="copyText(createGroupData.inviteCode, true)">
         {{ createGroupData.inviteCode }}
       </h1>
     </div>
     <div v-else>
       <el-input v-model="createGroupData.name" placeholder="群聊名称" />
-      <el-input
-        v-model="createGroupData.avatar"
-        placeholder="群聊头像(URL地址)"
-        style="margin-top: 10px"
-      />
+      <el-input v-model="createGroupData.avatar" placeholder="群聊头像(URL地址)" style="margin-top: 10px" />
       <p>创建后需刷新界面以使该群聊显示在列表中。</p>
     </div>
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="dialogVisible.createGroup = false">取消</el-button>
-        <el-button
-          type="primary"
-          @click="dialogVisible.createGroup = false"
-          v-if="createGroupData.inviteCode"
-        >
+        <el-button type="primary" @click="dialogVisible.createGroup = false" v-if="createGroupData.inviteCode">
           完成
         </el-button>
         <el-button type="primary" @click="createGroup" v-else>
@@ -281,6 +202,7 @@ export default {
   },
   data() {
     return {
+      empty: '暂无最近消息',
       fileName: 'file name',
       fileSize: '10M',
       currentRoom: { room: { id: 0 }, single_chat_with: {}, load: {} },
@@ -362,8 +284,8 @@ export default {
       const fileKey = res.scope.replace(
         '/*',
         '/im_' +
-          String(new Date().getTime()) +
-          file.name.replace('.', '_').replace(re, '')
+        String(new Date().getTime()) +
+        file.name.replace('.', '_').replace(re, '')
       );
       const s3Upload = s3
         .upload({
@@ -371,7 +293,7 @@ export default {
           Body: file,
           ContentType: file.type,
         })
-        .on('httpUploadProgress', evt => {});
+        .on('httpUploadProgress', evt => { });
       s3Upload.send(err => {
         if (err) {
           ElMessage.error('上传失败！');
@@ -493,8 +415,8 @@ export default {
       let end = start + piece;
       let cnt = Math.ceil(total / piece);
       const upload_progress_bar = document.getElementById(
-          'upload-progress-bar'
-        ),
+        'upload-progress-bar'
+      ),
         upload_progress_text = document.getElementById('upload-progress-text');
       upload_progress_text.innerText = '0%';
       while (start < total - 1) {
@@ -800,11 +722,13 @@ export default {
 .fa-users {
   color: rgba(0, 0, 0, 0.3);
 }
+
 .card-r {
   display: flex;
   justify-content: right;
   margin-right: 5px;
 }
+
 .card-l {
   display: flex;
   justify-content: left;
