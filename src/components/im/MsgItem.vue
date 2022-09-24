@@ -54,7 +54,7 @@
           playAudio = true;
         "
       >
-        播放
+        预览文件
       </small>
     </el-button>
   </div>
@@ -109,7 +109,7 @@ export default {
   methods: {
     parseUrl(content) {
       const reg =
-        /(http:\/\/|https:\/\/)?([A-Z|a-z|0-9|\-|\.]+)([.])([A-Z|a-z|0-9|\-]+)([\/]?)([A-Z|a-z|0-9|\/|=|\?|\&|\-|%]+)/g;
+        /(http:\/\/|https:\/\/)?([A-Z|a-z|0-9|\-|\.]+)([.])([A-Z|a-z|0-9|\-]+)([\/]?)([A-Z|a-z|0-9|\/|=|\?|\&|\-|%|\.|\_]+)/g;
       return content.replace(reg, match => {
         if (match.slice(0, 4) !== 'http') {
           return `<a class="el-link el-link--primary el-link-message-content" target="_blank" href="http://${match}"><span class="el-link__inner">${match}</span></a>`;
