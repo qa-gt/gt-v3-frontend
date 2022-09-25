@@ -2,7 +2,7 @@
   <div
     class="msg-content msg-content-text"
     v-if="msg.content_type === 0"
-    v-html="parseUrl(msg.content)"
+    v-html="parseText(msg.content)"
   />
   <div class="msg-content msg-content-image" v-else-if="msg.content_type === 1">
     <el-image
@@ -78,6 +78,7 @@
 
 <script>
 import { Picture as IconPicture } from '@element-plus/icons-vue';
+import TOP_DOMAINS from '@/assets/json/top-domains.json';
 export default {
   name: 'MsgItem',
   props: {
@@ -107,15 +108,42 @@ export default {
     };
   },
   methods: {
-    parseUrl(content) {
+    parseText(content) {
+      // XSS过滤
+      content = content
+        .replace(/\&/g, '&amp;')
+        .replace(/\</g, '&lt;')
+        .replace(/\>/g, '&gt;')
+        .replace(/\"/g, '&quot;');
+
+      // 链接识别
       const reg =
-        /(http:\/\/|https:\/\/)?([A-Z|a-z|0-9|\-|\.]+)([.])([A-Z|a-z|0-9|\-]+)([\/]?)([A-Z|a-z|0-9|\/|=|\?|\&|\-|%|\.|\_]+)/g;
-      return content.replace(reg, match => {
+        /(http:\/\/|https:\/\/)?([A-Z|a-z|0-9|\-|\.]+)([.])([A-Z|a-z|0-9|\-]+)([\/]?)([A-Z|a-z|0-9|\/|=|\?|\&|\-|%|\.|\_|\;]+)/g;
+      content = content.replace(reg, match => {
+        match = match.replace(/&amp;/g, '&');
+        if (match.indexOf(';') !== -1) return match;
         if (match.slice(0, 4) !== 'http') {
+          const top_domain = match
+            .replace(/^https?:\/\/(.*?)(:\d+)?\/.*$/, '$1')
+            .split('.')
+            .slice(-1)[0];
+          let flag = false;
+          if (top_domain.indexOf('xn--') === 0) flag = true;
+          else {
+            for (let i = 0; i < TOP_DOMAINS.length; i++) {
+              if (top_domain === TOP_DOMAINS[i]) {
+                console.log(TOP_DOMAINS[i]);
+                flag = true;
+                break;
+              }
+            }
+          }
+          if (!flag) return match;
           return `<a class="el-link el-link--primary el-link-message-content" target="_blank" href="http://${match}"><span class="el-link__inner">${match}</span></a>`;
         }
         return `<a class="el-link el-link--primary el-link-message-content" target="_blank" href="${match}"><span class="el-link__inner">${match}</span></a>`;
       });
+      return content;
     },
     formatName(name, length = 30) {
       if (name.length > length) {

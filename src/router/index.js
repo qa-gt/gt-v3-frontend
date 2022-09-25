@@ -90,9 +90,9 @@ const routes = [
         },
     },
     {
-        path: "/allusers",
-        name: "allusers",
-        component: () => import("@/views/AllUserView.vue"),
+        path: "/users",
+        name: "users",
+        component: () => import("@/views/UsersView.vue"),
         meta: {
             keepAlive: true,
         },
