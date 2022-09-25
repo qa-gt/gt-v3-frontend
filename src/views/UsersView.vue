@@ -76,6 +76,7 @@
 </template>
 
 <script>
+import { ElLoading } from 'element-plus';
 export default {
   data() {
     return {
@@ -93,6 +94,7 @@ export default {
       this.search();
     },
     search() {
+      const loading = ElLoading.service({ fullscreen: true });
       this.$axios
         .get('/user/', {
           params: {
@@ -103,7 +105,8 @@ export default {
         .then(res => {
           this.pageInfo.total = res.count;
           this.users = res.results;
-        });
+        })
+        .finally(() => setTimeout(loading.close, 100));
     },
   },
   created() {
