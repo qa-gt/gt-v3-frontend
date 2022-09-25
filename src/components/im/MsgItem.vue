@@ -1,9 +1,11 @@
 <template>
+  <!-- 文本消息 -->
   <div
     class="msg-content msg-content-text"
     v-if="msg.content_type === 0"
     v-html="parseText(msg.content)"
   />
+  <!-- 图片消息 -->
   <div class="msg-content msg-content-image" v-else-if="msg.content_type === 1">
     <el-image
       :src="msg.content"
@@ -24,31 +26,26 @@
       </template>
     </el-image>
   </div>
+  <!-- 文件消息 -->
   <div
     class="msg-content msg-content-file"
     v-else-if="
-      [2, 3, 4].includes(msg.content_type) && !playAudio && !directUrls[msg.id]
+      [2, 3, 4].includes(msg.content_type) && !(playAudio && directUrls[msg.id])
     "
   >
     <el-button
       type="text"
-      :title="
-        msg.file ? msg.file.name : { 4: '音频' }[msg.content_type] + '文件'
-      "
+      :title="(msg.file && msg.file.name) || msg.content_type"
     >
       <el-icon @click="getDirectUrl(msg.id, true)">
         <i class="fal fa-file-alt" />
       </el-icon>
       <span @click="getDirectUrl(msg.id, true)">
-        {{
-          formatName(
-            msg.file ? msg.file.name : { 4: '音频' }[msg.content_type] + '文件'
-          )
-        }}
+        {{ formatName((msg.file && msg.file.name) || msg.content_type) }}
       </span>
       <small>{{ msg.file ? formatSize(msg.file.size) : '' }}</small>
       <small
-        v-if="[4].includes(msg.content_type)"
+        v-if="[2, 4].includes(msg.content_type)"
         @click="
           getDirectUrl(msg.id, false);
           playAudio = true;
@@ -58,7 +55,9 @@
       </small>
     </el-button>
   </div>
-  <div v-if="playAudio">
+
+  <!-- 音频预览 -->
+  <div v-if="playAudio" v-show="directUrls[msg.id]">
     <el-card class="music-preview-card">
       <div class="music-preview">
         <div class="fileInfo">
