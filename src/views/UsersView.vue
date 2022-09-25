@@ -5,12 +5,12 @@
     <el-input
       v-model="searchInput"
       placeholder="想找什么？"
-      @keydown.enter.self.stop="search"
+      @keydown.enter.self.stop="doSearch"
       clearable
-      @clear="search"
+      @clear="doSearch"
     >
       <template #append>
-        <el-button type="primary" @click="search">
+        <el-button type="primary" @click="doSearch">
           <i class="fal fa-search" />
         </el-button>
       </template>
