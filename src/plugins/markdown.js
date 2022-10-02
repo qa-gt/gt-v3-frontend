@@ -332,13 +332,13 @@ const extMd = (text, writing = false) => {
         text = text.replaceAll(
             /!!!MUSIC-(WYY|QQ)-(ID|NAME):(.*?)!!!/g,
             (match, p1, p2, p3) => {
-                return `<audio controls="controls" src="https://gtapi.yxzl.top/utils/get_music_url?site=${p1}&by=${p2}&value=${p3}"></audio>`;
+                return `<audio controls="controls" src="https://gtapi.qdzx.icu/utils/get_music_url?site=${p1}&by=${p2}&value=${p3}"></audio>`;
             }
         );
     }
     text = text.replaceAll(/!!!IMAGE:(.*?)!!!/g, (match, p1) => {
         if (p1.substr(0, 4) !== "http" && p1.substr(0, 2) !== "//")
-            p1 = "https://gtcdn.yxzl.top/atc_images_old/" + p1 + "/30";
+            p1 = "https://gtcdn.qdzx.icu/atc_images_old/" + p1 + "/30";
         return `<img src=${p1} style="max-width: 100%" />`;
     });
     return text;

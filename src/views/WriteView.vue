@@ -215,11 +215,11 @@ export default {
           ElMessage.error('上传失败！');
           return;
         } else {
-          callback([`https://gtcdn.yxzl.top/${fileKey}/30`]);
+          callback([`https://gtcdn.qdzx.icu/${fileKey}/30`]);
           ElMessage.success('上传成功！');
           this.$store.commit('addImageCache', {
             key: key,
-            url: `https://gtcdn.yxzl.top/${fileKey}/30`,
+            url: `https://gtcdn.qdzx.icu/${fileKey}/30`,
           });
         }
       });

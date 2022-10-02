@@ -395,13 +395,13 @@ export default {
           return;
         }
         this.sendMessage({
-          content: `https://gtcdn.yxzl.top/${fileKey}/30`,
+          content: `https://gtcdn.qdzx.icu/${fileKey}/30`,
           content_type: 1,
         });
         ElMessage.success('上传成功！');
         this.$store.commit('addImageCache', {
           key: key,
-          url: `https://gtcdn.yxzl.top/${fileKey}/30`,
+          url: `https://gtcdn.qdzx.icu/${fileKey}/30`,
         });
       });
     },
@@ -766,7 +766,7 @@ export default {
   created() {
     this.ws = new WebSocket(
       (import.meta.env.PROD || document.cookie.indexOf('USE_PROD_SERVER') !== -1
-        ? 'wss://gtapi.yxzl.top/ws/im/?jwt='
+        ? 'wss://gtapi.qdzx.icu/ws/im/?jwt='
         : 'ws://127.0.0.1:8000/ws/im/?jwt=') + encodeURIComponent(this.jwt)
     );
     this.wsHeartbeat = setInterval(() => {

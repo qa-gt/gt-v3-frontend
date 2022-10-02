@@ -10,7 +10,7 @@
     <el-image
       :src="msg.content"
       :preview-src-list="[
-        msg.content.indexOf('https://gtcdn.yxzl.top/') === 0 &&
+        msg.content.indexOf('https://gtcdn.') === 0 &&
         msg.content.slice(-3) === '/30'
           ? msg.content.slice(0, -3)
           : msg.content,

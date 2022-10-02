@@ -14,7 +14,7 @@ const go = new window.Go();
 })();
 
 export const Axios = axios.create({
-  baseURL: import.meta.env.PROD || document.cookie.indexOf('USE_PROD_SERVER') !== -1 ? 'https://gtapi.yxzl.top' : '/api',
+  baseURL: import.meta.env.PROD || document.cookie.indexOf('USE_PROD_SERVER') !== -1 ? 'https://gtapi.qdzx.icu' : '/api',
 });
 
 Axios.interceptors.request.use(
