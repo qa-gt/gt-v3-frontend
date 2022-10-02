@@ -51,9 +51,10 @@
               <el-avatar
                 shape="square"
                 :src="
-                  item.room.is_group
+                  (item.room.is_group
                     ? item.room.avatar
-                    : item.single_chat_with.portrait
+                    : item.single_chat_with.portrait) ||
+                  'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
                 "
                 :size="40"
                 style="margin-bottom: 17.5px; margin-left: 10px"
@@ -104,18 +105,6 @@
             ref="chatBox"
             v-loading="currentRoom.load.loading"
           >
-            <!-- <el-scrollbar
-            style="
-              height: 60vh;
-              border-top: 1px var(--el-border-color) var(--el-border-style);
-              border-bottom: 1px var(--el-border-color) var(--el-border-style);
-              padding: 10px 0;
-              margin: 10px 0;
-            "
-            max-height="60vh"
-            ref="chatBox"
-            v-loading="currentRoom.load.loading"
-          > -->
             <div v-for="item in currentRoom.message" :key="item">
               <!-- 系统消息 -->
               <div class="msg-item msg-item-system" v-if="!item.sender">
@@ -143,7 +132,10 @@
                   <el-avatar
                     shape="square"
                     :size="35"
-                    :src="item.sender.portrait"
+                    :src="
+                      item.sender.portrait ||
+                      'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
+                    "
                   />
                 </span>
               </div>
@@ -154,7 +146,10 @@
                   <el-avatar
                     shape="square"
                     :size="35"
-                    :src="item.sender.portrait"
+                    :src="
+                      item.sender.portrait ||
+                      'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
+                    "
                   />
                 </span>
                 <span class="msg-item-content">
@@ -578,7 +573,7 @@ export default {
               data.room_id !== this.currentRoom.room.id &&
               data.sender.id !== this.user.id
             ) {
-              obj.unread = obj.unread += 1;
+              obj.unread += 1;
               new Audio(AlertAudio).play();
             }
             this.rooms.splice(i, 1);
@@ -761,13 +756,7 @@ export default {
         const element = this.$refs.chatBox.wrap$;
         if (!room.load.noMore) element.onscroll = this.loadMore;
         element.addEventListener('drop', this.dropFile, false);
-        element.addEventListener(
-          'dragenter',
-          e => {
-            e.preventDefault();
-          },
-          false
-        );
+        element.addEventListener('dragenter', e => e.preventDefault(), false);
         element.addEventListener('dragover', e => e.preventDefault(), false);
         element.addEventListener('dragleave', e => e.preventDefault(), false);
       });

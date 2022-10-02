@@ -24,7 +24,10 @@
             <template #title>
               <el-avatar
                 :size="40"
-                :src="user.portrait"
+                :src="
+                  user.portrait ||
+                  'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
+                "
                 fit="cover"
                 style="vertical-align: middle"
               />&emsp;
