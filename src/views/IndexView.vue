@@ -173,10 +173,10 @@ export default {
     doSearch() {
       if (this.searchText === this.searchInput) return;
       this.searchText = this.searchInput;
-      this.getAtcs();
       this.pageInfo.num = 1;
+      this.getAtcs();
     },
-    getAtcs() {
+    getAtcs(show_loading = true) {
       let topic = this.currentTopic,
         state__gte,
         ordering = '-create_time';
@@ -190,7 +190,7 @@ export default {
       } else {
         state__gte = 0;
       }
-      const loading = ElLoading.service({ fullscreen: true });
+      const loading = ElLoading.service({ fullscreen: show_loading });
       this.$axios
         .get('/article/', {
           params: {
@@ -217,7 +217,7 @@ export default {
     this.$axios.get('/topic/', { params: { min_state: 0 } }).then(data => {
       this.topics = this.topics.concat(data);
     });
-    setTimeout(this.getAtcs, 60000);
+    setTimeout(() => this.getAtcs(false), 60000);
   },
 };
 </script>

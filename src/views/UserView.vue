@@ -263,8 +263,6 @@ export default {
           return this.myFollowing;
         case '3':
           return this.myFollower;
-        case '4':
-          return this.myForms;
       }
     },
     changeCate() {
@@ -363,6 +361,7 @@ export default {
         old.params.uid === now.params.uid
       )
         return;
+      this.pageInfo.num = 1;
       this.$axios.get(`/user/${now.params.uid}/`).then(res => {
         this.user = res;
       });
