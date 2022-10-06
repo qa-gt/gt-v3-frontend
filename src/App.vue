@@ -102,7 +102,7 @@
     v-if="this.addition"
   >
     <el-link
-      :href="`https://yiyan.yixiangzhilv.com/?id=${yiyan.uuid}`"
+      :href="`https://yiyan.yixiangzhilv.com/?id=${yiyan.id}`"
       target="_blank"
       :underline="false"
       class="footer-yiyan"
