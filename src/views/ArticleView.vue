@@ -348,6 +348,7 @@ export default {
         .catch(err => err);
     },
     init() {
+      this.pageInfo.num = 1;
       const loading = ElLoading.service({ fullscreen: true });
       this.$axios
         .get(`/article/${this.$route.params.aid}/`)
