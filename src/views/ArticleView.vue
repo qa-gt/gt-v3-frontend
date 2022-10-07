@@ -97,7 +97,6 @@
         </el-collapse>
         <el-divider style="margin-top: 10px" />
         <gt-md-editor :modelValue="atc.content" :previewOnly="true" />
-        <!-- <gt-form :formdata="form" /> -->
       </el-card>
       <br /><br />
       <el-card shadow="hover" class="comments-card">
@@ -263,7 +262,7 @@
                 </div>
                 <div
                   class="comment comment-text"
-                  v-html="processMd(item.content).replaceAll('\n', '<br />')"
+                  v-html="processMd(item.content).replace(/\\n/g, '<br />')"
                 ></div>
               </div>
             </el-col>

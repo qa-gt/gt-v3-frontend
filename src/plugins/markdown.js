@@ -295,13 +295,13 @@ const extMd = (text, writing = false) => {
     for (let i = 0; i < emojis.length; i++) {
         const emoji = emojis[i],
             reg = new RegExp(`\\[${emoji}\\]`, "g");
-        text = text.replaceAll(
+        text = text.replace(
             reg,
             `<img class="emoji" src="/emojis/${emoji}.png" alt="${emoji}" title="${emoji}" />`
         );
     }
     if (writing) {
-        text = text.replaceAll(
+        text = text.replace(
             /!!!MUSIC-(WYY|QQ)-(ID|NAME):(.*?)!!!/g,
             match => {
                 return `${match}&emsp;<small style="color: rgb(200, 200, 200)">为减小服务器压力，编辑时音乐不会渲染</small>`;
@@ -329,14 +329,14 @@ const extMd = (text, writing = false) => {
                 page = p1[1] || "";
             return `<iframe src="//player.bilibili.com/player.html?bvid=${bvid}&page=${page}&high_quality=1" allowfullscreen="allowfullscreen" style="width: 100%; height: 25rem" scrolling="no" frameborder="0" sandbox="allow-top-navigation allow-same-origin allow-forms allow-scripts"></iframe>`;
         });
-        text = text.replaceAll(
+        text = text.replace(
             /!!!MUSIC-(WYY|QQ)-(ID|NAME):(.*?)!!!/g,
             (match, p1, p2, p3) => {
                 return `<audio controls="controls" src="https://gtapi.qdzx.icu/utils/get_music_url?site=${p1}&by=${p2}&value=${p3}"></audio>`;
             }
         );
     }
-    text = text.replaceAll(/!!!IMAGE:(.*?)!!!/g, (match, p1) => {
+    text = text.replace(/!!!IMAGE:(.*?)!!!/g, (match, p1) => {
         if (p1.substr(0, 4) !== "http" && p1.substr(0, 2) !== "//")
             p1 = "https://gtcdn.qdzx.icu/atc_images_old/" + p1 + "/30";
         return `<img src=${p1} style="max-width: 100%" />`;
