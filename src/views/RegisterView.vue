@@ -100,7 +100,7 @@ export default {
         .post('/user/register', {
           username: this.username,
           password: this.password,
-          ...this.captchaCode,
+          hccaptcha: this.captchaCode,
         })
         .then(res => {
           this.$store.commit('setJwt', res.token);
