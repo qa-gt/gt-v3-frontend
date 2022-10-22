@@ -262,7 +262,7 @@
                 </div>
                 <div
                   class="comment comment-text"
-                  v-html="processMd(item.content).replace(/\\n/g, '<br />')"
+                  v-html="processMd(item.content).replace(/\n/g, '<br />')"
                 ></div>
               </div>
             </el-col>

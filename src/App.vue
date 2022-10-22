@@ -173,8 +173,8 @@ export default {
     getNotices(dot = true) {
       if (!this.loggedIn) return;
       this.$axios.get('/notice/').then(data => {
-        for (let i = 0; dot && i < data.length; i++) {
           if (data[i].state === 0) {
+        for (let i = 0; dot && i < data.length; i++) {
             this.haveDot = true;
             break;
           }
